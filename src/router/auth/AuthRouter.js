@@ -1,7 +1,7 @@
 import Login from '../../views/auth/Login'
 import ForgetPassword from '../../views/auth/ForgetPassword'
 import ResetPassword from '../../views/auth/ResetPassword'
-import Dashboard from '../../views/admin/Dashboard1';
+import Dashboard from '../../views/admin/Mydashboard';
 
 export default [
     {
