@@ -4,213 +4,25 @@
    <div class="body">
 	
 	<!-- SIDEBAR -->
-	<section id="sidebar">
-		<a href="#" class="brand"><i class='bx bxs-smile icon'></i> MyAdmin</a>
-		<div class="sidebar-avartar">
-                          <div>
-                               <img src="../../assets/My project.png" width="70px" height="70px" alt=""  >
-                          </div>   
-                          <div class="avartar-info">
-                              <div class="avartar-text">
-                                 <h2>alpha ron</h2>
-                                <small>123-456-909</small>
-                             </div>
-                           <span class="bx bx-chevron-down icon"></span>
-                         </div>
-                    </div>
-		<ul class="side-menu">
-			<li class="divider" data-text="main">Main</li>
-			<li>
-				<a href="#"><i class='bx bxs-inbox icon' ></i> Elements <i class='bx bx-chevron-right icon-right' ></i></a>
-				<ul class="side-dropdown">
-					<li><a href="#">Alert</a></li>
-					<li><a href="#">Badges</a></li>
-					<li><a href="#">Breadcrumbs</a></li>
-					<li><a href="#">Button</a></li>
-				</ul>
-			</li>
-			<li><a href="#"><i class='bx bxs-chart icon' ></i> Charts</a></li>
-			<li><a href="#"><i class='bx bxs-widget icon' ></i> Widgets</a></li>
-			<li class="divider" data-text="table and forms">Table and forms</li>
-			<li><a href="#"><i class='bx bx-table icon' ></i> Tables</a></li>
-			<li>
-				<a href="#"><i class='bx bxs-notepad icon' ></i> Forms <i class='bx bx-chevron-right icon-right' ></i></a>
-				<ul class="side-dropdown">
-					<li><a href="#">Basic</a></li>
-					<li><a href="#">Select</a></li>
-					<li><a href="#">Checkbox</a></li>
-					<li><a href="#">Radio</a></li>
-				</ul>
-			</li>
-		</ul>
-		<div class="ads">
-			<div class="wrapper">
-				<a href="#" class="btn-upgrade">Upgrade</a>
-				<p>Become a <span>PRO</span> member and enjoy <span>All Features</span></p>
-			</div>
-		</div>
-	</section>
+	<Sidebar :isActive="isActive"/>
 	<!-- SIDEBAR -->
 
 	<!-- NAVBAR -->
 	<section id="content">
 		<!-- NAVBAR -->
-		<nav>
-			<i class='bx bx-menu toggle-sidebar' ></i>
-			<form action="#">
-				<div class="form-group">
-					<input type="text" placeholder="Search...">
-					<i class='bx bx-search icon' ></i>
-				</div>
-			</form>
-			<a href="#" class="nav-link">
-				<i class='bx bxs-bell icon' ></i>
-				<span class="badge">5</span>
-			</a>
-			<a href="#" class="nav-link">
-				<i class='bx bxs-message-square-dots icon' ></i>
-				<span class="badge">8</span>
-			</a>
-			<span class="divider"></span>
-			<div class="profile">
-				<img src="../../assets/My project.png" alt="">
-				<ul class="profile-link">
-					<li><a href="#"><i class='bx bxs-user-circle icon' ></i> Profile</a></li>
-					<li><a href="#"><i class='bx bxs-cog' ></i> Settings</a></li>
-					<li><a href="#"><i class='bx bxs-log-out-circle' ></i> Logout</a></li>
-				</ul>
-			</div>
-		</nav>
+		<Top :isShow="isShow"  @Toggle="myToggle"/>
 		<!-- NAVBAR -->
 
 		<!-- MAIN -->
 		<main>
-			<h1 class="title">Dashboard</h1>
+			<h1 class="title">Wellcome to Admin Dashboard</h1>
 			<ul class="breadcrumbs">
 				<li><a href="#">Home</a></li>
 				<li class="divider">/</li>
 				<li><a href="#" class="active">Dashboard</a></li>
 			</ul>
-			<div class="info-data">
-				<div class="card">
-					<div class="head">
-						<div>
-							<h2>1500</h2>
-							<p>Traffic</p>
-						</div>
-						<i class='bx bx-trending-up icon' ></i>
-					</div>
-					<span class="progress" data-value="40%"></span>
-					<span class="label">40%</span>
-				</div>
-				<div class="card">
-					<div class="head">
-						<div>
-							<h2>234</h2>
-							<p>Sales</p>
-						</div>
-						<i class='bx bx-trending-down icon down' ></i>
-					</div>
-					<span class="progress" data-value="60%"></span>
-					<span class="label">60%</span>
-				</div>
-				<div class="card">
-					<div class="head">
-						<div>
-							<h2>465</h2>
-							<p>Pageviews</p>
-						</div>
-						<i class='bx bx-trending-up icon' ></i>
-					</div>
-					<span class="progress" data-value="30%"></span>
-					<span class="label">30%</span>
-				</div>
-				<div class="card">
-					<div class="head">
-						<div>
-							<h2>235</h2>
-							<p>Visitors</p>
-						</div>
-						<i class='bx bx-trending-up icon' ></i>
-					</div>
-					<span class="progress" data-value="80%"></span>
-					<span class="label">80%</span>
-				</div>
-			</div>
-			<div class="data">
-				<div class="content-data">
-					<div class="head">
-						<h3>Sales Report</h3>
-						<div class="menu">
-							<i class='bx bx-dots-horizontal-rounded icon'></i>
-							<ul class="menu-link">
-								<li><a href="#">Edit</a></li>
-								<li><a href="#">Save</a></li>
-								<li><a href="#">Remove</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="chart">
-						<div id="chart"></div>
-					</div>
-				</div>
-				<div class="content-data">
-					<div class="head">
-						<h3>Chatbox</h3>
-						<div class="menu">
-							<i class='bx bx-dots-horizontal-rounded icon'></i>
-							<ul class="menu-link">
-								<li><a href="#">Edit</a></li>
-								<li><a href="#">Save</a></li>
-								<li><a href="#">Remove</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="chat-box">
-						<p class="day"><span>Today</span></p>
-						<div class="msg">
-							<img src="../../assets/My project.png" alt="">
-							<div class="chat">
-								<div class="profile">
-									<span class="username">Alan</span>
-									<span class="time">18:30</span>
-								</div>
-								<p>Hello</p>
-							</div>
-						</div>
-						<div class="msg me">
-							<div class="chat">
-								<div class="profile">
-									<span class="time">18:30</span>
-								</div>
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque voluptatum eos quam dolores eligendi exercitationem animi nobis reprehenderit laborum! Nulla.</p>
-							</div>
-						</div>
-						<div class="msg me">
-							<div class="chat">
-								<div class="profile">
-									<span class="time">18:30</span>
-								</div>
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, architecto!</p>
-							</div>
-						</div>
-						<div class="msg me">
-							<div class="chat">
-								<div class="profile">
-									<span class="time">18:30</span>
-								</div>
-								<p>Lorem ipsum, dolor sit amet.</p>
-							</div>
-						</div>
-					</div>
-					<form action="#">
-						<div class="form-group">
-							<input type="text" placeholder="Type...">
-							<button type="submit" class="btn-send"><i class='bx bxs-send' ></i></button>
-						</div>
-					</form>
-				</div>
-			</div>
+
+			<router-view></router-view>
 		</main>
 		<!-- MAIN -->
 	</section>
@@ -222,13 +34,29 @@
 </template>
 
 <script>
+import Sidebar from '@/components/admin/Sidebar.vue';
+import Top from '@/components/admin/Top.vue';
 export default{
-	name: 'MyDashboard',
+    name: "MyDashboard",
+	components: { Sidebar, Top },
+    data() {
+        return {
+            isActive: false,
+            isShow: false,
+        };
+    },
+    methods: {
+        myToggle() {
+            this.isActive = !this.isActive;
+        }
+    },
+    
 }
-
 </script>
 
 <style>
+/* SIDEBAR */
+
 #sidebar {
 	position: fixed;
 	max-width: 260px;
@@ -243,7 +71,7 @@ export default{
 	z-index: 200;
 }
 #sidebar.hide {
-	max-width: 60px;
+	max-width: 0px;
 }
 #sidebar.hide:hover {
 	max-width: 260px;
@@ -327,7 +155,8 @@ export default{
 }
 #sidebar .divider {
 	margin-top: 24px;
-	font-size: 12px;
+	font-size: 16px;
+	text-indent: 15px;
 	text-transform: uppercase;
 	font-weight: 700;
 	color: var(--dark-grey);
@@ -337,9 +166,9 @@ export default{
 #sidebar.hide:hover .divider {
 	text-align: left;
 }
-#sidebar.hide .divider {
+/* #sidebar.hide .divider {
 	text-align: center;
-}
+} */
 #sidebar .side-dropdown {
 	padding-left: 54px;
 	max-height: 0;
@@ -351,45 +180,6 @@ export default{
 }
 #sidebar .side-dropdown a:hover {
 	color: var(--blue);
-}
-#sidebar .ads {
-	width: 100%;
-	padding: 20px;
-}
-#sidebar.hide .ads {
-	display: none;
-}
-#sidebar.hide:hover .ads {
-	display: block;
-}
-#sidebar .ads .wrapper {
-	background: var(--grey);
-	padding: 20px;
-	border-radius: 10px;
-}
-#sidebar .btn-upgrade {
-	font-size: 14px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 12px 0;
-	color: var(--light);
-	background: var(--blue);
-	transition: all .3s ease;
-	border-radius: 5px;
-	font-weight: 600;
-	margin-bottom: 12px;
-}
-#sidebar .btn-upgrade:hover {
-	background: var(--dark-blue);
-}
-#sidebar .ads .wrapper p {
-	font-size: 12px;
-	color: var(--dark-grey);
-	text-align: center;
-}
-#sidebar .ads .wrapper p span {
-	font-weight: 700;
 }
 /* SIDEBAR */
 
@@ -405,8 +195,8 @@ export default{
 	transition: all .3s ease;
 }
 #sidebar.hide + #content {
-	width: calc(100% - 60px);
-	left: 60px;
+	width: calc(100% - 0px);
+	left: 0px;
 }
 /* NAVBAR */
 nav {
@@ -554,13 +344,13 @@ main .breadcrumbs li.divider {
 main .info-data {
 	margin-top: 36px;
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 	grid-gap: 20px;
 }
 main .info-data .card {
 	padding: 20px;
-	border-radius: 10px;
-	background: var(--light);
+	border-radius: 8px;
+	background: rgb(128, 200, 79);
 	box-shadow: 4px 4px 16px rgba(0, 0, 0, .05);
 }
 main .card .head {
@@ -573,11 +363,11 @@ main .card .head h2 {
 	font-weight: 600;
 }
 main .card .head p {
-	font-size: 14px;
+	font-size: 16px;
 }
 main .card .head .icon {
-	font-size: 20px;
-	color: var(--green);
+	font-size: 50px;
+	color: var(--blue);
 }
 main .card .head .icon.down {
 	color: var(--red);
@@ -616,7 +406,7 @@ main .data .content-data {
 	flex-grow: 1;
 	flex-basis: 400px;
 	padding: 20px;
-	background: var(--light);
+	background: var(--light-blue);
 	border-radius: 10px;
 	box-shadow: 4px 4px 16px rgba(0, 0, 0, .1);
 }
@@ -644,7 +434,7 @@ main .content-data .head .menu-link {
 	top: calc(100% + 10px);
 	right: 0;
 	width: 140px;
-	background: var(--light);
+	background: var(--light-blue);
 	border-radius: 10px;
 	box-shadow: 4px 4px 16px rgba(0, 0, 0, .1);
 	padding: 10px 0;
