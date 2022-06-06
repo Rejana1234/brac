@@ -7,7 +7,7 @@
                           </div>   
                           <div class="avartar-info">
                               <div class="avartar-text">
-                                 <h2>alpha ron</h2>
+                                 <h4>alpha ron</h4>
                                 <small>123-456-909</small>
                              </div>
                            <span class="bx bx-chevron-down icon"></span>

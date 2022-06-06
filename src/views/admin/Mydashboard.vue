@@ -118,7 +118,7 @@ export default{
 .avartar-info{
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items:center;
 }
 #sidebar .side-menu {
 	margin: 36px 0;
