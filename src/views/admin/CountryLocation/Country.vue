@@ -14,7 +14,7 @@
          </select>
          Entries
       </div>
-      <div class="search" ><input placeholder="country" ></div>
+      <div class="search" ><input placeholder="Search Country" ></div>
   </div>	
  
 <table summary="This table shows how to create responsive tables using Datatables' extended functionality" class="table table-bordered table-hover dt-responsive">
@@ -185,7 +185,7 @@ input {
     outline: none;
     border: 1px solid #02cf4a;
     border-radius: 6px;
-    color: #02cf5b;
+    color:black;
 }
 .select{
    margin-left: 0%;
@@ -240,7 +240,7 @@ margin-left: 317%;
   border-bottom-right-radius: 5px;
 }
 ::placeholder {
-    color: #02cf51;
+    color: #0a0a0a;
 }
 
 ::-webkit-scrollbar {
