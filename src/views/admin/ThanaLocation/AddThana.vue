@@ -1,13 +1,14 @@
 <template>
-    <div id="AddCountry">
-        <form action="" class="AddCountry-form">
-                 <h2>Add Country</h2>
+    <div id="AddThana">
+        <form action="" class="AddThana-form">
+                 <h2>Add Thana</h2>
             <div class="form-group">
-                <input type="name" name="name" id="" placeholder="Enter Country Name(EN)" class="box">
+                <input type="name" name="name" id="" placeholder="Enter Thana Name(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="name" name="name" id="" placeholder="Enter Country Name(BN)" class="box">
+                <input type="name" name="name" id="" placeholder="Enter Thana Name(BN)" class="box">
             </div>
+ 
             <div class="button">
                 <level>
                     <button type="submit"> Back </button>
@@ -17,15 +18,14 @@
                 </level>
             </div>
            
-            
-
+ 
         </form>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'AddCountry'
+    name: 'AddThana'
    ,
    components: {
      
@@ -51,13 +51,13 @@ export default {
 </script>
 
 <style scoped>
-#AddCountry{
+#AddThana{
     display: flex;
     justify-content: center;
     margin-top: 100rem;
 }
 
-.AddCountry-form{
+.AddThana-form{
     width: 95%;
     position: absolute;
     text-align: center;
@@ -67,11 +67,11 @@ export default {
     background:#eee;
     box-shadow: var(--box-shadow);
 }
-.AddCountry-form h2{
+.AddThana-form h2{
     display: flex;
     justify-content: left;
 }
- .AddCountry-form .box{
+ .AddThana-form .box{
     width: 100%;
     margin: .7rem 0;
     background: rgb(252, 250, 252);
@@ -82,13 +82,13 @@ export default {
     text-transform: none;
 }
 
-.AddCountry-form p{
+.AddThana-form p{
     font-size: 1.4rem;
     padding: .5rem 0;
     color: var(--light-color);
 }
 
-.AddCountry-form p a{
+.AddThana-form p a{
     color: var(--orange);
     text-decoration: underline;
 }
@@ -96,8 +96,7 @@ export default {
 button {
   padding: 7px 7px;
   background-color: rgb(59, 155, 59);
-  margin-right: 2%;
-  
+  margin-left: 2%;
 }
 
 button:hover{
@@ -110,5 +109,4 @@ button:hover{
 ::placeholder{
     font-size: 12px;
 }
-
 </style>

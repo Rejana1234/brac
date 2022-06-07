@@ -1,6 +1,6 @@
 <template>
-   <div id="countrys">
-   <div class="add-country">
+   <div id="Districts">
+   <div class="add-District">
       <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
    </div>
  
@@ -14,7 +14,7 @@
          </select>
          Entries
       </div>
-      <div class="search" ><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search Country" ></div>
+      <div class="search" ><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search District" ></div>
   </div>	
  
 <table summary="This table shows how to create responsive tables using Datatables' extended functionality" class="table table-bordered table-hover dt-responsive">
@@ -22,14 +22,14 @@
         <thead>
           <tr>
              <th>#SL No</th>
-            <th>Country</th>
+            <th>District</th>
              <th colspan="2">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr>
              <td>1</td>
-            <td>Argentina</td>   
+            <td>Gazipur</td>   
             <td colspan="2">
                <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
@@ -37,7 +37,7 @@
           </tr>
           <tr>
              <td>1</td>
-            <td>Argentina</td>   
+            <td>Dhaka</td>   
             <td colspan="2">
                <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
@@ -45,7 +45,7 @@
           </tr>
           <tr>
              <td>1</td>
-            <td>Argentina</td>   
+            <td>Feni</td>   
             <td colspan="2">
                <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
@@ -53,7 +53,7 @@
           </tr>
           <tr>
              <td>1</td>
-            <td>Argentina</td>   
+            <td>Shirajgonj</td>   
             <td colspan="2">
                <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
@@ -61,7 +61,7 @@
           </tr>
           <tr>
              <td>1</td>
-            <td>Argentina</td>   
+            <td>Chadpur</td>   
             <td colspan="2">
                <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
@@ -69,7 +69,7 @@
           </tr>
           <tr>
              <td>1</td>
-            <td>Argentina</td>   
+            <td>Tangail</td>   
             <td colspan="2">
                <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
@@ -77,7 +77,7 @@
           </tr>
           <tr>
              <td>1</td>
-            <td>Argentina</td>   
+            <td>Meherpur</td>   
             <td colspan="2">
                <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
@@ -103,7 +103,7 @@
 </template>
 <script>
 export default {
-   name: 'MyCountry',
+   name: 'MyDistrict',
    components: {
      
    },
@@ -135,7 +135,7 @@ export default {
     text-align: center;
     margin-bottom: 0.5%;
 }
-.add-country{
+.add-District{
    margin-left: 89%;
    margin-bottom: 3%;
 }
