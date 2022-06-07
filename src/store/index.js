@@ -6,13 +6,19 @@ Vue.use(Vuex);
 //import root-vuex
 import state from './state'
 import * as getters from './getters'
-import * as mutaions from './mutaions'
+import * as mutations from './mutations'
 import * as actions from './actions'
+
+//import modules
+import country from './modules/country';
 
 export default new Vuex.Store({
     state,
     getters,
-    mutaions,
-    actions
+    mutations,
+    actions,
 
+    modules:{
+        country
+    }
 })
