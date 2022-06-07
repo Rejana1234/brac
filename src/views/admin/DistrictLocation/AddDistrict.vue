@@ -1,12 +1,27 @@
 <template>
     <div id="AddDistrict">
         <form action="" class="AddDistrict-form">
-                 <h2>Add District</h2>
+                 <h3>Add District</h3>
+            <div class="Selection">
+                <select  name="Country" id="Country" class="box">
+                       <option value="Country Name" class="text">Country Name</option>
+                       <option value="Bangladesh">Bangladesh</option>
+                       <option value="India">India</option>
+                       <option value="Nepal">Nepal</option>
+                       <option value="Pakistan">Pakistan</option>
+                </select>
+            </div>
             <div class="form-group">
                 <input type="name" name="name" id="" placeholder="Enter District Name(EN)" class="box">
             </div>
             <div class="form-group">
                 <input type="name" name="name" id="" placeholder="Enter District Name(BN)" class="box">
+            </div>
+            <div class="form-group">
+                <input type="text" name="name" id="" placeholder="Enter District Code(EN)" class="box">
+            </div>
+            <div class="form-group">
+                <input type="text" name="name" id="" placeholder="Enter District Code(BN)" class="box">
             </div>
  
             <div class="button">
@@ -67,7 +82,7 @@ export default {
     background:#eee;
     box-shadow: var(--box-shadow);
 }
-.AddDistrict-form h2{
+.AddDistrict-form h3{
     display: flex;
     justify-content: left;
 }
@@ -92,7 +107,6 @@ export default {
     color: var(--orange);
     text-decoration: underline;
 }
-
 button {
   padding: 7px 7px;
   background-color: rgb(59, 155, 59);
@@ -107,6 +121,9 @@ button:hover{
     margin-left: 89%;
 }
 ::placeholder{
+    font-size: 12px;
+}
+.selection option.text{
     font-size: 12px;
 }
 </style>
