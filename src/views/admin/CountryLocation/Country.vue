@@ -22,8 +22,8 @@
 
        <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="countries.length" v-for="(country,index) in countries" :key="country.id">
-                <td>{{ index + 1 }}</td>
+            <tr v-show="countries.length" v-for="(country) in countries" :key="country.id">
+                <td>{{ country.id }}</td>
                 <td>{{ country.name_en }}</td>
                 <td>{{ country.name_bn }}</td>
                 <td>{{ country.code_en }}</td>
@@ -40,9 +40,9 @@
        </datatable>
 
         <div class="field">
-            <div><h5> Showing {{ pag.from }} to {{ pag.to }} of {{ pag.total }} entries</h5> </div>
+            <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
-            <pagination :pag="pag" :offset="5" @paginate="getAllCountry()"></pagination>
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCountry();"></pagination>
         </div>
    </div>
 
@@ -50,9 +50,11 @@
 
 <script>
 import DataTable from '../../../components/datatable/DataTable';
-import Pagination from '../../../components/datatable/Pagination';
+import Pagination from '../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
+
+import { http } from '../../../service/http_service';
 
 export default {
    name: 'MyCountry',
@@ -77,6 +79,7 @@ export default {
        });
 
        return {
+           countries: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -89,15 +92,18 @@ export default {
                dir: 'desc',
            },
            pagination: {
-               last_page: '',
-               current_page: 1,
-               total: '',
-               last_page_url: '',
-               next_page_url: '',
-               prev_page_url: '',
-               from: '',
-               to: ''
+                   last_page: '',
+                   current_page: 1,
+                   total: '',
+                   last_page_url: '',
+                   next_page_url: '',
+                   prev_page_url: '',
+                   from: '',
+                   to: ''
            },
+
+           current_page: '',
+           last_page : '',
 
             isActive: false,
             isShow: false,
@@ -106,8 +112,8 @@ export default {
 
     computed: {
         ...mapState({
-            countries: state => state.country.countries,
-            pag: state => state.country.pagination,
+            //countries: state => state.country.countries,
+            //pag: state => state.country.pagination,
             message: state => state.country.success_message
         })
     },
@@ -118,21 +124,25 @@ export default {
 
     methods: {
 
-       getAllCountry: async function(){
-           this.tableData.draw++;
-           try {
-               let params = new URLSearchParams();
-               params.append('page', this.pagination.current_page);
-               params.append('draw', this.tableData.draw);
-               params.append('length', this.tableData.length);
-               params.append('search', this.tableData.search);
-               params.append('column', this.tableData.column);
-               params.append('dir', this.tableData.dir);
+       getAllCountry(){
 
-               await this.$store.dispatch('country/get_country', params);
-           } catch (error) {
-               console.log(error);
-           }
+           this.tableData.draw++;
+           let params = new URLSearchParams();
+           params.append('page', this.pagination.current_page);
+           params.append('draw', this.tableData.draw);
+           params.append('length', this.tableData.length);
+           params.append('search', this.tableData.search);
+           params.append('column', this.tableData.column);
+           params.append('dir', this.tableData.dir);
+
+           return http().get('v1/country/getData?'+params)
+               .then(response => {
+                   this.countries = response.data.data.data;
+                   this.pagination = response.data.data;
+               })
+               .catch(error => {
+                   console.log(error);
+               })
        },
 
         sortBy(key) {
