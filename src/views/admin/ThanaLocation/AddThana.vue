@@ -1,12 +1,27 @@
 <template>
     <div id="AddThana">
         <form action="" class="AddThana-form">
-                 <h2>Add Thana</h2>
+                 <h3>Add Thana</h3>
             <div class="form-group">
-                <input type="name" name="name" id="" placeholder="Enter Thana Name(EN)" class="box">
+                <select  name="District" id="district" class="box">
+                       <option value="Country Name" class="text">District Name</option>
+                       <option value="Bangladesh">Bangladesh</option>
+                       <option value="India">India</option>
+                       <option value="Nepal">Nepal</option>
+                       <option value="Pakistan">Pakistan</option>
+                </select>
             </div>
             <div class="form-group">
-                <input type="name" name="name" id="" placeholder="Enter Thana Name(BN)" class="box">
+                <input type="name" name="name(en)" id="" placeholder="Enter Thana Name(EN)" class="box">
+            </div>
+            <div class="form-group">
+                <input type="name" name="name(bn)" id="" placeholder="Enter Thana Name(BN)" class="box">
+            </div>
+            <div class="form-group">
+                <input type="text" name="code(en)" id="" placeholder="Enter Thana Code(EN)" class="box">
+            </div>
+            <div class="form-group">
+                <input type="text" name="code(bn)" id="" placeholder="Enter Thana Code(BN)" class="box">
             </div>
  
             <div class="button">
@@ -67,7 +82,7 @@ export default {
     background:#eee;
     box-shadow: var(--box-shadow);
 }
-.AddThana-form h2{
+.AddThana-form h3{
     display: flex;
     justify-content: left;
 }
@@ -77,7 +92,7 @@ export default {
     background: rgb(252, 250, 252);
     border-radius: .5rem;
     padding: 1rem;
-    font-size: 1rem;
+    font-size: 12px;
     color: var(--black);
     text-transform: none;
 }

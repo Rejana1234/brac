@@ -1,90 +1,42 @@
 <template>
    <div id="Division">
    <div class="add-Division">
-      <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
+      <router-link to="/dashboard/adddivision">
+               <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
+           </router-link>
    </div>
  
-   <div class="field">
-      <div for="entries">Show:
-         <select  name="entries" id="entries">
-         <option value="10">10</option>
-         <option value="20">20</option>
-         <option value="30">30</option>
-         <option value="40">40</option>
-         </select>
-         Entries
-      </div>
-      <div class="search" ><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search Division" ></div>
-  </div>	
+  <div class="field">
+          <div for="entries">Show:
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllDivision()">
+                 <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
+             </select>
+             Entries
+          </div>
+
+          <div class="search">
+              <input type="text" v-model="tableData.search" placeholder="Search Division" @input="getAllDivision()">
+          </div>
+        </div>	
  
-<table summary="This table shows how to create responsive tables using Datatables' extended functionality" class="table table-bordered table-hover dt-responsive">
-        
-        <thead>
-          <tr>
-             <th>#SL No</th>
-            <th>Division</th>
-             <th colspan="2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-             <td>1</td>
-            <td>Dhaka</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Chittagong</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Barishal</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Khulna</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Rajshahi</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Sylhet</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Maymonsing</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+ <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+           <tbody>
+            <tr v-show="division.length" v-for="(division,index) in divisions" :key="division.id">
+                <td>{{ index + 1 }}</td>
+                <td>{{ division.name_en }}</td>
+                <td>{{ division.name_bn }}</td>
+                <td>{{ division.code_en }}</td>
+                <td>{{ division.code_bn }}</td>
+                <td colspan="2">
+                    <router-link :to="`/dashboard/edit_country/${division.id}`">
+                        <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                    </router-link>
+
+                    <button class="delete" v-on:click="deleteDivision(division)"><i class="fa-solid fa-trash"></i>  Delete</button>
+                </td>
+            </tr>
+           </tbody>
+       </datatable>
 
       <div class="field">
 
@@ -102,25 +54,122 @@
 
 </template>
 <script>
+import DataTable from '../../../components/datatable/DataTable';
+
+import {mapState} from 'vuex';
+
 export default {
    name: 'MyDivision',
+
    components: {
-     
+       datatable: DataTable,
    },
-   mixins: [],
-   props: {
-     
-   },
+
    data() {
-        return {
+       let sortOrders = {};
+       let columns = [
+           {label: '#Sl', name: 'id' },
+           {label: 'Name EN', name: 'name_en'},
+           {label: 'Name BN', name: 'name_bn'},
+           {label: 'Code EN', name: 'code_en'},
+           {label: 'Code BN', name: 'code_bn'},
+           {label: 'Action', name: 'action'},
+       ];
+       columns.forEach((column) => {
+           sortOrders[column.name] = -1;
+       });
+
+       return {
+           columns: columns,
+           sortKey: 'id',
+           sortOrders: sortOrders,
+           perPage: ['10', '20', '30','25','50','100'],
+           tableData: {
+               draw: 0,
+               length: 10,
+               search: '',
+               column: 0,
+               dir: 'desc',
+           },
+           pagination: {
+               last_page: '',
+               current_page: 1,
+               total: '',
+               last_page_url: '',
+               next_page_url: '',
+               prev_page_url: '',
+               from: '',
+               to: ''
+           },
+
             isActive: false,
             isShow: false,
-        };
+       }
+   },
+
+    computed: {
+        ...mapState({
+            countries: state => state.division.divisions,
+            pag: state => state.division.pagination,
+            message: state => state.division.success_message
+        })
     },
+
+    mounted(){
+       this.getAllDivision();
+    },
+
     methods: {
-        myFunction() {
-            this.isActive = !this.isActive;
+
+       getAllDivision: async function(){
+           this.tableData.draw++;
+           try {
+               let params = new URLSearchParams();
+               params.append('page', this.pagination.current_page);
+               params.append('draw', this.tableData.draw);
+               params.append('length', this.tableData.length);
+               params.append('search', this.tableData.search);
+               params.append('column', this.tableData.column);
+               params.append('dir', this.tableData.dir);
+
+               await this.$store.dispatch('division/get_division', params);
+           } catch (error) {
+               console.log(error);
+           }
+       },
+
+        sortBy(key) {
+            this.sortKey = key;
+            this.sortOrders[key] = this.sortOrders[key] * -1;
+            this.tableData.column = this.getIndex(this.columns, 'name', key);
+            this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
+            this.getAllDivision();
+        },
+
+        getIndex(array, key, value) {
+            return array.findIndex(i => i[key] == value)
+        },
+
+        deleteDivision: async function(division){
+           try {
+               let division_id = division.id;
+
+               await this.$store.dispatch('division/delete_division', division_id).then(() => {
+                   this.$swal.fire({
+                       toast: true,
+                       position: 'top-end',
+                       icon: 'success',
+                       title: this.message,
+                       showConfirmButton: false,
+                       timer: 1500
+                   });
+                   this.getAllDivision();
+               })
+           }catch (e) {
+               console.log(e);
+           }
         }
+
     },
 };
 </script>
@@ -136,7 +185,8 @@ export default {
     margin-bottom: 0.5%;
 }
 .add-Division{
-   margin-left: 89%;
+   display:flex;
+    justify-content: flex-end;
    margin-bottom: 3%;
 }
 .select{

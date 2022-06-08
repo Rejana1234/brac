@@ -10,5 +10,10 @@ export default[
         path:'addcountry',
         name:'AddCountry',
         component: AddCountry
+    },
+    {
+        path: 'edit_country/:id',
+        name: 'EditCountry',
+        component: () => import('../../views/admin/CountryLocation/EditCountry.vue')
     }
 ]

@@ -1,7 +1,7 @@
 <template>
-   <div id="Union">
-   <div class="add-Union">
-      <router-link to="/dashboard/addunion">
+   <div id="Village">
+   <div class="add-Village">
+      <router-link to="/dashboard/addvillage">
                <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
            </router-link>
    </div>
@@ -16,7 +16,7 @@
          </select>
          Entries
       </div>
-      <div class="search" ><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search Union" ></div>
+      <div class="search" ><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search Village" ></div>
   </div>	
  
 <table summary="This table shows how to create responsive tables using Datatables' extended functionality" class="table table-bordered table-hover dt-responsive">
@@ -24,7 +24,7 @@
         <thead>
           <tr>
              <th>#SL No</th>
-            <th>Union</th>
+            <th>Village</th>
              <th colspan="2">Action</th>
           </tr>
         </thead>
@@ -105,7 +105,7 @@
 </template>
 <script>
 export default {
-   name: 'MyUnion',
+   name: 'MyVillage',
    components: {
      
    },
@@ -137,7 +137,7 @@ export default {
     text-align: center;
     margin-bottom: 0.5%;
 }
-.add-Union{
+.add-Village{
    display:flex;
     justify-content: flex-end;
    margin-bottom: 3%;

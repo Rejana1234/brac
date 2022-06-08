@@ -1,27 +1,21 @@
 <template>
-    <div id="AddDivision">
-        <form action="" class="AddDivision-form">
-                 <h3>Add Division</h3>
-            <div class="form-group">
-                <select  name="Country" id="Country" class="box">
-                       <option value="Country Name" class="text">Country Name</option>
-                       <option value="Bangladesh">Bangladesh</option>
-                       <option value="India">India</option>
-                       <option value="Nepal">Nepal</option>
-                       <option value="Pakistan">Pakistan</option>
+    <div id="AddPostOffice">
+        <form action="" class="AddPostOffice-form">
+                 <h3>Add PostOffice</h3>
+            <div  class="form-group">
+                <select  name="Village" id="village" class="box" >
+                       <option  class="name">Village Name</option>
+                       <option  class="name">Bangladesh</option>
+                       <option  class="name">India</option>
+                       <option  class="name">Nepal</option>
+                       <option  class="name">Pakistan</option>
                 </select>
             </div>
             <div class="form-group">
-                <input type="name" name="name(en)" id="" placeholder="Enter Division Name(EN)" class="box">
+                <input type="text" name="code(en)" id="" placeholder="Enter PostOffice Code(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="name" name="name(bn)" id="" placeholder="Enter Division Name(BN)" class="box">
-            </div>
-            <div class="form-group">
-                <input type="text" name="code(en)" id="" placeholder="Enter Division Code(EN)" class="box">
-            </div>
-            <div class="form-group">
-                <input type="text" name="code(bn)" id="" placeholder="Enter Division Code(BN)" class="box">
+                <input type="text" name="code(bn)" id="" placeholder="Enter PostOffice Code(BN)" class="box">
             </div>
  
             <div class="button">
@@ -40,7 +34,7 @@
 
 <script>
 export default {
-    name: 'AddDivision'
+    name: 'AddPostOffice'
    ,
    components: {
      
@@ -66,13 +60,13 @@ export default {
 </script>
 
 <style scoped>
-#AddDivision{
+#AddPostOffice{
     display: flex;
     justify-content: center;
     margin-top: 100rem;
 }
 
-.AddDivision-form{
+.AddPostOffice-form{
     width: 95%;
     position: absolute;
     text-align: center;
@@ -82,11 +76,11 @@ export default {
     background:#eee;
     box-shadow: var(--box-shadow);
 }
-.AddDivision-form h3{
+.AddPostOffice-form h3{
     display: flex;
     justify-content: left;
 }
- .AddDivision-form .box{
+ .AddPostOffice-form .box{
     width: 100%;
     margin: .7rem 0;
     background: rgb(252, 250, 252);
@@ -97,13 +91,13 @@ export default {
     text-transform: none;
 }
 
-.AddDivision-form p{
+.AddPostOffice-form p{
     font-size: 1.4rem;
     padding: .5rem 0;
     color: var(--light-color);
 }
 
-.AddDivision-form p a{
+.AddPostOffice-form p a{
     color: var(--orange);
     text-decoration: underline;
 }
@@ -124,4 +118,5 @@ button:hover{
 ::placeholder{
     font-size: 12px;
 }
+
 </style>

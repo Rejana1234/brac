@@ -1,12 +1,27 @@
 <template>
     <div id="AddUnion">
         <form action="" class="AddUnion-form">
-                 <h2>Add Union</h2>
+                 <h3>Add Union</h3>
             <div class="form-group">
-                <input type="name" name="name" id="" placeholder="Enter Union Name(EN)" class="box">
+                <select  name="Thana" id="tana" class="box">
+                       <option value="Country Name" class="text">Thana Name</option>
+                       <option value="Bangladesh">Bangladesh</option>
+                       <option value="India">India</option>
+                       <option value="Nepal">Nepal</option>
+                       <option value="Pakistan">Pakistan</option>
+                </select>
             </div>
             <div class="form-group">
-                <input type="name" name="name" id="" placeholder="Enter Union Name(BN)" class="box">
+                <input type="name" name="name(en)" id="" placeholder="Enter Union Name(EN)" class="box">
+            </div>
+            <div class="form-group">
+                <input type="name" name="name(bn)" id="" placeholder="Enter Union Name(BN)" class="box">
+            </div>
+            <div class="form-group">
+                <input type="text" name="code(en)" id="" placeholder="Enter Union Code(EN)" class="box">
+            </div>
+            <div class="form-group">
+                <input type="text" name="code(bn)" id="" placeholder="Enter Union Code(BN)" class="box">
             </div>
  
             <div class="button">
@@ -67,7 +82,7 @@ export default {
     background:#eee;
     box-shadow: var(--box-shadow);
 }
-.AddUnion-form h2{
+.AddUnion-form h3{
     display: flex;
     justify-content: left;
 }
@@ -77,7 +92,7 @@ export default {
     background: rgb(252, 250, 252);
     border-radius: .5rem;
     padding: 1rem;
-    font-size: 1rem;
+    font-size: 12px;
     color: var(--black);
     text-transform: none;
 }

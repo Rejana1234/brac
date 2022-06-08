@@ -4,8 +4,10 @@ import Dashboard from '../../views/admin/Mydashboard';
 import CountryRouter from './CountryRouter';
 import DistrictRouter from './DistrictRouter';
 import DivisionRouter from './DivisionRouter';
+import PostOfficeRouter from './PostOfficeRouter';
 import ThanaRouter from './ThanaRouter';
 import UnionRouter from './UnionRouter';
+import VillageRouter from './VillageRouter';
 
 export default[
     {
@@ -23,6 +25,8 @@ export default[
             ...DivisionRouter,
             ...ThanaRouter,
             ...UnionRouter,
+            ...VillageRouter,
+            ...PostOfficeRouter
         ]
     }
 ]

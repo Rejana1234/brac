@@ -1,142 +1,183 @@
 <template>
    <div id="countrys">
-   <div class="add-country">
-      <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
-   </div>
- 
-   <div class="field">
-      <div for="entries">Show:
-         <select  name="entries" id="entries">
-         <option value="10">10</option>
-         <option value="20">20</option>
-         <option value="30">30</option>
-         <option value="40">40</option>
-         </select>
-         Entries
-      </div>
-      <div class="search" ><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search Country" ></div>
-  </div>	
- 
-<table summary="This table shows how to create responsive tables using Datatables' extended functionality" class="table table-bordered table-hover dt-responsive">
-        
-        <thead>
-          <tr>
-             <th>#SL No</th>
-            <th>Country</th>
-             <th colspan="2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-             <td>1</td>
-            <td>Argentina</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Argentina</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Argentina</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Argentina</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Argentina</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Argentina</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Argentina</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
 
-      <div class="field">
+       <div class="add-country">
+           <router-link to="/dashboard/addcountry">
+               <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
+           </router-link>
+       </div>
 
-         <div><h5> Showing 1 to 10 of 57 entries</h5> </div>       
-        <div class="pagination">          
-           <a href="#">Previous&laquo;</a>
-           <a class="active" href="#">1</a>
-           <a href="#">2</a>
-           <a href="#">3</a>
-           <a href="#">4</a>
-           <a href="#">Next&raquo;</a>
-        </div>      
-      </div>
-</div>
+        <div class="field">
+          <div for="entries">Show:
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllCountry()">
+                 <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
+             </select>
+             Entries
+          </div>
 
+          <div class="search">
+              <input type="text" v-model="tableData.search" placeholder="Search Country" @input="getAllCountry()">
+          </div>
+        </div>
+
+       <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+           <tbody>
+            <tr v-show="countries.length" v-for="(country,index) in countries" :key="country.id">
+                <td>{{ index + 1 }}</td>
+                <td>{{ country.name_en }}</td>
+                <td>{{ country.name_bn }}</td>
+                <td>{{ country.code_en }}</td>
+                <td>{{ country.code_bn }}</td>
+                <td colspan="2">
+                    <router-link :to="`/dashboard/edit_country/${country.id}`">
+                        <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                    </router-link>
+
+                    <button class="delete" v-on:click="deleteCountry(country)"><i class="fa-solid fa-trash"></i>  Delete</button>
+                </td>
+            </tr>
+           </tbody>
+       </datatable>
+
+        <div class="field">
+            <div><h5> Showing {{ pag.from }} to {{ pag.to }} of {{ pag.total }} entries</h5> </div>
+
+            <pagination :pag="pag" :offset="5" @paginate="getAllCountry()"></pagination>
+        </div>
+   </div>	
 </template>
+
 <script>
+import DataTable from '../../../components/datatable/DataTable';
+import Pagination from '../../../components/datatable/Pagination';
+
+import {mapState} from 'vuex';
+
 export default {
    name: 'MyCountry',
+
    components: {
-     
+       datatable: DataTable,
+       pagination: Pagination
    },
-   mixins: [],
-   props: {
-     
-   },
+
    data() {
-        return {
+       let sortOrders = {};
+       let columns = [
+           {label: '#Sl', name: 'id' },
+           {label: 'Name EN', name: 'name_en'},
+           {label: 'Name BN', name: 'name_bn'},
+           {label: 'Code EN', name: 'code_en'},
+           {label: 'Code BN', name: 'code_bn'},
+           {label: 'Action', name: 'action'},
+       ];
+       columns.forEach((column) => {
+           sortOrders[column.name] = -1;
+       });
+
+       return {
+           columns: columns,
+           sortKey: 'id',
+           sortOrders: sortOrders,
+           perPage: ['10', '20', '30','25','50','100'],
+           tableData: {
+               draw: 0,
+               length: 10,
+               search: '',
+               column: 0,
+               dir: 'desc',
+           },
+           pagination: {
+               last_page: '',
+               current_page: 1,
+               total: '',
+               last_page_url: '',
+               next_page_url: '',
+               prev_page_url: '',
+               from: '',
+               to: ''
+           },
+
             isActive: false,
             isShow: false,
-        };
+       }
+   },
+
+    computed: {
+        ...mapState({
+            countries: state => state.country.countries,
+            pag: state => state.country.pagination,
+            message: state => state.country.success_message
+        })
     },
+
+    mounted(){
+       this.getAllCountry();
+    },
+
     methods: {
-        myFunction() {
-            this.isActive = !this.isActive;
+
+       getAllCountry: async function(){
+           this.tableData.draw++;
+           try {
+               let params = new URLSearchParams();
+               params.append('page', this.pagination.current_page);
+               params.append('draw', this.tableData.draw);
+               params.append('length', this.tableData.length);
+               params.append('search', this.tableData.search);
+               params.append('column', this.tableData.column);
+               params.append('dir', this.tableData.dir);
+
+               await this.$store.dispatch('country/get_country', params);
+           } catch (error) {
+               console.log(error);
+           }
+       },
+
+        sortBy(key) {
+            this.sortKey = key;
+            this.sortOrders[key] = this.sortOrders[key] * -1;
+            this.tableData.column = this.getIndex(this.columns, 'name', key);
+            this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
+            this.getAllCountry();
+        },
+
+        getIndex(array, key, value) {
+            return array.findIndex(i => i[key] == value)
+        },
+
+        deleteCountry: async function(country){
+           try {
+               let country_id = country.id;
+
+               await this.$store.dispatch('country/delete_country', country_id).then(() => {
+                   this.$swal.fire({
+                       toast: true,
+                       position: 'top-end',
+                       icon: 'success',
+                       title: this.message,
+                       showConfirmButton: false,
+                       timer: 1500
+                   });
+                   this.getAllCountry();
+               })
+           }catch (e) {
+               console.log(e);
+           }
         }
+
     },
 };
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-
-
-
 .table {
     width: 100%;
     text-align: center;
     margin-bottom: 0.5%;
 }
 .add-country{
-   margin-left: 89%;
+    display:flex;
+    justify-content: flex-end;
    margin-bottom: 3%;
 }
 .select{

@@ -2,9 +2,9 @@
     <div id="AddDistrict">
         <form action="" class="AddDistrict-form">
                  <h3>Add District</h3>
-            <div class="Selection">
-                <select  name="Country" id="Country" class="box">
-                       <option value="Country Name" class="text">Country Name</option>
+            <div class="form-group">
+                <select  name="Division" id="division" class="box">
+                       <option value="Country Name" class="text">Division Name</option>
                        <option value="Bangladesh">Bangladesh</option>
                        <option value="India">India</option>
                        <option value="Nepal">Nepal</option>
@@ -12,16 +12,16 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="name" name="name" id="" placeholder="Enter District Name(EN)" class="box">
+                <input type="name" name="name(en)" id="" placeholder="Enter District Name(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="name" name="name" id="" placeholder="Enter District Name(BN)" class="box">
+                <input type="name" name="name(bn)" id="" placeholder="Enter District Name(BN)" class="box">
             </div>
             <div class="form-group">
-                <input type="text" name="name" id="" placeholder="Enter District Code(EN)" class="box">
+                <input type="text" name="code(en)" id="" placeholder="Enter District Code(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="text" name="name" id="" placeholder="Enter District Code(BN)" class="box">
+                <input type="text" name="code(bn)" id="" placeholder="Enter District Code(BN)" class="box">
             </div>
  
             <div class="button">
@@ -92,7 +92,7 @@ export default {
     background: rgb(252, 250, 252);
     border-radius: .5rem;
     padding: 1rem;
-    font-size: 1rem;
+    font-size: 12px;
     color: var(--black);
     text-transform: none;
 }

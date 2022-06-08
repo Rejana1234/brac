@@ -1,7 +1,9 @@
 <template>
    <div id="Thana">
    <div class="add-Thana">
-      <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
+      <router-link to="/dashboard/addthana">
+               <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
+           </router-link>
    </div>
  
    <div class="field">
@@ -136,7 +138,8 @@ export default {
     margin-bottom: 0.5%;
 }
 .add-Thana{
-   margin-left: 89%;
+   display:flex;
+    justify-content: flex-end;
    margin-bottom: 3%;
 }
 .select{
