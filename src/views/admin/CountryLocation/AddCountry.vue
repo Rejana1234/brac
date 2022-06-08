@@ -17,9 +17,17 @@
             <div class="form-group">
                 <input type="name" v-model="countryData.code_bn" name="code_bn" id="code_bn" placeholder="Enter Country Name(BN)" class="box">
             </div>
- 
-            <button type="submit"> Save </button>
- 
+            <div class="button">
+                <level>
+                    <button type="submit"> Back </button>
+                </level>
+                <level>
+                    <button type="submit"> Save </button>
+                </level>
+            </div>
+           
+            
+
         </form>
     </div>
 </template>
@@ -100,7 +108,7 @@ export default {
 }
 
 .AddCountry-form{
-    width: 96rem;
+    width: 95%;
     position: absolute;
     text-align: center;
     top: 20%;
@@ -138,11 +146,19 @@ export default {
 button {
   padding: 7px 7px;
   background-color: rgb(59, 155, 59);
-  margin-left: 87rem;
+  margin-right: 2%;
+  
 }
 
 button:hover{
     background: var(--orange);
     color: #fff;
 }
+.button{
+    margin-left: 89%;
+}
+::placeholder{
+    font-size: 12px;
+}
+
 </style>

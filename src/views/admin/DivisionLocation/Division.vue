@@ -1,66 +1,68 @@
 <template>
-   <div id="countrys">
-
-       <div class="add-country">
-           <router-link to="/dashboard/addcountry">
+   <div id="Division">
+   <div class="add-Division">
+      <router-link to="/dashboard/adddivision">
                <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
            </router-link>
-       </div>
-
-        <div class="field">
+   </div>
+ 
+  <div class="field">
           <div for="entries">Show:
-             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllCountry()">
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllDivision()">
                  <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
              </select>
              Entries
           </div>
 
           <div class="search">
-              <input type="text" v-model="tableData.search" placeholder="Search Country" @input="getAllCountry()">
+              <input type="text" v-model="tableData.search" placeholder="Search Division" @input="getAllDivision()">
           </div>
-        </div>
-
-       <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+        </div>	
+ 
+ <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="countries.length" v-for="(country) in countries" :key="country.id">
-                <td>{{ country.id }}</td>
-                <td>{{ country.name_en }}</td>
-                <td>{{ country.name_bn }}</td>
-                <td>{{ country.code_en }}</td>
-                <td>{{ country.code_bn }}</td>
+            <tr v-show="division.length" v-for="(division,index) in divisions" :key="division.id">
+                <td>{{ index + 1 }}</td>
+                <td>{{ division.name_en }}</td>
+                <td>{{ division.name_bn }}</td>
+                <td>{{ division.code_en }}</td>
+                <td>{{ division.code_bn }}</td>
                 <td colspan="2">
-                    <router-link :to="`/dashboard/edit_country/${country.id}`">
+                    <router-link :to="`/dashboard/edit_country/${division.id}`">
                         <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                     </router-link>
 
-                    <button class="delete" v-on:click="deleteCountry(country)"><i class="fa-solid fa-trash"></i>  Delete</button>
+                    <button class="delete" v-on:click="deleteDivision(division)"><i class="fa-solid fa-trash"></i>  Delete</button>
                 </td>
             </tr>
            </tbody>
        </datatable>
 
-        <div class="field">
-            <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
+      <div class="field">
 
-            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCountry();"></pagination>
-        </div>
-   </div>	
+         <div><h5> Showing 1 to 10 of 57 entries</h5> </div>       
+        <div class="pagination">          
+           <a href="#">Previous&laquo;</a>
+           <a class="active" href="#">1</a>
+           <a href="#">2</a>
+           <a href="#">3</a>
+           <a href="#">4</a>
+           <a href="#">Next&raquo;</a>
+        </div>      
+      </div>
+</div>
+
 </template>
-
 <script>
 import DataTable from '../../../components/datatable/DataTable';
-import Pagination from '../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
 
-import { http } from '../../../service/http_service';
-
 export default {
-   name: 'MyCountry',
+   name: 'MyDivision',
 
    components: {
        datatable: DataTable,
-       pagination: Pagination
    },
 
    data() {
@@ -78,7 +80,6 @@ export default {
        });
 
        return {
-           countries: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -91,14 +92,14 @@ export default {
                dir: 'desc',
            },
            pagination: {
-                   last_page: '',
-                   current_page: 1,
-                   total: '',
-                   last_page_url: '',
-                   next_page_url: '',
-                   prev_page_url: '',
-                   from: '',
-                   to: ''
+               last_page: '',
+               current_page: 1,
+               total: '',
+               last_page_url: '',
+               next_page_url: '',
+               prev_page_url: '',
+               from: '',
+               to: ''
            },
 
             isActive: false,
@@ -108,37 +109,33 @@ export default {
 
     computed: {
         ...mapState({
-            //countries: state => state.country.countries,
-            //pag: state => state.country.pagination,
-            message: state => state.country.success_message
+            countries: state => state.division.divisions,
+            pag: state => state.division.pagination,
+            message: state => state.division.success_message
         })
     },
 
     mounted(){
-       this.getAllCountry();
+       this.getAllDivision();
     },
 
     methods: {
 
-       getAllCountry(){
-
+       getAllDivision: async function(){
            this.tableData.draw++;
-           let params = new URLSearchParams();
-           params.append('page', this.pagination.current_page);
-           params.append('draw', this.tableData.draw);
-           params.append('length', this.tableData.length);
-           params.append('search', this.tableData.search);
-           params.append('column', this.tableData.column);
-           params.append('dir', this.tableData.dir);
+           try {
+               let params = new URLSearchParams();
+               params.append('page', this.pagination.current_page);
+               params.append('draw', this.tableData.draw);
+               params.append('length', this.tableData.length);
+               params.append('search', this.tableData.search);
+               params.append('column', this.tableData.column);
+               params.append('dir', this.tableData.dir);
 
-           return http().get('v1/country/getData?'+params)
-               .then(response => {
-                   this.countries = response.data.data.data;
-                   this.pagination = response.data.data;
-               })
-               .catch(error => {
-                   console.log(error);
-               })
+               await this.$store.dispatch('division/get_division', params);
+           } catch (error) {
+               console.log(error);
+           }
        },
 
         sortBy(key) {
@@ -146,18 +143,18 @@ export default {
             this.sortOrders[key] = this.sortOrders[key] * -1;
             this.tableData.column = this.getIndex(this.columns, 'name', key);
             this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
-            this.getAllCountry();
+            this.getAllDivision();
         },
 
         getIndex(array, key, value) {
             return array.findIndex(i => i[key] == value)
         },
 
-        deleteCountry: async function(country){
+        deleteDivision: async function(division){
            try {
-               let country_id = country.id;
+               let division_id = division.id;
 
-               await this.$store.dispatch('country/delete_country', country_id).then(() => {
+               await this.$store.dispatch('division/delete_division', division_id).then(() => {
                    this.$swal.fire({
                        toast: true,
                        position: 'top-end',
@@ -166,7 +163,7 @@ export default {
                        showConfirmButton: false,
                        timer: 1500
                    });
-                   this.getAllCountry();
+                   this.getAllDivision();
                })
            }catch (e) {
                console.log(e);
@@ -177,13 +174,18 @@ export default {
 };
 </script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+
+
+
 .table {
     width: 100%;
     text-align: center;
     margin-bottom: 0.5%;
 }
-.add-country{
-    display:flex;
+.add-Division{
+   display:flex;
     justify-content: flex-end;
    margin-bottom: 3%;
 }

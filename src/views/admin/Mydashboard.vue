@@ -145,6 +145,9 @@ export default{
 #sidebar .side-menu > li > a:hover {
 	background: var(--grey);
 }
+#sidebar .side-menu > li > ul> li> a:hover {
+	background: var(--grey);
+}
 #sidebar .side-menu > li > a.active .icon-right {
 	transform: rotateZ(90deg);
 }
