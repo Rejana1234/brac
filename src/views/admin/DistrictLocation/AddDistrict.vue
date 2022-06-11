@@ -1,27 +1,28 @@
 <template>
     <div id="AddDistrict">
-        <form action="" class="AddDistrict-form">
+        <form  class="AddDistrict-form" v-on:submit.prevent="addDistrict">
                  <h3>Add District</h3>
             <div class="form-group">
-                <select  name="Division" id="division" class="box">
-                       <option value="Country Name" class="text">Division Name</option>
+                <select  name="Division" id="division" class="box" v-model="districtData.country_id" @change="getAllDistrict()">
+                       <option v-for="(records, index) in country_id" :key="index" :value="records">{{records}}</option>
+                       <!-- <option value="Country Name" class="text">Division Name</option>
                        <option value="Bangladesh">Bangladesh</option>
                        <option value="India">India</option>
                        <option value="Nepal">Nepal</option>
-                       <option value="Pakistan">Pakistan</option>
+                       <option value="Pakistan">Pakistan</option> -->
                 </select>
             </div>
             <div class="form-group">
-                <input type="name" name="name(en)" id="" placeholder="Enter District Name(EN)" class="box">
+                <input type="name" v-model="districtData.name_en" name="name(en)" id="" placeholder="Enter District Name(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="name" name="name(bn)" id="" placeholder="Enter District Name(BN)" class="box">
+                <input type="name" v-model="districtData.name_en" name="name(bn)" id="" placeholder="Enter District Name(BN)" class="box">
             </div>
             <div class="form-group">
-                <input type="text" name="code(en)" id="" placeholder="Enter District Code(EN)" class="box">
+                <input type="text" v-model="districtData.name_en" name="code(en)" id="" placeholder="Enter District Code(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="text" name="code(bn)" id="" placeholder="Enter District Code(BN)" class="box">
+                <input type="text" v-model="districtData.name_en" name="code(bn)" id="" placeholder="Enter District Code(BN)" class="box">
             </div>
  
             <div class="button">
@@ -39,6 +40,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
     name: 'AddDistrict'
    ,
@@ -47,11 +50,21 @@ export default {
    },
    data() {
      return {
+         districtData:{
+             country_id:'',
+             name_en:'',
+             name_bn:'',
+             code_en:'',
+             code_bn:''
+         },
+         errors: {}
        
      }
    },
    computed: {
-     
+     ...mapState({
+         message: state => state.district.success_message
+     })
    },
    watch: {
      
@@ -60,6 +73,32 @@ export default {
      
    },
    methods: {
+       addDistrict: async function(){
+           try{
+               let formData = new FormData();
+               formData.append('country_id', this.districtData.country_id);
+               formData.append('name_en', this.districtData.name_en);
+               formData.append('name_bn', this.districtData.name_bn);
+               formData.append('code_en', this.districtData.code_en);
+               formData.append('code_bn', this.districtData.code_bn);
+
+               await this.$store.dispatch('district/add_district', formData).then(() => {
+                   this.$swal.fire({
+                       toast: true,
+                       position: 'top-end',
+                       icon: 'success',
+                       title: this.message,
+                       showConfirmButton: false,
+                       timer: 1500
+                   });
+
+                   this.districtData = {};
+               })
+               
+           }catch (e) {
+               console.log(e)
+           }
+       }
      
    }
 };

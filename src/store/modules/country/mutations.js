@@ -1,3 +1,7 @@
+export const GET_ALL_COUNTRY = (state, data) => {
+    state.countries = data.countries;
+};
+
 export const GET_COUNTRY = (state, data) => {
     state.countries = data.data.data;
     state.pagination = data.data;

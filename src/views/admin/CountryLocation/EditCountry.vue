@@ -1,6 +1,6 @@
 <template>
-    <div id="AddCountry">
-        <form class="AddCountry-form" v-on:submit.prevent="editCountry">
+    <div id="EditCountry">
+        <form class="EditCountry-form" v-on:submit.prevent="editCountry">
             <h2>Edit Country</h2>
             <div class="form-group">
                 <input type="name" v-model="editCountryList.name_en" name="name_en" id="name_en" placeholder="Enter Country Name(EN)" class="box">
@@ -18,7 +18,15 @@
                 <input type="name" v-model="editCountryList.code_bn" name="code_bn" id="code_bn" placeholder="Enter Country Name(BN)" class="box">
             </div>
 
-            <button type="submit"> Edit </button>
+            <div class="button">
+                <level>
+                    <button type="submit"> Back </button>
+                </level>
+                <level>
+                    <button type="submit"> Edit </button>
+                </level>
+            </div>
+           
 
         </form>
     </div>
@@ -84,57 +92,65 @@
 </script>
 
 <style scoped>
-    #AddCountry{
-        display: flex;
-        justify-content: center;
-        margin-top: 100rem;
-    }
 
-    .AddCountry-form{
-        width: 96rem;
-        position: absolute;
-        text-align: center;
-        top: 20%;
-        padding: 2rem;
-        border-radius: .5rem;
-        background:#eee;
-        box-shadow: var(--box-shadow);
-    }
-    .AddCountry-form h2{
-        display: flex;
-        justify-content: left;
-    }
-    .AddCountry-form .box{
-        width: 100%;
-        margin: .7rem 0;
-        background: rgb(252, 250, 252);
-        border-radius: .5rem;
-        padding: 1rem;
-        font-size: 1rem;
-        color: var(--black);
-        text-transform: none;
-    }
+#EditCountry{
+    display: flex;
+    justify-content: center;
+    margin-top: 100rem;
+}
 
-    .AddCountry-form p{
-        font-size: 1.4rem;
-        padding: .5rem 0;
-        color: var(--light-color);
-    }
+.EditCountry-form{
+    width: 95%;
+    position: absolute;
+    text-align: center;
+    top: 20%;
+    padding: 2rem;
+    border-radius: .5rem;
+    background:#eee;
+    box-shadow: var(--box-shadow);
+}
+.EditCountry-form h2{
+    display: flex;
+    justify-content: left;
+}
+ .EditCountry-form .box{
+    width: 100%;
+    margin: .7rem 0;
+    background: rgb(252, 250, 252);
+    border-radius: .5rem;
+    padding: 1rem;
+    font-size: 1rem;
+    color: var(--black);
+    text-transform: none;
+}
 
-    .AddCountry-form p a{
-        color: var(--orange);
-        text-decoration: underline;
-    }
+.EditCountry-form p{
+    font-size: 1.4rem;
+    padding: .5rem 0;
+    color: var(--light-color);
+}
 
-    button {
-        padding: 7px 7px;
-        background-color: rgb(59, 155, 59);
-        margin-left: 87rem;
-    }
+.EditCountry-form p a{
+    color: var(--orange);
+    text-decoration: underline;
+}
 
-    button:hover{
-        background: var(--orange);
-        color: #fff;
-    }
+button {
+  padding: 7px 7px;
+  background-color: rgb(59, 155, 59);
+  margin-right: 2%;
+  
+}
+
+button:hover{
+    background: var(--orange);
+    color: #fff;
+}
+.button{
+    margin-left: 89%;
+}
+::placeholder{
+    font-size: 12px;
+}
 
 </style>

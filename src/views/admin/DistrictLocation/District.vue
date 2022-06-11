@@ -22,12 +22,13 @@
            <tbody>
             <tr v-show="districts.length" v-for="(district,index) in districts" :key="district.id">
                 <td>{{ index + 1 }}</td>
+                <td>{{ district.division_name }}</td>
                 <td>{{ district.name_en }}</td>
                 <td>{{ district.name_bn }}</td>
                 <td>{{ district.code_en }}</td>
                 <td>{{ district.code_bn }}</td>
                 <td colspan="2">
-                    <router-link :to="`/dashboard/edit_country/${district.id}`">
+                    <router-link :to="`/dashboard/edit_district/${district.id}`">
                         <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                     </router-link>
 
@@ -39,36 +40,34 @@
 
 
       <div class="field">
+            <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
-         <div><h5> Showing 1 to 10 of 57 entries</h5> </div>       
-        <div class="pagination">          
-           <a href="#">Previous&laquo;</a>
-           <a class="active" href="#">1</a>
-           <a href="#">2</a>
-           <a href="#">3</a>
-           <a href="#">4</a>
-           <a href="#">Next&raquo;</a>
-        </div>      
-      </div>
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllDistrict();"></pagination>
+        </div>
 </div>
 
 </template>
 <script>
 import DataTable from '../../../components/datatable/DataTable';
+import Pagination from '../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
+
+import { http } from '../../../service/http_service';
 
 export default {
    name: 'MyDistrict',
 
    components: {
        datatable: DataTable,
+       pagination: Pagination
    },
 
    data() {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
+           {label: 'Division_Name', name: 'division_name'},
            {label: 'Name EN', name: 'name_en'},
            {label: 'Name BN', name: 'name_bn'},
            {label: 'Code EN', name: 'code_en'},
@@ -80,6 +79,7 @@ export default {
        });
 
        return {
+           districts: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -92,15 +92,18 @@ export default {
                dir: 'desc',
            },
            pagination: {
-               last_page: '',
-               current_page: 1,
-               total: '',
-               last_page_url: '',
-               next_page_url: '',
-               prev_page_url: '',
-               from: '',
-               to: ''
+                   last_page: '',
+                   current_page: 1,
+                   total: '',
+                   last_page_url: '',
+                   next_page_url: '',
+                   prev_page_url: '',
+                   from: '',
+                   to: ''
            },
+
+           current_page: '',
+           last_page : '',
 
             isActive: false,
             isShow: false,
@@ -109,8 +112,8 @@ export default {
 
     computed: {
         ...mapState({
-            countries: state => state.district.districts,
-            pag: state => state.district.pagination,
+            //countries: state => state.country.countries,
+            //pag: state => state.country.pagination,
             message: state => state.district.success_message
         })
     },
@@ -121,21 +124,25 @@ export default {
 
     methods: {
 
-       getAllDistrict: async function(){
-           this.tableData.draw++;
-           try {
-               let params = new URLSearchParams();
-               params.append('page', this.pagination.current_page);
-               params.append('draw', this.tableData.draw);
-               params.append('length', this.tableData.length);
-               params.append('search', this.tableData.search);
-               params.append('column', this.tableData.column);
-               params.append('dir', this.tableData.dir);
+      getAllDistrict(){
 
-               await this.$store.dispatch('district/get_district', params);
-           } catch (error) {
-               console.log(error);
-           }
+           this.tableData.draw++;
+           let params = new URLSearchParams();
+           params.append('page', this.pagination.current_page);
+           params.append('draw', this.tableData.draw);
+           params.append('length', this.tableData.length);
+           params.append('search', this.tableData.search);
+           params.append('column', this.tableData.column);
+           params.append('dir', this.tableData.dir);
+
+           return http().get('v1/district/getData?'+params)
+               .then(response => {
+                   this.districts = response.data.data.data;
+                   this.pagination = response.data.data;
+               })
+               .catch(error => {
+                   console.log(error);
+               })
        },
 
         sortBy(key) {
@@ -174,10 +181,6 @@ export default {
 };
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-
-
 
 .table {
     width: 100%;

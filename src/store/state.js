@@ -1,4 +1,4 @@
 export default {
-    apiUrl: 'http://localhost:8000/api',
-    serverPath: 'https://localhost:8000',
+    apiUrl: 'https://infoservice.nodesdigitalbd.com/api',
+    serverPath: 'https://infoservice.nodesdigitalbd.com',
 }

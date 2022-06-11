@@ -5,7 +5,7 @@
             <div class="form-group">
                 <input type="name" v-model="countryData.name_en" name="name_en" id="name_en" placeholder="Enter Country Name(EN)" class="box">
 
-            </div>
+            </div>  
             <div class="form-group">
                 <input type="name" v-model="countryData.name_bn" name="name_bn" id="name_bn" placeholder="Enter Country Name(BN)" class="box">
             </div>
