@@ -10,5 +10,10 @@ export default[
         path:'adddivision',
         name:'AddDivision',
         component: AddDivision
+    },
+    {
+        path: 'edit_division/:id',
+        name: 'EditDivision',
+        component: () => import('../../views/admin/DivisionLocation/EditDivision.vue')
     }
 ]

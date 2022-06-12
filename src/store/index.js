@@ -11,7 +11,8 @@ import * as actions from './actions'
 
 //import modules
 import country from './modules/country';
-
+import district from "./modules/district";
+import division from "./modules/division";
 export default new Vuex.Store({
     state,
     getters,
@@ -19,6 +20,8 @@ export default new Vuex.Store({
     actions,
 
     modules:{
-        country
+        country,
+        division,
+        district,
     }
 })

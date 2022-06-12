@@ -21,14 +21,15 @@
  
  <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="division.length" v-for="(division,index) in divisions" :key="division.id">
+            <tr v-show="divisions.length" v-for="(division,index) in divisions" :key="division.id">
                 <td>{{ index + 1 }}</td>
-                <td>{{ division.name_en }}</td>
-                <td>{{ division.name_bn }}</td>
-                <td>{{ division.code_en }}</td>
-                <td>{{ division.code_bn }}</td>
+                <td>{{ division.country_name}}</td>
+                <td>{{ division.division_name_en }}</td>
+                <td>{{ division.division_name_bn }}</td>
+                <td>{{ division.division_code_en }}</td>
+                <td>{{ division.division_code_bn }}</td>
                 <td colspan="2">
-                    <router-link :to="`/dashboard/edit_country/${division.id}`">
+                    <router-link :to="`/dashboard/edit_division/${division.id}`">
                         <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                     </router-link>
 
@@ -39,47 +40,46 @@
        </datatable>
 
       <div class="field">
+            <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
-         <div><h5> Showing 1 to 10 of 57 entries</h5> </div>       
-        <div class="pagination">          
-           <a href="#">Previous&laquo;</a>
-           <a class="active" href="#">1</a>
-           <a href="#">2</a>
-           <a href="#">3</a>
-           <a href="#">4</a>
-           <a href="#">Next&raquo;</a>
-        </div>      
-      </div>
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllDivision();"></pagination>
+        </div>
 </div>
 
 </template>
 <script>
 import DataTable from '../../../components/datatable/DataTable';
+import Pagination from '../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
+
+import { http } from '../../../service/http_service';
 
 export default {
    name: 'MyDivision',
 
    components: {
        datatable: DataTable,
+       pagination: Pagination
    },
 
    data() {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
-           {label: 'Name EN', name: 'name_en'},
-           {label: 'Name BN', name: 'name_bn'},
-           {label: 'Code EN', name: 'code_en'},
-           {label: 'Code BN', name: 'code_bn'},
-           {label: 'Action', name: 'action'},
+           {label: 'Country Name', name: 'country_name'},
+           {label: 'Name EN', name: 'division_name_en'},
+           {label: 'Name BN', name: 'division_name_bn'},
+           {label: 'Code EN', name: 'division_code_en'},
+           {label: 'Code BN', name: 'division_code_bn'},
+           {label: 'Action', name: 'action'}
        ];
        columns.forEach((column) => {
            sortOrders[column.name] = -1;
        });
 
        return {
+           divisions: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -92,14 +92,14 @@ export default {
                dir: 'desc',
            },
            pagination: {
-               last_page: '',
-               current_page: 1,
-               total: '',
-               last_page_url: '',
-               next_page_url: '',
-               prev_page_url: '',
-               from: '',
-               to: ''
+                   last_page: '',
+                   current_page: 1,
+                   total: '',
+                   last_page_url: '',
+                   next_page_url: '',
+                   prev_page_url: '',
+                   from: '',
+                   to: ''
            },
 
             isActive: false,
@@ -109,8 +109,8 @@ export default {
 
     computed: {
         ...mapState({
-            countries: state => state.division.divisions,
-            pag: state => state.division.pagination,
+            //countries: state => state.country.countries,
+            //pag: state => state.country.pagination,
             message: state => state.division.success_message
         })
     },
@@ -121,21 +121,26 @@ export default {
 
     methods: {
 
-       getAllDivision: async function(){
-           this.tableData.draw++;
-           try {
-               let params = new URLSearchParams();
-               params.append('page', this.pagination.current_page);
-               params.append('draw', this.tableData.draw);
-               params.append('length', this.tableData.length);
-               params.append('search', this.tableData.search);
-               params.append('column', this.tableData.column);
-               params.append('dir', this.tableData.dir);
+       getAllDivision(){
 
-               await this.$store.dispatch('division/get_division', params);
-           } catch (error) {
-               console.log(error);
-           }
+           this.tableData.draw++;
+           let params = new URLSearchParams();
+           params.append('page', this.pagination.current_page);
+           params.append('draw', this.tableData.draw);
+           params.append('length', this.tableData.length);
+           params.append('search', this.tableData.search);
+           params.append('column', this.tableData.column);
+           params.append('dir', this.tableData.dir);
+
+           return http().get('v1/division/getData?'+params)
+               .then(response => {
+                   this.divisions = response.data.data.data;
+                   this.pagination = response.data.data;
+                   console.log(this.divisions);
+               })
+               .catch(error => {
+                   console.log(error);
+               })
        },
 
         sortBy(key) {
@@ -174,9 +179,6 @@ export default {
 };
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-
 
 
 .table {

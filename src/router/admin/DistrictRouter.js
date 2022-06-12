@@ -10,5 +10,10 @@ export default[
         path:'adddistrict',
         name:'AddDistrict',
         component: AddDistrict
+    },
+    {
+        path: 'edit_district/:id',
+        name: 'EditDistrict',
+        component: () => import('../../views/admin/DistrictLocation/EditDistrict.vue')
     }
 ]
