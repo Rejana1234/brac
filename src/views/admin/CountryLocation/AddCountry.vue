@@ -19,8 +19,11 @@
             </div>
             <div class="button">
                 <level>
-                    <button type="submit"> Back </button>
+                    <router-link to="/dashboard/country">
+                        <button type="button"> Back </button>
+                    </router-link>
                 </level>
+
                 <level>
                     <button type="submit"> Save </button>
                 </level>

@@ -7,7 +7,7 @@ export default[
         component: Union
     },
     {
-        path:'addunion',
+        path:'add_union',
         name:'AddUnion',
         component: AddUnion
     }

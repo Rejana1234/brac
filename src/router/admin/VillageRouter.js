@@ -7,7 +7,7 @@ export default[
         component: Village
     },
     {
-        path:'addvillage',
+        path:'add_village',
         name:'AddVillage',
         component: AddVillage
     }

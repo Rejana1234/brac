@@ -12,22 +12,25 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="name" name="name(en)" id="" placeholder="Enter District Name(EN)" class="box">
+                <input type="name" name="name_en" id="name_en" placeholder="Enter District Name(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="name" name="name(bn)" id="" placeholder="Enter District Name(BN)" class="box">
+                <input type="name" name="name_bn" id="name_bn" placeholder="Enter District Name(BN)" class="box">
             </div>
             <div class="form-group">
-                <input type="text" name="code(en)" id="" placeholder="Enter District Code(EN)" class="box">
+                <input type="text" name="code_en" id="code_en" placeholder="Enter District Code(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="text" name="code(bn)" id="" placeholder="Enter District Code(BN)" class="box">
+                <input type="text" name="code_bn" id="code_bn" placeholder="Enter District Code(BN)" class="box">
             </div>
  
             <div class="button">
                 <level>
-                    <button type="submit"> Back </button>
+                    <router-link to="">
+                        <button type="button"> Back </button>
+                    </router-link>
                 </level>
+
                 <level>
                     <button type="submit"> Save </button>
                 </level>

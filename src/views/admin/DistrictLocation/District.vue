@@ -40,35 +40,31 @@
 
       <div class="field">
 
-         <div><h5> Showing 1 to 10 of 57 entries</h5> </div>       
-        <div class="pagination">          
-           <a href="#">Previous&laquo;</a>
-           <a class="active" href="#">1</a>
-           <a href="#">2</a>
-           <a href="#">3</a>
-           <a href="#">4</a>
-           <a href="#">Next&raquo;</a>
-        </div>      
+         <div><h5> Showing 1 to 10 of 57 entries</h5> </div>
+         <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCountry();"></pagination>
       </div>
 </div>
 
 </template>
 <script>
 import DataTable from '../../../components/datatable/DataTable';
+import Pagination from '../../../components/datatable/Pagination.vue';
 
-import {mapState} from 'vuex';
+import {mapState, mapActions} from 'vuex';
 
 export default {
    name: 'MyDistrict',
 
    components: {
        datatable: DataTable,
+       pagination: Pagination
    },
 
    data() {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
+           {label: 'Division Name', name: 'division_name'},
            {label: 'Name EN', name: 'name_en'},
            {label: 'Name BN', name: 'name_bn'},
            {label: 'Code EN', name: 'code_en'},
@@ -109,7 +105,7 @@ export default {
 
     computed: {
         ...mapState({
-            countries: state => state.district.districts,
+            divisions: state => state.division.divisions,
             pag: state => state.district.pagination,
             message: state => state.district.success_message
         })

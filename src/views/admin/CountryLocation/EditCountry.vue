@@ -18,7 +18,17 @@
                 <input type="name" v-model="editCountryList.code_bn" name="code_bn" id="code_bn" placeholder="Enter Country Name(BN)" class="box">
             </div>
 
-            <button type="submit"> Edit </button>
+            <div class="button">
+                <level>
+                    <router-link to="/dashboard/country">
+                        <button type="button"> Back </button>
+                    </router-link>
+                </level>
+
+                <level>
+                    <button type="submit"> Edit </button>
+                </level>
+            </div>
 
         </form>
     </div>
@@ -126,15 +136,23 @@
         text-decoration: underline;
     }
 
+
     button {
         padding: 7px 7px;
         background-color: rgb(59, 155, 59);
-        margin-left: 87rem;
+        margin-right: 2%;
+
     }
 
     button:hover{
         background: var(--orange);
         color: #fff;
+    }
+    .button{
+        margin-left: 89%;
+    }
+    ::placeholder{
+        font-size: 12px;
     }
 
 </style>
