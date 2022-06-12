@@ -1,3 +1,7 @@
+export const GET_ALL_DISTRICT = (state, data) => {
+    state.districts = data.districts;
+};
+
 export const GET_DISTRICT = (state, data) => {
     state.districts = data.data.data;
     state.pagination = data.data;

@@ -12,13 +12,14 @@ export const get_thana = ({commit}, data) => {
 
 export const add_thana = ({commit}, data) => {
     return http().post('v1/thana/store', data).then(res => {
+        // console.log(res.data);
         commit('THANA_STORE', res.data);
     })
 };
 
 export const edit_thana = ({commit}, id) => {
     return http().get(`v1/thana/edit/${id}`).then(res => {
-        //console.log(res.data);
+         //console.log(res.data);
         commit('GET_EDIT_THANA', res.data);
     })
 };

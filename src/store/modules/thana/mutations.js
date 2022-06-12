@@ -17,7 +17,7 @@ export const THANA_STORE = (state, data) => {
 };
 
 export const GET_EDIT_THANA = (state, data) => {
-    state.thana = data;
+    state.thana = data.thana;
 };
 
 export const THANA_UPDATE = (state, data) => {
