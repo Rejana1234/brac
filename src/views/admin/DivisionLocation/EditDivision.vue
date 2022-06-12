@@ -3,6 +3,13 @@
         <form class="AddDivision-form" v-on:submit.prevent="editDivision">
             <h2>Edit Division</h2>
             <div class="form-group">
+                <select  name="Country_id" id="country" class="box" v-model="editDivisionList.country_id">
+                       <option value="">Select Country</option>
+                       <option v-for="(country, index) in Countries" :key="index" :value="country.id">{{country.name_en}}</option>
+                      
+                </select>
+            </div>
+            <div class="form-group">
                 <input type="name" v-model="editDivisionList.name_en" name="name_en" id="name_en" placeholder="Enter Division Name(EN)" class="box">
 
             </div>
@@ -11,14 +18,14 @@
             </div>
 
             <div class="form-group">
-                <input type="name" v-model="editDivisionList.code_en" name="code_en" id="code_en" placeholder="Enter Division Name(EN)" class="box">
+                <input type="name" v-model="editDivisionList.code_en" name="code_en" id="code_en" placeholder="Enter Division Code(EN)" class="box">
 
             </div>
             <div class="form-group">
-                <input type="name" v-model="editDivisionList.code_bn" name="code_bn" id="code_bn" placeholder="Enter Division Name(BN)" class="box">
+                <input type="name" v-model="editDivisionList.code_bn" name="code_bn" id="code_bn" placeholder="Enter Division Code(BN)" class="box">
             </div>
 
-             <div class="button">
+            <div class="button">
                 <level>
                     <button type="submit"> Back </button>
                 </level>
@@ -46,17 +53,20 @@
         computed: {
             ...mapState({
                 editDivisionList: state => state.division.division,
+                Countries: state => state.country.countries,
                 message: state => state.division.success_message
             })
         },
 
         mounted(){
             this.getEditDivision(this.$route.params.id);
+            this.get__all_country();
         },
 
         methods: {
             ...mapActions({
-                getEditDivision: 'division/edit_division'
+                getEditDivision: 'division/edit_division',
+                get__all_country: 'country/get_all_country'
             }),
 
             editDivision: async function(){
@@ -64,6 +74,7 @@
                     let id = this.$route.params.id;
                     let formData = new FormData();
 
+                    formData.append('country_id', this.editDivisionList.country_id);
                     formData.append('name_en', this.editDivisionList.name_en);
                     formData.append('name_bn', this.editDivisionList.name_bn);
                     formData.append('code_en', this.editDivisionList.code_en);

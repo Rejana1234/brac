@@ -1,5 +1,5 @@
 import {http} from "../../../service/http_service";
-export const get_all_country = ({commit}) => {
+export const get_all_division = ({commit}) => {
     return http().get('v1/division').then(res => {
         commit('GET_ALL_DIVISION', res.data);
     })
@@ -18,7 +18,8 @@ export const add_division = ({commit}, data) => {
 
 export const edit_division = ({commit}, id) => {
     return http().get(`v1/division/edit/${id}`).then(res => {
-        commit('GET_EDIT_DIVISION', res.data.division);
+        //console.log(res.data);
+        commit('GET_EDIT_DIVISION', res.data);
     })
 };
 

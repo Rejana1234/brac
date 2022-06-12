@@ -6,130 +6,179 @@
            </router-link>
    </div>
  
-   <div class="field">
-      <div for="entries">Show:
-         <select  name="entries" id="entries">
-         <option value="10">10</option>
-         <option value="20">20</option>
-         <option value="30">30</option>
-         <option value="40">40</option>
-         </select>
-         Entries
-      </div>
-      <div class="search" ><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search Thana" ></div>
-  </div>	
+  <div class="field">
+          <div for="entries">Show:
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllThana()">
+                 <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
+             </select>
+             Entries
+          </div>
+
+          <div class="search">
+              <input type="text" v-model="tableData.search" placeholder="Search Thana" @input="getAllThana()">
+          </div>
+        </div>	
  
-<table summary="This table shows how to create responsive tables using Datatables' extended functionality" class="table table-bordered table-hover dt-responsive">
-        
-        <thead>
-          <tr>
-             <th>#SL No</th>
-            <th>Thana</th>
-             <th colspan="2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-             <td>1</td>
-            <td>Vatara</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Ramu</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Barishal</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Mihirgao</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Senbag</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Nababpur</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Shiburia</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+ <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+           <tbody>
+            <tr v-show="thanas.length" v-for="(thana,index) in thanas" :key="thana.id">
+                <td>{{ index + 1 }}</td>
+                <td>{{ thana.district_name}}</td>
+                <td>{{ thana.thana_name_en }}</td>
+                <td>{{ thana.thana_name_bn }}</td>
+                <td>{{ thana.thana_code_en }}</td>
+                <td>{{ thana.thana_code_bn }}</td>
+                <td colspan="2">
+                    <router-link :to="`/dashboard/edit_thana/${thana.id}`">
+                        <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                    </router-link>
+
+                    <button class="delete" v-on:click="deleteThana(thana)"><i class="fa-solid fa-trash"></i>  Delete</button>
+                </td>
+            </tr>
+           </tbody>
+       </datatable>
 
       <div class="field">
+            <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
-         <div><h5> Showing 1 to 10 of 57 entries</h5> </div>       
-        <div class="pagination">          
-           <a href="#">Previous&laquo;</a>
-           <a class="active" href="#">1</a>
-           <a href="#">2</a>
-           <a href="#">3</a>
-           <a href="#">4</a>
-           <a href="#">Next&raquo;</a>
-        </div>      
-      </div>
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllThana();"></pagination>
+        </div>
 </div>
 
 </template>
 <script>
+import DataTable from '../../../components/datatable/DataTable';
+import Pagination from '../../../components/datatable/Pagination.vue';
+
+import {mapState} from 'vuex';
+
+import { http } from '../../../service/http_service';
+
 export default {
    name: 'MyThana',
+
    components: {
-     
+       datatable: DataTable,
+       pagination: Pagination
    },
-   mixins: [],
-   props: {
-     
-   },
+
    data() {
-        return {
+       let sortOrders = {};
+       let columns = [
+           {label: '#Sl', name: 'id' },
+           {label: 'District Name', name: 'district_name'},
+           {label: 'Name EN', name: 'thana_name_en'},
+           {label: 'Name BN', name: 'thana_name_bn'},
+           {label: 'Code EN', name: 'thana_code_en'},
+           {label: 'Code BN', name: 'thana_code_bn'},
+           {label: 'Action', name: 'action'}
+       ];
+       columns.forEach((column) => {
+           sortOrders[column.name] = -1;
+       });
+
+       return {
+           thanas: [],
+           columns: columns,
+           sortKey: 'id',
+           sortOrders: sortOrders,
+           perPage: ['10', '20', '30','25','50','100'],
+           tableData: {
+               draw: 0,
+               length: 10,
+               search: '',
+               column: 0,
+               dir: 'desc',
+           },
+           pagination: {
+                   last_page: '',
+                   current_page: 1,
+                   total: '',
+                   last_page_url: '',
+                   next_page_url: '',
+                   prev_page_url: '',
+                   from: '',
+                   to: ''
+           },
+
             isActive: false,
             isShow: false,
-        };
+       }
+   },
+
+    computed: {
+        ...mapState({
+            //countries: state => state.country.countries,
+            //pag: state => state.country.pagination,
+            message: state => state.thana.success_message
+        })
     },
+
+    mounted(){
+       this.getAllThana();
+    },
+
     methods: {
-        myFunction() {
-            this.isActive = !this.isActive;
+
+       getAllThana(){
+
+           this.tableData.draw++;
+           let params = new URLSearchParams();
+           params.append('page', this.pagination.current_page);
+           params.append('draw', this.tableData.draw);
+           params.append('length', this.tableData.length);
+           params.append('search', this.tableData.search);
+           params.append('column', this.tableData.column);
+           params.append('dir', this.tableData.dir);
+
+           return http().get('v1/thana/getData?'+params)
+               .then(response => {
+                   this.thanas = response.data.data.data;
+                   this.pagination = response.data.data;
+                   console.log(this.thanas);
+               })
+               .catch(error => {
+                   console.log(error);
+               })
+       },
+
+        sortBy(key) {
+            this.sortKey = key;
+            this.sortOrders[key] = this.sortOrders[key] * -1;
+            this.tableData.column = this.getIndex(this.columns, 'name', key);
+            this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
+            this.getAllThana();
+        },
+
+        getIndex(array, key, value) {
+            return array.findIndex(i => i[key] == value)
+        },
+
+        deleteThana: async function(thana){
+           try {
+               let thana_id = thana.id;
+
+               await this.$store.dispatch('thana/delete_thana', thana_id).then(() => {
+                   this.$swal.fire({
+                       toast: true,
+                       position: 'top-end',
+                       icon: 'success',
+                       title: this.message,
+                       showConfirmButton: false,
+                       timer: 1500
+                   });
+                   this.getAllThana();
+               })
+           }catch (e) {
+               console.log(e);
+           }
         }
+
     },
 };
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-
 
 
 .table {

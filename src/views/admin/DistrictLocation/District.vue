@@ -287,7 +287,6 @@ margin-left: 317%;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 }
-
 .pagination a:last-child {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;

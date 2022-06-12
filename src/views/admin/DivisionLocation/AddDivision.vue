@@ -4,7 +4,7 @@
                  <h3>Add Division</h3>
             <div class="form-group">
                 <select  name="Country_id" id="country" class="box" v-model="divisionData.country_id">
-                       <option value="country">Select Country</option>
+                       <option value="">Select Country</option>
                        <option v-for="(country, index) in Countries" :key="index" :value="country.id">{{country.name_en}}</option>
                       
                 </select>
