@@ -1,7 +1,7 @@
 <template>
    <div id="Districts">
    <div class="add-District">
-      <router-link to="/dashboard/adddistrict">
+      <router-link to="/dashboard/add_district">
                <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
            </router-link>
    </div>
@@ -40,8 +40,8 @@
 
 
       <div class="field">
-        <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
-         <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCountry();"></pagination>
+        <div><h5> Showing {{ paginations.from }} to {{ paginations.to }} of {{ paginations.total }} entries</h5> </div>
+         <pagination :pagination.sync="paginations" :offset="5" @paginate="getAllCountry();"></pagination>
       </div>
 
 
@@ -52,9 +52,7 @@
 import DataTable from '../../../components/datatable/DataTable';
 import Pagination from '../../../components/datatable/Pagination.vue';
 
-import {mapState, mapActions} from 'vuex';
-
-import { http } from '../../../service/http_service';
+import {mapState} from 'vuex';
 
 export default {
    name: 'MyDistrict',
@@ -80,7 +78,6 @@ export default {
        });
 
        return {
-           districts: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -113,37 +110,34 @@ export default {
 
     computed: {
         ...mapState({
-            divisions: state => state.division.divisions,
-            pag: state => state.district.pagination,
+            districts: state => state.district.districts,
+            paginations: state => state.district.pagination,
             message: state => state.district.success_message
         })
     },
 
     mounted(){
-       this.getAllDistrict();
+       this.getDistrict();
     },
 
     methods: {
 
-      getAllDistrict(){
+      getDistrict: async function(){
 
-           this.tableData.draw++;
-           let params = new URLSearchParams();
-           params.append('page', this.pagination.current_page);
-           params.append('draw', this.tableData.draw);
-           params.append('length', this.tableData.length);
-           params.append('search', this.tableData.search);
-           params.append('column', this.tableData.column);
-           params.append('dir', this.tableData.dir);
+            try{
+                this.tableData.draw++;
+                let params = new URLSearchParams();
+                params.append('page', this.pagination.current_page);
+                params.append('draw', this.tableData.draw);
+                params.append('length', this.tableData.length);
+                params.append('search', this.tableData.search);
+                params.append('column', this.tableData.column);
+                params.append('dir', this.tableData.dir);
 
-           return http().get('v1/district/getData?'+params)
-               .then(response => {
-                   this.districts = response.data.data.data;
-                   this.pagination = response.data.data;
-               })
-               .catch(error => {
-                   console.log(error);
-               })
+                await this.$store.dispatch('district/get_district', params);
+            }catch(e) {
+                console.log(e);
+            }
        },
 
         sortBy(key) {

@@ -1,4 +1,5 @@
 import {http} from "../../../service/http_service";
+
 export const get_all_division = ({commit}) => {
     return http().get('v1/division').then(res => {
         commit('GET_ALL_DIVISION', res.data);

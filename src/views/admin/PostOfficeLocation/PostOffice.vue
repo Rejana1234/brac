@@ -1,7 +1,7 @@
 <template>
    <div id="Post_office">
    <div class="add-Post_office">
-      <router-link to="/dashboard/addpost_office">
+      <router-link to="/dashboard/add_post_office">
                <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
            </router-link>
    </div>
@@ -21,13 +21,10 @@
  
  <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="post_office.length" v-for="(post_office,index) in post_offices" :key="post_office.id">
+            <tr v-show="postOfficesList.length" v-for="(post_office,index) in postOfficesList" :key="post_office.id">
                 <td>{{ index + 1 }}</td>
-                <td>{{ post_office.district_id}}</td>
-                <td>{{ post_office.name_en }}</td>
-                <td>{{ post_office.name_bn }}</td>
-                <td>{{ post_office.code_en }}</td>
-                <td>{{ post_office.code_bn }}</td>
+                <td>{{ post_office.village_name}}</td>
+                <td>{{ post_office.post_office_name }}</td>
                 <td colspan="2">
                     <router-link :to="`/dashboard/edit_post_office/${post_office.id}`">
                         <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
@@ -40,9 +37,9 @@
        </datatable>
 
       <div class="field">
-            <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
+            <div><h5> Showing {{ paginations.from }} to {{ paginations.to }} of {{ paginations.total }} entries</h5> </div>
 
-            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllPostOffice();"></pagination>
+            <pagination :pagination.sync="paginations" :offset="5" @paginate="getAllPostOffice();"></pagination>
         </div>
 </div>
 
@@ -52,8 +49,6 @@ import DataTable from '../../../components/datatable/DataTable';
 import Pagination from '../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
-
-import { http } from '../../../service/http_service';
 
 export default {
    name: 'MyPost_Office',
@@ -67,11 +62,8 @@ export default {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
-           {label: 'District_ID', name: 'district_id'},
-           {label: 'Name EN', name: 'name_en'},
-           {label: 'Name BN', name: 'name_bn'},
-           {label: 'Code EN', name: 'code_en'},
-           {label: 'Code BN', name: 'code_bn'},
+           {label: 'Village Name', name: 'village_name'},
+           {label: 'Post Office', name: 'post_office_name'},
            {label: 'Action', name: 'action'},
        ];
        columns.forEach((column) => {
@@ -79,7 +71,6 @@ export default {
        });
 
        return {
-           post_offices: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -112,9 +103,9 @@ export default {
 
     computed: {
         ...mapState({
-            //countries: state => state.country.countries,
-            //pag: state => state.country.pagination,
-            message: state => state.post_office.success_message
+            postOfficesList: state => state.BarcPostOffice.Barc_post_offices,
+            paginations: state => state.BarcPostOffice.pagination,
+            message: state => state.BarcPostOffice.success_message
         })
     },
 
@@ -124,25 +115,23 @@ export default {
 
     methods: {
 
-       getAllPostOffice(){
+       getAllPostOffice: async function(){
 
-           this.tableData.draw++;
-           let params = new URLSearchParams();
-           params.append('page', this.pagination.current_page);
-           params.append('draw', this.tableData.draw);
-           params.append('length', this.tableData.length);
-           params.append('search', this.tableData.search);
-           params.append('column', this.tableData.column);
-           params.append('dir', this.tableData.dir);
+           try {
+               this.tableData.draw++;
+               let params = new URLSearchParams();
+               params.append('page', this.pagination.current_page);
+               params.append('draw', this.tableData.draw);
+               params.append('length', this.tableData.length);
+               params.append('search', this.tableData.search);
+               params.append('column', this.tableData.column);
+               params.append('dir', this.tableData.dir);
 
-           return http().get('v1/post_office'+params)
-               .then(response => {
-                   this.post_offices = response.data.data.data;
-                   this.pagination = response.data.data;
-               })
-               .catch(error => {
-                   console.log(error);
-               })
+               await this.$store.dispatch('BarcPostOffice/get_post_office', params);
+
+           }catch (e) {
+               console.log(e);
+           }
        },
 
         sortBy(key) {
@@ -161,7 +150,7 @@ export default {
            try {
                let post_office_id = post_office.id;
 
-               await this.$store.dispatch('post_office/delete_post_office', post_office_id).then(() => {
+               await this.$store.dispatch('BarcPostOffice/delete_post_office', post_office_id).then(() => {
                    this.$swal.fire({
                        toast: true,
                        position: 'top-end',
@@ -181,10 +170,6 @@ export default {
 };
 </script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-
-
 
 .table {
     width: 100%;

@@ -32,16 +32,22 @@
 					</li>
 
 					<li>
-						<router-link active-class="active" to="/dashboard/union"><i class='bx bxs-chart icon' ></i> Union</router-link>
-					</li>
-
-					<li>
 						<router-link active-class="active" to="/dashboard/village"><i class='bx bxs-chart icon' ></i> Village</router-link>
 					</li>
 
+                    <li>
+                        <router-link active-class="active" to="/dashboard/post_office"><i class='bx bxs-chart icon' ></i> Post-Office</router-link>
+                    </li>
+
+                    <li>
+                        <router-link active-class="active" to="/dashboard/poc"><i class='bx bxs-chart icon' ></i> Poc</router-link>
+                    </li>
+
 					<li>
-						<router-link active-class="active" to="/dashboard/post_office"><i class='bx bxs-chart icon' ></i> Post-Office</router-link>
+						<router-link active-class="active" to="/dashboard/union"><i class='bx bxs-chart icon' ></i> Union</router-link>
 					</li>
+
+
 				</ul>
 			</li>
 			<li class="divider" data-text="location">Land-Size </li>

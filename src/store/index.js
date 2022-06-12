@@ -13,6 +13,11 @@ import * as actions from './actions'
 import country from './modules/country';
 import district from "./modules/district";
 import division from "./modules/division";
+import thana from "./modules/thana";
+import village from "./modules/village";
+import BarcPostOffice from "./modules/barcPostOffice";
+
+
 export default new Vuex.Store({
     state,
     getters,
@@ -23,5 +28,8 @@ export default new Vuex.Store({
         country,
         division,
         district,
+        thana,
+        village,
+        BarcPostOffice
     }
 })

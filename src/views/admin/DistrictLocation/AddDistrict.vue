@@ -3,38 +3,32 @@
         <form  class="AddDistrict-form" v-on:submit.prevent="addDistrict">
                  <h3>Add District</h3>
             <div class="form-group">
-                <select  name="Division" id="division" class="box" v-model="districtData.country_id" @change="getAllDistrict()">
-                       <option v-for="(records, index) in country_id" :key="index" :value="records">{{records}}</option>
-                       <!-- <option value="Country Name" class="text">Division Name</option>
-                       <option value="Bangladesh">Bangladesh</option>
-                       <option value="India">India</option>
-                       <option value="Nepal">Nepal</option>
-                       <option value="Pakistan">Pakistan</option> -->
+                <select  name="division_id" id="division_id" class="box" v-model="districtData.division_id">
+                    <option value="">Select Division</option>
+                    <option v-for="(division, index) in divisions" :key="index" :value="division.id">{{division.name_en}}</option>
                 </select>
             </div>
             <div class="form-group">
-                <input type="name" name="name_en" id="name_en" placeholder="Enter District Name(EN)" class="box">
+                <input type="name" v-model="districtData.name_en" name="name_en" id="name_en" placeholder="Enter District Name(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="name" name="name_bn" id="name_bn" placeholder="Enter District Name(BN)" class="box">
+                <input type="name" v-model="districtData.name_bn" name="name_bn" id="name_bn" placeholder="Enter District Name(BN)" class="box">
             </div>
             <div class="form-group">
-                <input type="text" name="code_en" id="code_en" placeholder="Enter District Code(EN)" class="box">
+                <input type="text" v-model="districtData.code_en" name="code_en" id="code_en" placeholder="Enter District Code(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="text" name="code_bn" id="code_bn" placeholder="Enter District Code(BN)" class="box">
+                <input type="text" v-model="districtData.code_bn" name="code_bn" id="code_bn" placeholder="Enter District Code(BN)" class="box">
             </div>
  
             <div class="button">
-                <level>
-                    <router-link to="">
+                <div>
+                    <router-link to="/dashboard/district">
                         <button type="button"> Back </button>
                     </router-link>
-                </level>
 
-                <level>
                     <button type="submit"> Save </button>
-                </level>
+                </div>
             </div>
            
  
@@ -43,18 +37,19 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
-    name: 'AddDistrict'
-   ,
+    name: 'AddDistrict',
+
    components: {
      
    },
+
    data() {
      return {
          districtData:{
-             country_id:'',
+             division_id:'',
              name_en:'',
              name_bn:'',
              code_en:'',
@@ -64,22 +59,31 @@ export default {
        
      }
    },
+
    computed: {
      ...mapState({
+         divisions: state => state.division.divisions,
          message: state => state.district.success_message
      })
    },
+
    watch: {
      
    },
+
    mounted() {
-     
+     this.getAllDivision();
    },
+
    methods: {
+       ...mapActions({
+           getAllDivision: 'division/get_all_division'
+       }),
+
        addDistrict: async function(){
            try{
                let formData = new FormData();
-               formData.append('country_id', this.districtData.country_id);
+               formData.append('division_id', this.districtData.division_id);
                formData.append('name_en', this.districtData.name_en);
                formData.append('name_bn', this.districtData.name_bn);
                formData.append('code_en', this.districtData.code_en);
