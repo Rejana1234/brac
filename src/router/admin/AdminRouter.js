@@ -10,6 +10,7 @@ import ThanaRouter from './ThanaRouter';
 import UnionRouter from './UnionRouter';
 import VillageRouter from './VillageRouter';
 import CropRouter from './CropRouter';
+import PoRouter from './PoRouter';
 
 export default[
     {
@@ -31,6 +32,8 @@ export default[
             ...PostOfficeRouter,
             ...SeasonRouter,
             ...CropRouter,
+            ...PoRouter
+
         ]
     }
 ]

@@ -1,36 +1,32 @@
 <template>
     <div id="AddUnion">
-        <form action="" class="AddUnion-form">
+        <form action="" class="AddUnion-form" v-on:submit.prevent="addUnion">
                  <h3>Add Union</h3>
+
             <div class="form-group">
-                <select  name="Thana" id="tana" class="box">
-                       <option value="Country Name" class="text">Thana Name</option>
-                       <option value="Bangladesh">Bangladesh</option>
-                       <option value="India">India</option>
-                       <option value="Nepal">Nepal</option>
-                       <option value="Pakistan">Pakistan</option>
+                <select  name="village_id" id="village_id" class="box" v-model="unionData.village_id">
+                    <option value="">Select Village</option>
+                    <option v-for="(village, index) in villages" :key="index" :value="village.id">{{village.name_en}}</option>
                 </select>
             </div>
+
             <div class="form-group">
-                <input type="name" name="name(en)" id="" placeholder="Enter Union Name(EN)" class="box">
+                <input type="name" v-model="unionData.name_en" name="name(en)" id="name_en" placeholder="Enter Union Name(EN)" class="box">
             </div>
+
             <div class="form-group">
-                <input type="name" name="name(bn)" id="" placeholder="Enter Union Name(BN)" class="box">
-            </div>
-            <div class="form-group">
-                <input type="text" name="code(en)" id="" placeholder="Enter Union Code(EN)" class="box">
-            </div>
-            <div class="form-group">
-                <input type="text" name="code(bn)" id="" placeholder="Enter Union Code(BN)" class="box">
+                <input type="name" v-model="unionData.name_bn" name="name(bn)" id="name_bn" placeholder="Enter Union Name(BN)" class="box">
             </div>
  
             <div class="button">
-                <level>
-                    <button type="submit"> Back </button>
-                </level>
-                <level>
+                <div>
+                    <router-link to="/dashboard/union">
+                        <button type="submit"> Back </button>
+                    </router-link>
+
                     <button type="submit"> Save </button>
-                </level>
+                </div>
+
             </div>
            
  
@@ -39,28 +35,68 @@
 </template>
 
 <script>
+    import {mapState, mapActions} from 'vuex';
 export default {
-    name: 'AddUnion'
-   ,
+    name: 'AddUnion',
+
    components: {
      
    },
+
    data() {
      return {
-       
+       unionData: {
+           village_id: '',
+           name_en: '',
+           name_bn: ''
+       }
      }
    },
+
    computed: {
-     
+       ...mapState({
+           villages: state => state.village.villages,
+           message: state => state.union.success_message
+       })
    },
+
    watch: {
      
    },
+
    mounted() {
-     
+       this.getVillage();
    },
+
    methods: {
-     
+       ...mapActions({
+           getVillage: 'village/get_all_village'
+       }),
+
+       addUnion: async function(){
+           try {
+               let formData = new FormData();
+
+               formData.append('village_id', this.unionData.village_id);
+               formData.append('name_en', this.unionData.name_en);
+               formData.append('name_bn', this.unionData.name_bn);
+
+               await this.$store.dispatch('union/add_union', formData).then(() => {
+                   this.$swal.fire({
+                       toast: true,
+                       position: 'top-end',
+                       icon: 'success',
+                       title: this.message,
+                       showConfirmButton: false,
+                       timer: 1500
+                   });
+
+                   this.unionData = {};
+               })
+           }catch (e) {
+               console.log(e);
+           }
+       }
    }
 };
 </script>

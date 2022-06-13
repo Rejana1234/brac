@@ -40,11 +40,15 @@
                     </li>
 
                     <li>
-                        <router-link active-class="active" to="/dashboard/poc"><i class='bx bxs-chart icon' ></i> Poc</router-link>
+                        <router-link active-class="active" to="/dashboard/po"><i class='bx bxs-chart icon' ></i> Poc</router-link>
                     </li>
 
 					<li>
 						<router-link active-class="active" to="/dashboard/union"><i class='bx bxs-chart icon' ></i> Union</router-link>
+					</li>
+
+					<li>
+						<router-link active-class="active" to="/dashboard/location"><i class='bx bxs-chart icon' ></i>All Location</router-link>
 					</li>
 
 

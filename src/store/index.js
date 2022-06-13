@@ -18,6 +18,8 @@ import thana from "./modules/thana";
 import village from "./modules/village";
 import BarcPostOffice from "./modules/barcPostOffice";
 import seasion from "./modules/seasion";
+import po from "./modules/po";
+import union from "./modules/union";
 
 export default new Vuex.Store({
     state,
@@ -33,6 +35,7 @@ export default new Vuex.Store({
         village,
         BarcPostOffice,
         seasion,
-
+        po,
+        union
     }
 })

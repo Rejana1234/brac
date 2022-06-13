@@ -5,7 +5,7 @@
 
             <div class="form-group">
                 <select  name="village_id" id="village_id" class="box" v-model="postOfficeData.village_id">
-                    <option value="">Select Thana</option>
+                    <option value="">Select Village</option>
                     <option v-for="(village, index) in villages" :key="index" :value="village.id">{{village.name_en}}</option>
                 </select>
             </div>

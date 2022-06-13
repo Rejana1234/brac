@@ -1,5 +1,11 @@
 import {http} from "../../../service/http_service";
 
+export const get_all_post_office = ({commit}) => {
+    return http().get('v1/post_office').then(res => {
+        commit('GET_ALL_POST_OFFICE', res.data);
+    })
+};
+
 export const get_post_office  = ({commit}, data) => {
     return http().get('v1/post_office/getData?'+data).then(res => {
         commit('GET_POST_OFFICE', res.data);
