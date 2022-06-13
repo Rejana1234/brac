@@ -10,5 +10,10 @@ export default[
         path:'addthana',
         name:'AddThana',
         component: AddThana
+    },
+    {
+        path: 'edit_thana/:id',
+        name: 'EditThana',
+        component: () => import('../../views/admin/ThanaLocation/EditThana.vue')
     }
 ]

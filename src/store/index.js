@@ -14,9 +14,10 @@ import country from './modules/country';
 import district from "./modules/district";
 import division from "./modules/division";
 import thana from "./modules/thana";
+
 import village from "./modules/village";
 import BarcPostOffice from "./modules/barcPostOffice";
-
+import seasion from "./modules/seasion";
 
 export default new Vuex.Store({
     state,
@@ -30,6 +31,8 @@ export default new Vuex.Store({
         district,
         thana,
         village,
-        BarcPostOffice
+        BarcPostOffice,
+        seasion,
+
     }
 })

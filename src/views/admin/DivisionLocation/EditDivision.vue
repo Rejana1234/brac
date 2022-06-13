@@ -1,6 +1,6 @@
 <template>
-    <div id="AddDivision">
-        <form class="AddDivision-form" v-on:submit.prevent="editDivision">
+    <div id="EditDivision">
+        <form class="EditDivision-form" v-on:submit.prevent="editDivision">
             <h2>Edit Division</h2>
             <div class="form-group">
                 <select  name="Country_id" id="country" class="box" v-model="editDivisionList.country_id">
@@ -103,14 +103,14 @@
 </script>
 
 <style scoped>
-    #AddDivision{
+    #EditDivision{
         display: flex;
         justify-content: center;
         margin-top: 100rem;
     }
 
-    .AddDivision-form{
-        width: 96rem;
+    .EditDivision-form{
+        width: 96%;
         position: absolute;
         text-align: center;
         top: 20%;
@@ -119,11 +119,11 @@
         background:#eee;
         box-shadow: var(--box-shadow);
     }
-    .AddDivision-form h2{
+    .EditDivision-form h2{
         display: flex;
         justify-content: left;
     }
-    .AddDivision-form .box{
+    .EditDivision-form .box{
         width: 100%;
         margin: .7rem 0;
         background: rgb(252, 250, 252);
@@ -134,13 +134,13 @@
         text-transform: none;
     }
 
-    .AddDivision-form p{
+    .EditDivision-form p{
         font-size: 1.4rem;
         padding: .5rem 0;
         color: var(--light-color);
     }
 
-    .AddDivision-form p a{
+    .EditDivision-form p a{
         color: var(--orange);
         text-decoration: underline;
     }

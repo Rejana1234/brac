@@ -5,9 +5,11 @@ import CountryRouter from './CountryRouter';
 import DistrictRouter from './DistrictRouter';
 import DivisionRouter from './DivisionRouter';
 import PostOfficeRouter from './PostOfficeRouter';
+import SeasonRouter from './SeasonRouter';
 import ThanaRouter from './ThanaRouter';
 import UnionRouter from './UnionRouter';
 import VillageRouter from './VillageRouter';
+import CropRouter from './CropRouter';
 
 export default[
     {
@@ -26,7 +28,9 @@ export default[
             ...ThanaRouter,
             ...UnionRouter,
             ...VillageRouter,
-            ...PostOfficeRouter
+            ...PostOfficeRouter,
+            ...SeasonRouter,
+            ...CropRouter,
         ]
     }
 ]
