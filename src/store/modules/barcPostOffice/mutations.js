@@ -1,3 +1,7 @@
+export const GET_ALL_POST_OFFICE = (state, data) => {
+    state.Barc_post_offices = data.post_office;
+};
+
 export const GET_POST_OFFICE = (state, data) => {
     state.Barc_post_offices = data.data.data;
     state.pagination = data.data;

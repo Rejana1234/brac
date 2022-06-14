@@ -19,7 +19,12 @@ import BarcPostOffice from "./modules/barcPostOffice";
 import seasion from "./modules/seasion";
 import landSize from "./modules/landSize";
 import crop from "./modules/crop";
-
+import po from "./modules/po";
+import union from "./modules/union";
+import location from "./modules/location";
+import selection from "./modules/selection";
+import cultivation from "./modules/cultivation";
+import section from "./modules/section";
 
 export default new Vuex.Store({
     state,
@@ -32,11 +37,17 @@ export default new Vuex.Store({
         division,
         district,
         thana,
+        union,
         village,
         BarcPostOffice,
         seasion,
         landSize,
         crop,
-       
+        po,
+        location,
+        selection,
+        cultivation,
+        section,
+        
     }
 })

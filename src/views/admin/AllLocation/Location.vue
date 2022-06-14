@@ -1,57 +1,54 @@
 <template>
-   <div id="Post_office">
-   <div class="add-Post_office">
-      <router-link to="/dashboard/add_post_office">
-               <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
-           </router-link>
-   </div>
- 
-  <div class="field">
+   <div id="location">
+
+        <div class="field">
           <div for="entries">Show:
-             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllPostOffice()">
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllLocation()">
                  <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
              </select>
              Entries
           </div>
 
           <div class="search">
-              <input type="text" v-model="tableData.search" placeholder="Search Post_office" @input="getAllPostOffice()">
+              <input type="text" v-model="tableData.search" placeholder="Search Location" @input="getAllLocation()">
           </div>
-        </div>	
- 
- <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
-           <tbody>
-            <tr v-show="postOfficesList.length" v-for="(post_office,index) in postOfficesList" :key="post_office.id">
-                <td>{{ index + 1 }}</td>
-                <td>{{ post_office.village_name}}</td>
-                <td>{{ post_office.post_office_name }}</td>
-                <td colspan="2">
-                    <router-link :to="`/dashboard/edit_post_office/${post_office.id}`">
-                        <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-                    </router-link>
+        </div>
 
-                    <button class="delete" v-on:click="deletePostOffice(post_office)"><i class="fa-solid fa-trash"></i>  Delete</button>
-                </td>
+       <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+           <tbody>
+            <tr v-show="locations.length" v-for="(location) in locations" :key="location.id">
+                <td>{{ location.id }}</td>
+                <td>{{ location.user_id }}</td>
+                <td>{{ location.country_name_en }}</td>
+                <td>{{ location.division_name_en }}</td>
+                <td>{{ location.district_name_en }}</td>
+                <td>{{ location.thana_name_en }}</td>
+                <td>{{ location.village_name_en }}</td>
+                <td>{{ location.post_code }}</td>
+                <td>{{ location.poc_code }}</td>
+                <td>{{ location.union_name_en }}</td>
             </tr>
            </tbody>
        </datatable>
 
-      <div class="field">
-            <div><h5> Showing {{ paginations.from }} to {{ paginations.to }} of {{ paginations.total }} entries</h5> </div>
+        <div class="field">
+            <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
-            <pagination :pagination.sync="paginations" :offset="5" @paginate="getAllPostOffice();"></pagination>
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllLocation();"></pagination>
         </div>
-</div>
-
+   </div>	
 </template>
+
 <script>
 import DataTable from '../../../components/datatable/DataTable';
 import Pagination from '../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
 
+import { http } from '../../../service/http_service';
+
 export default {
-   name: 'MyPost_Office',
+   name: 'AllLocation',
 
    components: {
        datatable: DataTable,
@@ -62,15 +59,22 @@ export default {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
-           {label: 'Village Name', name: 'village_name'},
-           {label: 'Post Office', name: 'post_office_name'},
-           {label: 'Action', name: 'action'},
+           {label: 'User ID', name: 'user_id'},
+           {label: 'Country', name: 'country_name_en'},
+           {label: 'Division', name: 'division_name_en'},
+           {label: 'District', name: 'district_name_en'},
+           {label: 'Thana', name: 'thana_name_enaction'},
+           {label: 'Village', name: 'village_name_en'},
+           {label: 'Post Code', name: 'post_code'},
+           {label: 'POC Code', name: 'poc_code'},
+           {label: 'Union', name: 'union_name_en'},
        ];
        columns.forEach((column) => {
            sortOrders[column.name] = -1;
        });
 
        return {
+           locations: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -93,9 +97,6 @@ export default {
                    to: ''
            },
 
-           current_page: '',
-           last_page : '',
-
             isActive: false,
             isShow: false,
        }
@@ -103,35 +104,36 @@ export default {
 
     computed: {
         ...mapState({
-            postOfficesList: state => state.BarcPostOffice.Barc_post_offices,
-            paginations: state => state.BarcPostOffice.pagination,
-            message: state => state.BarcPostOffice.success_message
+            
+            message: state => state.location.success_message
         })
     },
 
     mounted(){
-       this.getAllPostOffice();
+       this.getAllLocation();
     },
 
     methods: {
 
-       getAllPostOffice: async function(){
+       getAllLocation(){
 
-           try {
-               this.tableData.draw++;
-               let params = new URLSearchParams();
-               params.append('page', this.pagination.current_page);
-               params.append('draw', this.tableData.draw);
-               params.append('length', this.tableData.length);
-               params.append('search', this.tableData.search);
-               params.append('column', this.tableData.column);
-               params.append('dir', this.tableData.dir);
+           this.tableData.draw++;
+           let params = new URLSearchParams();
+           params.append('page', this.pagination.current_page);
+           params.append('draw', this.tableData.draw);
+           params.append('length', this.tableData.length);
+           params.append('search', this.tableData.search);
+           params.append('column', this.tableData.column);
+           params.append('dir', this.tableData.dir);
 
-               await this.$store.dispatch('BarcPostOffice/get_post_office', params);
-
-           }catch (e) {
-               console.log(e);
-           }
+           return http().get('v1/location/getData?'+params)
+               .then(response => {
+                   this.locations = response.data.data.data;
+                   this.pagination = response.data.data;
+               })
+               .catch(error => {
+                   console.log(error);
+               })
        },
 
         sortBy(key) {
@@ -139,48 +141,18 @@ export default {
             this.sortOrders[key] = this.sortOrders[key] * -1;
             this.tableData.column = this.getIndex(this.columns, 'name', key);
             this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
-            this.getAllPostOffice();
+            this.getAllLocation();
         },
-
-        getIndex(array, key, value) {
-            return array.findIndex(i => i[key] == value)
-        },
-
-        deletePostOffice: async function(post_office){
-           try {
-               let post_office_id = post_office.id;
-
-               await this.$store.dispatch('BarcPostOffice/delete_post_office', post_office_id).then(() => {
-                   this.$swal.fire({
-                       toast: true,
-                       position: 'top-end',
-                       icon: 'success',
-                       title: this.message,
-                       showConfirmButton: false,
-                       timer: 1500
-                   });
-                   this.getAllPostOffice();
-               })
-           }catch (e) {
-               console.log(e);
-           }
-        }
-
     },
 };
 </script>
 <style>
-
 .table {
     width: 100%;
     text-align: center;
     margin-bottom: 0.5%;
 }
-.add-Post_office{
-   display:flex;
-    justify-content: flex-end;
-   margin-bottom: 3%;
-}
+
 .select{
    align-items:baseline;
 }
@@ -297,4 +269,7 @@ margin-left: 317%;
 ::-webkit-scrollbar-thumb {
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
+ 
+
+
 </style>

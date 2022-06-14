@@ -71,6 +71,7 @@ export default {
            {label: 'Image', name: 'image'},
            {label: 'Name EN', name: 'name_en'},
            {label: 'Name BN', name: 'name_bn'},
+           {label: 'Action', name: 'action'}
        ];
        columns.forEach((column) => {
            sortOrders[column.name] = -1;

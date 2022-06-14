@@ -16,12 +16,12 @@
  
  <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="seasions.length" v-for="(seasion,index) in seasions" :key="seasion.id">
+            <tr v-show="landseasions.length" v-for="(landseasion,index) in landseasions" :key="landseasion.id">
                 <td>{{ index + 1 }}</td>
-                <td>{{ seasion.name_en }}</td>
-                <td>{{ seasion.name_bn }}</td>
-                <td>{{ seasion.start_date }}</td>
-                <td>{{ seasion.end_date}}</td>
+                <td>{{ landseasion.name_en }}</td>
+                <td>{{ landseasion.name_bn }}</td>
+                <td>{{ landseasion.start_date }}</td>
+                <td>{{ landseasion.end_date}}</td>
             </tr>
            </tbody>
        </datatable>

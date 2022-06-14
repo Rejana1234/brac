@@ -1,43 +1,32 @@
 <template>
-    <div id="AddUnion">
-        <form action="" class="AddUnion-form" v-on:submit.prevent="addUnion">
-                 <h3>Add Union</h3>
-
+    <div id="AddCultivation">
+        <form class="AddCultivation-form" v-on:submit.prevent="addCultivation">
+             <h2>Add Cultivation</h2>  
             <div class="form-group">
-                <select  name="village_id" id="village_id" class="box" v-model="unionData.village_id">
-                    <option value="">Select Village</option>
-                    <option v-for="(village, index) in villages" :key="index" :value="village.id">{{village.name_en}}</option>
-                </select>
+                <input type="name" v-model="cultivationData.name" name="name" id="name" placeholder="Enter cultivation Name" class="box">
             </div>
-
-            <div class="form-group">
-                <input type="name" v-model="unionData.name_en" name="name(en)" id="name_en" placeholder="Enter Union Name(EN)" class="box">
-            </div>
-
-            <div class="form-group">
-                <input type="name" v-model="unionData.name_bn" name="name(bn)" id="name_bn" placeholder="Enter Union Name(BN)" class="box">
-            </div>
- 
             <div class="button">
                 <div>
-                    <router-link to="/dashboard/union">
-                        <button type="submit"> Back </button>
+                    <router-link to="/dashboard/cultivation_category">
+                        <button type="button"> Back </button>
                     </router-link>
-
                     <button type="submit"> Save </button>
                 </div>
 
             </div>
            
- 
+            
+
         </form>
     </div>
 </template>
 
 <script>
-    import {mapState, mapActions} from 'vuex';
+
+import {mapState} from 'vuex';
+
 export default {
-    name: 'AddUnion',
+    name: 'AddCultivation',
 
    components: {
      
@@ -45,18 +34,20 @@ export default {
 
    data() {
      return {
-       unionData: {
-           village_id: '',
+       cultivationData:{
+           image:'',
            name_en: '',
-           name_bn: ''
-       }
+           name_bn: '',
+           
+       },
+
+        errors: {}
      }
    },
 
    computed: {
        ...mapState({
-           villages: state => state.village.villages,
-           message: state => state.union.success_message
+           message: state => state.cultivation.success_message
        })
    },
 
@@ -65,23 +56,18 @@ export default {
    },
 
    mounted() {
-       this.getVillage();
+     
    },
 
    methods: {
-       ...mapActions({
-           getVillage: 'village/get_all_village'
-       }),
-
-       addUnion: async function(){
+      
+       addCultivation: async function(){
            try {
                let formData = new FormData();
+               formData.append('name', this.cultivationData.name);
+               
 
-               formData.append('village_id', this.unionData.village_id);
-               formData.append('name_en', this.unionData.name_en);
-               formData.append('name_bn', this.unionData.name_bn);
-
-               await this.$store.dispatch('union/add_union', formData).then(() => {
+               await this.$store.dispatch('cultivation/add_cultivation', formData).then(() => {
                    this.$swal.fire({
                        toast: true,
                        position: 'top-end',
@@ -91,7 +77,7 @@ export default {
                        timer: 1500
                    });
 
-                   this.unionData = {};
+                   this.cultivationData = {};
                })
            }catch (e) {
                console.log(e);
@@ -102,13 +88,14 @@ export default {
 </script>
 
 <style scoped>
-#AddUnion{
+
+#AddCultivation{
     display: flex;
     justify-content: center;
     margin-top: 100rem;
 }
 
-.AddUnion-form{
+.AddCultivation-form{
     width: 95%;
     position: absolute;
     text-align: center;
@@ -118,28 +105,28 @@ export default {
     background:#eee;
     box-shadow: var(--box-shadow);
 }
-.AddUnion-form h3{
+.AddCultivation-form h2{
     display: flex;
     justify-content: left;
 }
- .AddUnion-form .box{
+ .AddCultivation-form .box{
     width: 100%;
     margin: .7rem 0;
     background: rgb(252, 250, 252);
     border-radius: .5rem;
     padding: 1rem;
-    font-size: 12px;
+    font-size: 1rem;
     color: var(--black);
     text-transform: none;
 }
 
-.AddUnion-form p{
+.AddCultivation-form p{
     font-size: 1.4rem;
     padding: .5rem 0;
     color: var(--light-color);
 }
 
-.AddUnion-form p a{
+.AddCultivation-form p a{
     color: var(--orange);
     text-decoration: underline;
 }
@@ -147,7 +134,8 @@ export default {
 button {
   padding: 7px 7px;
   background-color: rgb(59, 155, 59);
-  margin-left: 2%;
+  margin-right: 2%;
+  
 }
 
 button:hover{
@@ -160,4 +148,5 @@ button:hover{
 ::placeholder{
     font-size: 12px;
 }
+
 </style>

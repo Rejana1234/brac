@@ -1,32 +1,26 @@
 <template>
-    <div id="edit_union">
-        <form action="" class="AddUnion-form" v-on:submit.prevent="editUnion">
-            <h3>Edit Union</h3>
+    <div id="edit_po">
+        <form action="" class="AddPostOffice-form" v-on:submit.prevent="editPo">
+            <h3>Edit Poc</h3>
 
             <div class="form-group">
-                <select  name="village_id" id="village_id" class="box" v-model="edit_union.village_id">
-                    <option value="">Select Village</option>
-                    <option v-for="(village, index) in villages" :key="index" :value="village.id">{{village.name_en}}</option>
+                <select  name="post_office_id" id="post_office_id" class="box" v-model="editPoc.post_office_id">
+                    <option value="">Select Post Office</option>
+                    <option v-for="(post_office, index) in postOffices" :key="index" :value="post_office.id">{{post_office.post_code}}</option>
                 </select>
             </div>
-
             <div class="form-group">
-                <input type="name" v-model="edit_union.name_en" name="name(en)" id="name_en" placeholder="Enter Union Name(EN)" class="box">
-            </div>
-
-            <div class="form-group">
-                <input type="name" v-model="edit_union.name_bn" name="name(bn)" id="name_bn" placeholder="Enter Union Name(BN)" class="box">
+                <input type="text" name="poc_code" v-model="editPoc.poc_code" id="" placeholder="Enter Poc Code(EN)" class="box">
             </div>
 
             <div class="button">
                 <div>
-                    <router-link to="/dashboard/union">
+                    <router-link to="/dashboard/po">
                         <button type="submit"> Back </button>
                     </router-link>
 
                     <button type="submit"> Save </button>
                 </div>
-
             </div>
 
 
@@ -38,7 +32,7 @@
     import {mapState, mapActions} from 'vuex';
 
     export default {
-        name: 'EditUnion',
+        name: "EditPo",
 
         data(){
             return{
@@ -46,36 +40,35 @@
             }
         },
 
-        computed:{
+        computed: {
             ...mapState({
-                edit_union: state => state.union.union,
-                villages: state => state.village.villages,
-                message: state => state.union.success_message
+                editPoc: state => state.po.po,
+                postOffices: state => state.BarcPostOffice.Barc_post_offices,
+                message: state => state.po.success_message
             })
         },
 
         mounted(){
-            this.getVillage();
-            this.getEditUnion(this.$route.params.id);
+            this.getAllPostOffice();
+            this.getEditPoc(this.$route.params.id);
         },
 
         methods: {
             ...mapActions({
-                getVillage: 'village/get_all_village',
-                getEditUnion: 'union/get_edit_union'
+                getAllPostOffice: 'BarcPostOffice/get_all_post_office',
+                getEditPoc: 'po/get_edit_poc'
             }),
 
-            editUnion: async function(){
+            editPo: async function(){
                 try {
                     let id = this.$route.params.id;
                     let formData = new FormData();
 
-                    formData.append('village_id', this.edit_union.village_id);
-                    formData.append('name_en', this.edit_union.name_en);
-                    formData.append('name_bn', this.edit_union.name_bn);
+                    formData.append('post_office_id', this.editPoc.post_office_id);
+                    formData.append('poc_code', this.editPoc.poc_code);
                     formData.append('_method', 'PUT');
 
-                    await this.$store.dispatch('union/update_union', {id:id, data:formData}).then(() => {
+                    await this.$store.dispatch('po/update_po', {id:id, data:formData}).then(() => {
                         this.$swal.fire({
                             toast: true,
                             position: 'top-end',
@@ -84,8 +77,7 @@
                             showConfirmButton: false,
                             timer: 1500
                         });
-
-                        this.getEditUnion(this.$route.params.id);
+                        this.getEditPoc(this.$route.params.id);
                     })
                 }catch (e) {
                     console.log(e);
@@ -96,13 +88,13 @@
 </script>
 
 <style scoped>
-    #edit_union{
+    #edit_po{
         display: flex;
         justify-content: center;
         margin-top: 100rem;
     }
 
-    .AddUnion-form{
+    .AddPostOffice-form{
         width: 95%;
         position: absolute;
         text-align: center;
@@ -112,11 +104,11 @@
         background:#eee;
         box-shadow: var(--box-shadow);
     }
-    .AddUnion-form h3{
+    .AddPostOffice-form h3{
         display: flex;
         justify-content: left;
     }
-    .AddUnion-form .box{
+    .AddPostOffice-form .box{
         width: 100%;
         margin: .7rem 0;
         background: rgb(252, 250, 252);
@@ -127,13 +119,13 @@
         text-transform: none;
     }
 
-    .AddUnion-form p{
+    .AddPostOffice-form p{
         font-size: 1.4rem;
         padding: .5rem 0;
         color: var(--light-color);
     }
 
-    .AddUnion-form p a{
+    .AddPostOffice-form p a{
         color: var(--orange);
         text-decoration: underline;
     }

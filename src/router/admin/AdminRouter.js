@@ -12,6 +12,12 @@ import VillageRouter from './VillageRouter';
 import CropRouter from './CropRouter';
 import LandPreperation from './LandPreperation';
 import LandSize from './LandSize';
+import PoRouter from './PoRouter';
+import LocationRouter from './LocationRouter';
+import SelectionRouter from './SelectionRouter';
+import CultivationRouter from './CultivationRouter';
+import CultivationSectionRouter from './CultivationSectionRouter';
+
 
 export default[
     {
@@ -35,6 +41,12 @@ export default[
             ...CropRouter,
             ...LandPreperation,
             ...LandSize,
+            ...PoRouter,
+            ...LocationRouter,
+            ...SelectionRouter,
+            ...CultivationRouter,
+            ...CultivationSectionRouter
+
         ]
     }
 ]

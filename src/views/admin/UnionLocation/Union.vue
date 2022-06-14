@@ -1,137 +1,175 @@
 <template>
    <div id="Union">
-   <div class="add-Union">
-      <router-link to="/dashboard/addunion">
+       <div class="add-District">
+           <router-link to="/dashboard/add_union">
                <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
            </router-link>
+       </div>
+
+       <div class="field">
+           <div for="entries">Show:
+               <select  name="entries" id="entries" v-model="tableData.length" @change="getUnion()">
+                   <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
+               </select>
+               Entries
+           </div>
+
+           <div class="search">
+               <input type="text" v-model="tableData.search" placeholder="Search District" @input="getUnion()">
+           </div>
+       </div>
+       <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+           <tbody>
+           <tr v-show="unions.length" v-for="(union,index) in unions" :key="union.id">
+               <td>{{ index + 1 }}</td>
+               <td>{{ union.village_name_en }}</td>
+               <td>{{ union.name_en }}</td>
+               <td>{{ union.name_bn }}</td>
+               <td colspan="2">
+                   <router-link :to="`/dashboard/edit_union/${union.id}`">
+                       <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                   </router-link>
+
+                   <button class="delete" v-on:click="deleteUnion(union)"><i class="fa-solid fa-trash"></i>  Delete</button>
+               </td>
+           </tr>
+           </tbody>
+       </datatable>
+
+
+       <div class="field">
+           <div><h5> Showing {{ paginations.from }} to {{ paginations.to }} of {{ paginations.total }} entries</h5> </div>
+           <pagination :pagination.sync="paginations" :offset="5" @paginate="getUnion();"></pagination>
+       </div>
    </div>
- 
-   <div class="field">
-      <div for="entries">Show:
-         <select  name="entries" id="entries">
-         <option value="10">10</option>
-         <option value="20">20</option>
-         <option value="30">30</option>
-         <option value="40">40</option>
-         </select>
-         Entries
-      </div>
-      <div class="search" ><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search Union" ></div>
-  </div>	
- 
-<table summary="This table shows how to create responsive tables using Datatables' extended functionality" class="table table-bordered table-hover dt-responsive">
-        
-        <thead>
-          <tr>
-             <th>#SL No</th>
-            <th>Union</th>
-             <th colspan="2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-             <td>1</td>
-            <td>Vatara</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Ramu</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Barishal</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Mihirgao</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Senbag</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Nababpur</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-             <td>1</td>
-            <td>Shiburia</td>   
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div class="field">
-
-         <div><h5> Showing 1 to 10 of 57 entries</h5> </div>       
-        <div class="pagination">          
-           <a href="#">Previous&laquo;</a>
-           <a class="active" href="#">1</a>
-           <a href="#">2</a>
-           <a href="#">3</a>
-           <a href="#">4</a>
-           <a href="#">Next&raquo;</a>
-        </div>      
-      </div>
-</div>
-
 </template>
 <script>
+    import DataTable from '../../../components/datatable/DataTable';
+    import Pagination from '../../../components/datatable/Pagination.vue';
+
+    import {mapState} from 'vuex';
 export default {
    name: 'MyUnion',
+
    components: {
-     
+     datatable: DataTable,
+       pagination: Pagination
    },
+
    mixins: [],
+
    props: {
      
    },
+
    data() {
-        return {
-            isActive: false,
-            isShow: false,
-        };
+       let sortOrders = {};
+       let columns = [
+           {label: '#Sl', name: 'id' },
+           {label: 'Village Name', name: 'village_name_en'},
+           {label: 'Name En', name: 'name_en'},
+           {label: 'Name BN', name: 'name_bn'},
+           {label: 'Action', name: 'action'},
+       ];
+       columns.forEach((column) => {
+           sortOrders[column.name] = -1;
+       });
+
+       return {
+           columns: columns,
+           sortKey: 'id',
+           sortOrders: sortOrders,
+           perPage: ['10', '20', '30','25','50','100'],
+           tableData: {
+               draw: 0,
+               length: 10,
+               search: '',
+               column: 0,
+               dir: 'desc',
+           },
+           pagination: {
+               last_page: '',
+               current_page: 1,
+               total: '',
+               last_page_url: '',
+               next_page_url: '',
+               prev_page_url: '',
+               from: '',
+               to: ''
+           },
+
+           current_page: '',
+           last_page : '',
+
+           isActive: false,
+           isShow: false,
+       }
     },
+
+    computed: {
+        ...mapState({
+            unions: state => state.union.unions,
+            paginations: state => state.union.pagination,
+            message: state => state.union.success_message
+        })
+    },
+
+    mounted(){
+        this.getUnion();
+    },
+
     methods: {
-        myFunction() {
-            this.isActive = !this.isActive;
-        }
+        getUnion: async function(){
+            try{
+                this.tableData.draw++;
+                let params = new URLSearchParams();
+                params.append('page', this.pagination.current_page);
+                params.append('draw', this.tableData.draw);
+                params.append('length', this.tableData.length);
+                params.append('search', this.tableData.search);
+                params.append('column', this.tableData.column);
+                params.append('dir', this.tableData.dir);
+
+                await this.$store.dispatch('union/get_union', params);
+            }catch(e) {
+                console.log(e);
+            }
+        },
+
+        deleteUnion: async function(union){
+            try {
+                let id = union.id;
+                await this.$store.dispatch('union/delete_union', id).then(() => {
+                    this.$swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: this.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                })
+            }catch (e) {
+                console.log(e);
+            }
+        },
+
+        sortBy(key) {
+            this.sortKey = key;
+            this.sortOrders[key] = this.sortOrders[key] * -1;
+            this.tableData.column = this.getIndex(this.columns, 'name', key);
+            this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
+            this.getUnion();
+        },
+
+        getIndex(array, key, value) {
+            return array.findIndex(i => i[key] == value)
+        },
     },
 };
 </script>
+
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-
-
-
 .table {
     width: 100%;
     text-align: center;

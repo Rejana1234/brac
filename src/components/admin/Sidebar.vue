@@ -40,11 +40,15 @@
                     </li>
 
                     <li>
-                        <router-link active-class="active" to="/dashboard/poc"><i class='bx bxs-chart icon' ></i> Poc</router-link>
+                        <router-link active-class="active" to="/dashboard/po"><i class='bx bxs-chart icon' ></i> Poc</router-link>
                     </li>
 
 					<li>
 						<router-link active-class="active" to="/dashboard/union"><i class='bx bxs-chart icon' ></i> Union</router-link>
+					</li>
+
+					<li>
+						<router-link active-class="active" to="/dashboard/location"><i class='bx bxs-chart icon' ></i>All Location</router-link>
 					</li>
 
 
@@ -78,8 +82,12 @@
 			<li class="divider" data-text="location">Cultivation </li>
 			<li>
 				<ul>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Category</a></li>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Cultivation Selection</a></li>
+					<li>
+						<router-link active-class="active" to="/dashboard/cultivation_category"><i class='bx bxs-chart icon' ></i>Cultivation Category</router-link>
+					</li>
+					<li>
+						<router-link active-class="active" to="/dashboard/cultivation_section"><i class='bx bxs-chart icon' ></i> Cultivation Section</router-link>>
+					</li>
 				</ul>
 			</li>
 			<li class="divider" data-text="location">Setting </li>
