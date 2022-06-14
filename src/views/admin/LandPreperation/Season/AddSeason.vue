@@ -9,6 +9,9 @@
                 <input type="name" v-model="seasionData.name_bn" name="name(bn)" id="" placeholder="Enter Season Name(BN)" class="box">
             </div>
             <div class="form-group">
+                <input type="name" v-model="seasionData.cultural_operation" name="cultural_operation" id="" placeholder="Enter Cultural Operation Name(EN)" class="box">
+            </div>
+            <div class="form-group">
                 <input type="date" v-model="seasionData.start_date" name="start date" id="" placeholder="Enter Start Date" class="box">
             </div>
             <div class="form-group">
@@ -17,7 +20,9 @@
 
             <div class="button">
                 <div>
-                    <button type="submit"> Back </button>
+                     <router-link to="/dashboard/season">
+                        <button type="button"> Back </button>
+                    </router-link>
                     <button type="submit"> Save </button>
                 </div>
             </div>
@@ -41,6 +46,7 @@
                 seasionData:{
                     name_en:'',
                     name_bn:'',
+                    cultural_operation:'',
                     start_date:'',
                     end_date:''
                 },
@@ -68,6 +74,7 @@
 
                     formData.append('name_en', this.seasionData.name_en);
                     formData.append('name_bn', this.seasionData.name_bn);
+                    formData.append('cultural_operation', this.seasionData.cultural_operation)
                     formData.append('start_date', this.seasionData.start_date);
                     formData.append('end_date', this.seasionData.end_date);
 

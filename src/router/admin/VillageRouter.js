@@ -1,14 +1,22 @@
-import Village from '../../views/admin/VillageLocation/Village';
-import AddVillage from '../../views/admin/VillageLocation/AddVillage';
+import Village from '../../views/admin/village/Village';
+
+
 export default[
     {
         path:'village',
         name: 'Village',
         component: Village
     },
+
     {
-        path:'addvillage',
+        path:'add_village',
         name:'AddVillage',
-        component: AddVillage
+        component: () => import('../../views/admin/village/AddVillage')
+    },
+
+    {
+        path: 'edit_village/:id',
+        name: 'EditVillage',
+        component: () => import('../../views/admin/village/EditVillage')
     }
 ]

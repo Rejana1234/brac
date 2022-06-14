@@ -4,7 +4,7 @@
 		<div class="sidebar-avartar">
                           <div>
                                <img src="../../assets/My project.png" width="70px" height="70px" alt=""  >
-                          </div>   
+                          </div>
                           <div class="avartar-info">
                               <div class="avartar-text">
                                  <h4>alpha ron</h4>
@@ -17,29 +17,62 @@
 			<li class="divider" data-text="location">Location</li>
 			<li>
 				<ul>
-					<li><a href="/dashboard/country"><i class='bx bxs-chart icon' ></i> Country</a></li>
-					<li><a href="/dashboard/division"><i class='bx bxs-chart icon' ></i> Division</a></li>
-					<li><a href="/dashboard/district"><i class='bx bxs-chart icon' ></i> District</a></li>
-					<li><a href="/dashboard/Thana"><i class='bx bxs-chart icon' ></i> Thana</a></li>
-					<li><a href="/dashboard/Union"><i class='bx bxs-chart icon' ></i> Union</a></li>
-					<li><a href="/dashboard/village"><i class='bx bxs-chart icon' ></i> Village</a></li>
-					<li><a href="/dashboard/PostOffice"><i class='bx bxs-chart icon' ></i> Post-Office</a></li>
+					<li>
+						<router-link active-class="active" to="/dashboard/country" exact><i class='bx bxs-chart icon' ></i> Country</router-link>
+					</li>
+
+					<li>
+						<router-link active-class="active" to="/dashboard/division"><i class='bx bxs-chart icon' ></i> Division</router-link></li>
+					<li>
+						<router-link active-class="active" to="/dashboard/district"><i class='bx bxs-chart icon' ></i> District</router-link>
+					</li>
+
+					<li>
+						<router-link active-class="active" to="/dashboard/thana"><i class='bx bxs-chart icon' ></i> Thana</router-link>
+					</li>
+
+					<li>
+						<router-link active-class="active" to="/dashboard/village"><i class='bx bxs-chart icon' ></i> Village</router-link>
+					</li>
+
+                    <li>
+                        <router-link active-class="active" to="/dashboard/post_office"><i class='bx bxs-chart icon' ></i> Post-Office</router-link>
+                    </li>
+
+                    <li>
+                        <router-link active-class="active" to="/dashboard/poc"><i class='bx bxs-chart icon' ></i> Poc</router-link>
+                    </li>
+
+					<li>
+						<router-link active-class="active" to="/dashboard/union"><i class='bx bxs-chart icon' ></i> Union</router-link>
+					</li>
+
+
 				</ul>
 			</li>
 			<li class="divider" data-text="location">Land-Size </li>
-			<li><a href="#"><i class='bx bxs-chart icon' ></i> Land-Size</a></li>
+			<li><router-link active-class="active" to="/dashboard/land_size"><i class='bx bxs-chart icon' ></i> Land Size</router-link></li>
 			<li class="divider" data-text="location">Land Preperation </li>
 			<li>
 			<ul >
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Season</a></li>
+					<li>
+						<router-link active-class="active" to="/dashboard/season"><i class='bx bxs-chart icon' ></i> Season </router-link>
+					</li> 
+					<li>
+						<router-link active-class="active" to="/dashboard/land_preperation"><i class='bx bxs-chart icon' ></i> Land Preperation </router-link>
+					</li>
 			</ul>
 			</li>
 			<li class="divider" data-text="location">Crop </li>
 			<li>
 				
 				<ul>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Crop Catagory</a></li>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Crop Selection</a></li>
+					<li> 
+						<router-link active-class="active" to="/dashboard/crop"><i class='bx bxs-chart icon' ></i> Crop </router-link> 
+					</li>
+					<li>
+						<router-link active-class="active" to="/dashboard/crop_selection"><i class='bx bxs-chart icon' ></i> Crop Selection</router-link> 
+					</li>
 				</ul>
 			</li>
 			<li class="divider" data-text="location">Cultivation </li>

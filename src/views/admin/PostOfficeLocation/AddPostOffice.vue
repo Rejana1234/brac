@@ -1,30 +1,26 @@
 <template>
     <div id="AddPostOffice">
-        <form action="" class="AddPostOffice-form">
-                 <h3>Add PostOffice</h3>
-            <div  class="form-group">
-                <select  name="Village" id="village" class="box" >
-                       <option  class="name">Village Name</option>
-                       <option  class="name">Bangladesh</option>
-                       <option  class="name">India</option>
-                       <option  class="name">Nepal</option>
-                       <option  class="name">Pakistan</option>
+        <form action="" class="AddPostOffice-form" v-on:submit.prevent="addPostOffice">
+             <h3>Add PostOffice</h3>
+
+            <div class="form-group">
+                <select  name="village_id" id="village_id" class="box" v-model="postOfficeData.village_id">
+                    <option value="">Select Thana</option>
+                    <option v-for="(village, index) in villages" :key="index" :value="village.id">{{village.name_en}}</option>
                 </select>
             </div>
             <div class="form-group">
-                <input type="text" name="code(en)" id="" placeholder="Enter PostOffice Code(EN)" class="box">
-            </div>
-            <div class="form-group">
-                <input type="text" name="code(bn)" id="" placeholder="Enter PostOffice Code(BN)" class="box">
+                <input type="text" name="post_code" v-model="postOfficeData.post_code" id="" placeholder="Enter PostOffice Name(EN)" class="box">
             </div>
  
             <div class="button">
-                <level>
-                    <button type="submit"> Back </button>
-                </level>
-                <level>
+                <div>
+                    <router-link to="/dashboard/post_office">
+                        <button type="submit"> Back </button>
+                    </router-link>
+
                     <button type="submit"> Save </button>
-                </level>
+                </div>
             </div>
            
  
@@ -33,6 +29,8 @@
 </template>
 
 <script>
+    import {mapState, mapActions} from 'vuex';
+
 export default {
     name: 'AddPostOffice'
    ,
@@ -41,20 +39,52 @@ export default {
    },
    data() {
      return {
-       
+       postOfficeData:{
+           village_id: '',
+           post_code: '',
+       }
      }
    },
    computed: {
-     
+       ...mapState({
+           villages: state => state.village.villages,
+           message: state => state.BarcPostOffice.success_message
+       })
    },
    watch: {
      
    },
    mounted() {
-     
+     this.getVillage();
    },
    methods: {
-     
+       ...mapActions({
+           getVillage: 'village/get_all_village'
+       }),
+
+       addPostOffice: async function(){
+          try {
+              let formData = new FormData();
+
+              formData.append('village_id', this.postOfficeData.village_id);
+              formData.append('post_code', this.postOfficeData.post_code);
+
+              await this.$store.dispatch('BarcPostOffice/add_post_office', formData).then(() => {
+                  this.$swal.fire({
+                      toast: true,
+                      position: 'top-end',
+                      icon: 'success',
+                      title: this.message,
+                      showConfirmButton: false,
+                      timer: 1500
+                  });
+
+                  this.postOfficeData = {};
+              })
+          } catch (e) {
+              console.log(e);
+          }
+       }
    }
 };
 </script>

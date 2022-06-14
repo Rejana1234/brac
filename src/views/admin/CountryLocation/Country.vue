@@ -101,9 +101,6 @@ export default {
                    to: ''
            },
 
-           current_page: '',
-           last_page : '',
-
             isActive: false,
             isShow: false,
        }

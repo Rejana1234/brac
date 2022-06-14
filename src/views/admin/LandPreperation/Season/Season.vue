@@ -25,6 +25,7 @@
                 <td>{{ index + 1 }}</td>
                 <td>{{ seasion.name_en }}</td>
                 <td>{{ seasion.name_bn }}</td>
+                <td>{{seasion.cultural_operation}}</td>
                 <td>{{ seasion.start_date }}</td>
                 <td>{{ seasion.end_date}}</td>
                 <td colspan="2">
@@ -47,12 +48,12 @@
 
 </template>
 <script>
-import DataTable from '../../../components/datatable/DataTable';
-import Pagination from '../../../components/datatable/Pagination.vue';
+import DataTable from '../../../../components/datatable/DataTable';
+import Pagination from '../../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
 
-import { http } from '../../../service/http_service';
+import { http } from '../../../../service/http_service';
 
 export default {
    name: 'TheSeasion',
@@ -68,6 +69,7 @@ export default {
            {label: '#Sl', name: 'id' },
            {label: 'Name EN', name: 'name_en'},
            {label: 'Name BN', name: 'name_bn'},
+           {label: 'Cultural Operation', name: 'cultural_operation'},
            {label: 'Start Date', name: 'start_date'},
            {label: 'End Date', name: 'end_date'},
            {label: 'Action', name: 'action'}

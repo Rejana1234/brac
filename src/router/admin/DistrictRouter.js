@@ -1,5 +1,5 @@
 import District from '../../views/admin/DistrictLocation/District';
-import AddDistrict from '../../views/admin/DistrictLocation/AddDistrict';
+
 export default[
     {
         path:'district',
@@ -7,9 +7,9 @@ export default[
         component: District
     },
     {
-        path:'adddistrict',
+        path:'add_district',
         name:'AddDistrict',
-        component: AddDistrict
+        component: () => import('../../views/admin/DistrictLocation/AddDistrict')
     },
     {
         path: 'edit_district/:id',

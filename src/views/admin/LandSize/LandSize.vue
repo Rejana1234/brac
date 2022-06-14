@@ -1,50 +1,35 @@
 <template>
-   <div id="Districts">
-   <div class="add-District">
-      <router-link to="/dashboard/add_district">
-               <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
-           </router-link>
-   </div>
+   <div id="LandSize">
  
-   <div class="field">
+  <div class="field">
           <div for="entries">Show:
-             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllDistrict()">
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllLandSize()">
                  <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
              </select>
              Entries
           </div>
 
           <div class="search">
-              <input type="text" v-model="tableData.search" placeholder="Search District" @input="getAllDistrict()">
+              <input type="text" v-model="tableData.search" placeholder="Search Size" @input="getAllLandSize()">
           </div>
-        </div>
+        </div>	
+ 
  <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="districts.length" v-for="(district,index) in districts" :key="district.id">
+            <tr v-show="sizes.length" v-for="(size,index) in sizes" :key="size.id">
                 <td>{{ index + 1 }}</td>
-                <td>{{ district.division_name }}</td>
-                <td>{{ district.name_en }}</td>
-                <td>{{ district.name_bn }}</td>
-                <td>{{ district.code_en }}</td>
-                <td>{{ district.code_bn }}</td>
-                <td colspan="2">
-                    <router-link :to="`/dashboard/edit_district/${district.id}`">
-                        <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-                    </router-link>
-
-                    <button class="delete" v-on:click="deleteDistrict(district)"><i class="fa-solid fa-trash"></i>  Delete</button>
-                </td>
+                <td>{{ size.user_id }}</td>
+                <td>{{ size.size }}</td>
+                <td>{{ size.land_type }}</td>
             </tr>
            </tbody>
        </datatable>
 
-
       <div class="field">
-        <div><h5> Showing {{ paginations.from }} to {{ paginations.to }} of {{ paginations.total }} entries</h5> </div>
-         <pagination :pagination.sync="paginations" :offset="5" @paginate="getAllCountry();"></pagination>
-      </div>
+            <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
-
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllLandSize();"></pagination>
+        </div>
 </div>
 
 </template>
@@ -54,8 +39,10 @@ import Pagination from '../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
 
+import { http } from '../../../service/http_service';
+
 export default {
-   name: 'MyDistrict',
+   name: 'LandSize',
 
    components: {
        datatable: DataTable,
@@ -66,18 +53,16 @@ export default {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
-           {label: 'Division Name', name: 'division_name'},
-           {label: 'Name EN', name: 'name_en'},
-           {label: 'Name BN', name: 'name_bn'},
-           {label: 'Code EN', name: 'code_en'},
-           {label: 'Code BN', name: 'code_bn'},
-           {label: 'Action', name: 'action'},
+           {label: 'User ID', name: 'user_id'},
+           {label: 'Land Size', name: 'size'},
+           {label: 'Land Measure Type', name: 'land_type'},
        ];
        columns.forEach((column) => {
            sortOrders[column.name] = -1;
        });
 
        return {
+           sizes: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -100,9 +85,6 @@ export default {
                    to: ''
            },
 
-           current_page: '',
-           last_page : '',
-
             isActive: false,
             isShow: false,
        }
@@ -110,34 +92,37 @@ export default {
 
     computed: {
         ...mapState({
-            districts: state => state.district.districts,
-            paginations: state => state.district.pagination,
-            message: state => state.district.success_message
+            
+            message: state => state.size.success_message
         })
     },
 
     mounted(){
-       this.getDistrict();
+       this.getAllLandSize();
     },
 
     methods: {
 
-      getDistrict: async function(){
+       getAllLandSize(){
 
-            try{
-                this.tableData.draw++;
-                let params = new URLSearchParams();
-                params.append('page', this.pagination.current_page);
-                params.append('draw', this.tableData.draw);
-                params.append('length', this.tableData.length);
-                params.append('search', this.tableData.search);
-                params.append('column', this.tableData.column);
-                params.append('dir', this.tableData.dir);
+           this.tableData.draw++;
+           let params = new URLSearchParams();
+           params.append('page', this.pagination.current_page);
+           params.append('draw', this.tableData.draw);
+           params.append('length', this.tableData.length);
+           params.append('search', this.tableData.search);
+           params.append('column', this.tableData.column);
+           params.append('dir', this.tableData.dir);
 
-                await this.$store.dispatch('district/get_district', params);
-            }catch(e) {
-                console.log(e);
-            }
+           return http().get('v1/land_size/getData?'+params)
+               .then(response => {
+                   this.sizes = response.data.data.data;
+                   this.pagination = response.data.data;
+                   console.log(this.sizes);
+               })
+               .catch(error => {
+                   console.log(error);
+               })
        },
 
         sortBy(key) {
@@ -145,47 +130,23 @@ export default {
             this.sortOrders[key] = this.sortOrders[key] * -1;
             this.tableData.column = this.getIndex(this.columns, 'name', key);
             this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
-            this.getAllDistrict();
+            this.getAllLandSize();
         },
 
-        getIndex(array, key, value) {
-            return array.findIndex(i => i[key] == value)
-        },
-
-        deleteDistrict: async function(district){
-           try {
-               let district_id = district.id;
-
-               await this.$store.dispatch('district/delete_district', district_id).then(() => {
-                   this.$swal.fire({
-                       toast: true,
-                       position: 'top-end',
-                       icon: 'success',
-                       title: this.message,
-                       showConfirmButton: false,
-                       timer: 1500
-                   });
-                   this.getAllDistrict();
-               })
-           }catch (e) {
-               console.log(e);
-           }
-        }
+        // getIndex(array, key, value) {
+        //     return array.findIndex(i => i[key] == value)
+        // },
 
     },
 };
 </script>
 <style>
 
+
 .table {
     width: 100%;
     text-align: center;
     margin-bottom: 0.5%;
-}
-.add-District{
-   display:flex;
-    justify-content: flex-end;
-   margin-bottom: 3%;
 }
 .select{
    align-items:baseline;
@@ -282,6 +243,7 @@ margin-left: 317%;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 }
+
 .pagination a:last-child {
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;

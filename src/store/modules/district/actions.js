@@ -10,7 +10,7 @@ export const get_district = ({commit}, data) => {
     })
 };
 
-export const add_ditrict = ({commit}, data) => {
+export const add_district = ({commit}, data) => {
     return http().post('v1/district/store', data).then(res => {
         commit('DISTRICT_STORE', res.data);
     })

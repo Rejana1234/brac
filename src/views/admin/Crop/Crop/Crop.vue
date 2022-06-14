@@ -1,106 +1,194 @@
 <template>
    <div id="Crop">
-   <div class="add-Crop">
-      <router-link to="/dashboard/addcrop">
+
+       <div class="add-crop">
+           <router-link to="/dashboard/addcrop">
                <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
            </router-link>
-   </div>
- 
-   <div class="field">
-      <div for="entries">Show:
-         <select  name="entries" id="entries">
-         <option value="10">10</option>
-         <option value="20">20</option>
-         <option value="30">30</option>
-         <option value="40">40</option>
-         </select>
-         Entries
-      </div>
-      <div class="search" ><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search Crop" ></div>
-  </div>	
- 
-<table summary="This table shows how to create responsive tables using Datatables' extended functionality" class="table table-bordered table-hover dt-responsive">
-        
-        <thead>
-          <tr>
-             <th>#SL No</th>
-            <th>Crop EN</th>
-            <th>Crop BN</th>
-            <th>Image</th>
-             <th colspan="2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-             <td>1</td>
-            <td><img src="../../../../assets/My project.png" alt=""></td>
-            <td>Vatara</td> 
-            <td>Vatara</td>  
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td><img src="../../../../assets/My project.png" alt=""></td>
-            <td>Vatara</td> 
-            <td>Vatara</td>    
-            <td colspan="2">
-               <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-               <button class="delete"><i class="fa-solid fa-trash"></i>  Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+       </div>
 
-      <div class="field">
+        <div class="field">
+          <div for="entries">Show:
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllCrop()">
+                 <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
+             </select>
+             Entries
+          </div>
 
-         <div><h5> Showing 1 to 10 of 57 entries</h5> </div>       
-        <div class="pagination">          
-           <a href="#">Previous&laquo;</a>
-           <a class="active" href="#">1</a>
-           <a href="#">2</a>
-           <a href="#">3</a>
-           <a href="#">4</a>
-           <a href="#">Next&raquo;</a>
-        </div>      
-      </div>
-</div>
+          <div class="search">
+              <input type="text" v-model="tableData.search" placeholder="Search Crop" @input="getAllCrop()">
+          </div>
+        </div>
 
+       <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+           <tbody>
+            <tr v-show="crops.length" v-for="(crop) in crops" :key="crop.id">
+                <td>{{ crop.id }}</td>
+                <td>
+                  <img :src="showImage(crop.image)" alt="" width="50px">
+                </td>
+                <td>{{ crop.name_en }}</td>
+                <td>{{ crop.name_bn }}</td>
+                <td colspan="2">
+                    <router-link :to="`/dashboard/edit_crop/${crop.id}`">
+                        <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                    </router-link>
+
+                    <button class="delete" v-on:click="deleteCrop(crop)"><i class="fa-solid fa-trash"></i>  Delete</button>
+                </td>
+            </tr>
+           </tbody>
+       </datatable>
+
+        <div class="field">
+            <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
+
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCrop();"></pagination>
+        </div>
+   </div>	
 </template>
+
 <script>
+import DataTable from '../../../../components/datatable/DataTable';
+import Pagination from '../../../../components/datatable/Pagination.vue';
+
+import {mapState} from 'vuex';
+
+import { http, httpFile } from '../../../../service/http_service';
+
 export default {
    name: 'MyCrop',
+
    components: {
-     
+       datatable: DataTable,
+       pagination: Pagination
    },
-   mixins: [],
-   props: {
-     
-   },
+
    data() {
-        return {
+       let sortOrders = {};
+       let columns = [
+           {label: '#Sl', name: 'id' },
+           {label: 'Image', name: 'image'},
+           {label: 'Name EN', name: 'name_en'},
+           {label: 'Name BN', name: 'name_bn'},
+       ];
+       columns.forEach((column) => {
+           sortOrders[column.name] = -1;
+       });
+
+       return {
+           crops: [],
+           columns: columns,
+           sortKey: 'id',
+           sortOrders: sortOrders,
+           perPage: ['10', '20', '30','25','50','100'],
+           tableData: {
+               draw: 0,
+               length: 10,
+               search: '',
+               column: 0,
+               dir: 'desc',
+               
+               
+           },
+           pagination: {
+                   last_page: '',
+                   current_page: 1,
+                   total: '',
+                   last_page_url: '',
+                   next_page_url: '',
+                   prev_page_url: '',
+                   from: '',
+                   to: ''
+           },
+
             isActive: false,
             isShow: false,
-        };
+       }
+   },
+
+    computed: {
+        ...mapState({
+            message: state => state.crop.success_message
+        })
     },
+
+    mounted(){
+       this.getAllCrop();
+    },
+
     methods: {
-        myFunction() {
-            this.isActive = !this.isActive;
+
+       getAllCrop(){
+
+           this.tableData.draw++;
+           let params = new URLSearchParams();
+           params.append('page', this.pagination.current_page);
+           params.append('draw', this.tableData.draw);
+           params.append('length', this.tableData.length);
+           params.append('search', this.tableData.search);
+           params.append('column', this.tableData.column);
+           params.append('dir', this.tableData.dir);
+          
+
+           return http(),httpFile().get('v1/crop/getData?'+params)
+               .then(response => {
+                   this.crops = response.data.data.data;
+                   this.pagination = response.data.data;
+               })
+               .catch(error => {
+                   console.log(error);
+               })
+       },
+
+        showImage(img){
+                let server_Path = this.$store.state.serverPath;
+                return server_Path +"/public/uploads/crop_image/"+ img;
+            },
+
+        sortBy(key) {
+            this.sortKey = key;
+            this.sortOrders[key] = this.sortOrders[key] * -1;
+            this.tableData.column = this.getIndex(this.columns, 'name', key);
+            this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
+            this.getAllCrop();
+        },
+
+        getIndex(array, key, value) {
+            return array.findIndex(i => i[key] == value)
+        },
+
+        deleteCrop: async function(crop){
+           try {
+               let crop_id = crop.id;
+
+               await this.$store.dispatch('crop/delete_crop', crop_id).then(() => {
+                   this.$swal.fire({
+                       toast: true,
+                       position: 'top-end',
+                       icon: 'success',
+                       title: this.message,
+                       showConfirmButton: false,
+                       timer: 1500
+                   });
+                   this.getAllCrop();
+               })
+           }catch (e) {
+               console.log(e);
+           }
         }
+
     },
 };
 </script>
 <style>
-
 .table {
     width: 100%;
     text-align: center;
     margin-bottom: 0.5%;
 }
-.add-Crop{
-   display:flex;
+.add-crop{
+    display:flex;
     justify-content: flex-end;
    margin-bottom: 3%;
 }
@@ -221,8 +309,6 @@ margin-left: 317%;
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
  
-img{
-  width: 50px;
-}
+
 
 </style>

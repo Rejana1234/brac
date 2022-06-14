@@ -156,6 +156,9 @@ export default{
 	background: var(--blue);
 	color: var(--light);
 }
+#sidebar .side-menu a.active{
+	background: var(--grey);
+}
 #sidebar .divider {
 	margin-top: 24px;
 	font-size: 16px;

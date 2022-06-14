@@ -1,6 +1,6 @@
 
 export const GET_ALL_THANA = (state, data) => {
-    state.thanas = data.thanas;
+    state.thanas = data.thana;
 };
 
 export const GET_THANA = (state, data) => {

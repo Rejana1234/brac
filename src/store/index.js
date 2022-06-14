@@ -14,7 +14,13 @@ import country from './modules/country';
 import district from "./modules/district";
 import division from "./modules/division";
 import thana from "./modules/thana";
+import village from "./modules/village";
+import BarcPostOffice from "./modules/barcPostOffice";
 import seasion from "./modules/seasion";
+import landSize from "./modules/landSize";
+import crop from "./modules/crop";
+
+
 export default new Vuex.Store({
     state,
     getters,
@@ -26,6 +32,11 @@ export default new Vuex.Store({
         division,
         district,
         thana,
+        village,
+        BarcPostOffice,
         seasion,
+        landSize,
+        crop,
+       
     }
 })

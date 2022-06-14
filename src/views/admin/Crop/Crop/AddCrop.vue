@@ -1,59 +1,110 @@
 <template>
     <div id="AddCrop">
-        <form action="" class="AddCrop-form">
-                 <h3>Add Crop</h3>
+        <form class="AddCrop-form" v-on:submit.prevent="addCrop">
+             <h2>Add Crop</h2>
             <div class="form-group">
-                <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg,.image/jpg" class="box">
+                <input type="file" class="box" name="image" v-on:change="attachImage" ref="cropImage">            
+            </div>  
+            <div class="form-group">
+                <input type="name" v-model="cropData.name_en" name="name_bn" id="name_bn" placeholder="Enter crop Name(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="name" name="name(bn)" id="" placeholder="Enter Union Name(EN)" class="box">
+                <input type="name" v-model="cropData.name_bn" name="name_bn" id="code_bn" placeholder="Enter crop Name(BN)" class="box">
             </div>
-            <div class="form-group">
-                <input type="name" name="code(en)" id="" placeholder="Enter Union Name(BN)" class="box">
-            </div>
- 
             <div class="button">
-                <level>
-                    <button type="submit"> Back </button>
-                </level>
-                <level>
+                <div>
+                    <router-link to="/dashboard/crop">
+                        <button type="button"> Back </button>
+                    </router-link>
                     <button type="submit"> Save </button>
-                </level>
+                </div>
+
             </div>
            
- 
+            
+
         </form>
     </div>
 </template>
 
 <script>
+
+import {mapState} from 'vuex';
+
 export default {
-    name: 'AddCrop'
-   ,
+    name: 'AddCrop',
+
    components: {
      
    },
+
    data() {
      return {
-       
+       cropData:{
+           image:'',
+           name_en: '',
+           name_bn: '',
+           
+       },
+
+        errors: {}
      }
    },
+
    computed: {
-     
+       ...mapState({
+           message: state => state.crop.success_message
+       })
    },
+
    watch: {
      
    },
+
    mounted() {
      
    },
+
    methods: {
-     
+      attachImage: function(){
+        //to use some file todo
+        this.cropData.image = this.$refs.cropImage.files[0];
+        let reader = new FileReader();
+        reader.addEventListener('load', function () {
+          this.$refs.newCategoryImageDisplay.src = reader.result;
+        }.bind(this),false);
+        reader.readAsDataURL(this.file);
+      },
+       addCrop: async function(){
+           try {
+               let formData = new FormData();
+               formData.append('image', this.cropData.image);
+               formData.append('name_en', this.cropData.name_en);
+               formData.append('name_bn', this.cropData.name_bn);
+               
+
+               await this.$store.dispatch('crop/add_crop', formData).then(() => {
+                   this.$swal.fire({
+                       toast: true,
+                       position: 'top-end',
+                       icon: 'success',
+                       title: this.message,
+                       showConfirmButton: false,
+                       timer: 1500
+                   });
+
+                   this.cropData = {};
+               })
+           }catch (e) {
+               console.log(e);
+           }
+       }
    }
 };
 </script>
 
 <style scoped>
+
 #AddCrop{
     display: flex;
     justify-content: center;
@@ -70,7 +121,7 @@ export default {
     background:#eee;
     box-shadow: var(--box-shadow);
 }
-.AddCrop-form h3{
+.AddCrop-form h2{
     display: flex;
     justify-content: left;
 }
@@ -80,7 +131,7 @@ export default {
     background: rgb(252, 250, 252);
     border-radius: .5rem;
     padding: 1rem;
-    font-size: 12px;
+    font-size: 1rem;
     color: var(--black);
     text-transform: none;
 }
@@ -99,7 +150,8 @@ export default {
 button {
   padding: 7px 7px;
   background-color: rgb(59, 155, 59);
-  margin-left: 2%;
+  margin-right: 2%;
+  
 }
 
 button:hover{
@@ -112,4 +164,5 @@ button:hover{
 ::placeholder{
     font-size: 12px;
 }
+
 </style>

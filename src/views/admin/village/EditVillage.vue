@@ -1,39 +1,36 @@
 <template>
-    <div id="EditDivision">
-        <form class="EditDivision-form" v-on:submit.prevent="editDivision">
-            <h2>Edit Division</h2>
+    <div id="edit_village">
+        <form class="EditDistrict-form" v-on:submit.prevent="editThana">
+            <h2>Edit Village</h2>
             <div class="form-group">
-                <select  name="Country_id" id="country" class="box" v-model="editDivisionList.country_id">
-                       <option value="">Select Country</option>
-                       <option v-for="(country, index) in Countries" :key="index" :value="country.id">{{country.name_en}}</option>
-                      
+                <select  name="thana_id" id="thana_id" class="box" v-model="editVillageData.thana_id">
+                    <option value="">Select Thana</option>
+                    <option v-for="(thana, index) in thanas" :key="index" :value="thana.id">{{thana.name_en}}</option>
                 </select>
             </div>
             <div class="form-group">
-                <input type="name" v-model="editDivisionList.name_en" name="name_en" id="name_en" placeholder="Enter Division Name(EN)" class="box">
-
+                <input type="name" v-model="editVillageData.name_en" name="name_en" id="name_en" placeholder="Enter District Name(EN)" class="box">
             </div>
             <div class="form-group">
-                <input type="name" v-model="editDivisionList.name_bn" name="name_bn" id="name_bn" placeholder="Enter Division Name(BN)" class="box">
-            </div>
-
-            <div class="form-group">
-                <input type="name" v-model="editDivisionList.code_en" name="code_en" id="code_en" placeholder="Enter Division Code(EN)" class="box">
-
+                <input type="name" v-model="editVillageData.name_bn" name="name_bn" id="name_bn" placeholder="Enter District Name(BN)" class="box">
             </div>
             <div class="form-group">
-                <input type="name" v-model="editDivisionList.code_bn" name="code_bn" id="code_bn" placeholder="Enter Division Code(BN)" class="box">
+                <input type="text" v-model="editVillageData.code_en" name="code_en" id="code_en" placeholder="Enter District Code(EN)" class="box">
+            </div>
+            <div class="form-group">
+                <input type="text" v-model="editVillageData.code_bn" name="code_bn" id="code_bn" placeholder="Enter District Code(BN)" class="box">
             </div>
 
             <div class="button">
                 <div>
-                    <router-link to="/dashboard/division">
+                    <router-link to="/dashboard/village">
                         <button type="button"> Back </button>
                     </router-link>
-
                     <button type="submit"> Edit </button>
                 </div>
+
             </div>
+
 
         </form>
     </div>
@@ -43,7 +40,7 @@
     import {mapState, mapActions} from 'vuex';
 
     export default {
-        name: 'MyEditDivision',
+        name: "EditVillage",
 
         data(){
             return{
@@ -53,36 +50,36 @@
 
         computed: {
             ...mapState({
-                editDivisionList: state => state.division.division,
-                Countries: state => state.country.countries,
-                message: state => state.division.success_message
+                editVillageData: state => state.village.village,
+                thanas: state => state.thana.thanas,
+                message: state => state.village.success_message
             })
         },
 
         mounted(){
-            this.getEditDivision(this.$route.params.id);
-            this.get__all_country();
+            this.getThana();
+            this.getEditVillage(this.$route.params.id);
         },
 
         methods: {
             ...mapActions({
-                getEditDivision: 'division/edit_division',
-                get__all_country: 'country/get_all_country'
+                getThana: 'thana/get_all_thana',
+                getEditVillage: 'village/get_edit_village'
             }),
 
-            editDivision: async function(){
+            editThana: async function(){
                 try {
                     let id = this.$route.params.id;
                     let formData = new FormData();
 
-                    formData.append('country_id', this.editDivisionList.country_id);
-                    formData.append('name_en', this.editDivisionList.name_en);
-                    formData.append('name_bn', this.editDivisionList.name_bn);
-                    formData.append('code_en', this.editDivisionList.code_en);
-                    formData.append('code_bn', this.editDivisionList.code_bn);
+                    formData.append('thana_id', this.editVillageData.thana_id);
+                    formData.append('name_en', this.editVillageData.name_en);
+                    formData.append('name_bn', this.editVillageData.name_bn);
+                    formData.append('code_en', this.editVillageData.code_en);
+                    formData.append('code_bn', this.editVillageData.code_bn);
                     formData.append('_method', 'PUT');
 
-                    await this.$store.dispatch('division/update_division', {id:id, data:formData}).then(() => {
+                    await this.$store.dispatch('village/update_village', {id:id, data:formData}).then(() => {
                         this.$swal.fire({
                             toast: true,
                             position: 'top-end',
@@ -91,9 +88,9 @@
                             showConfirmButton: false,
                             timer: 1500
                         });
-                        this.getEditDivision(this.$route.params.id);
-                    })
 
+                        this.getEditVillage(id);
+                    })
                 }catch (e) {
                     console.log(e);
                 }
@@ -103,14 +100,14 @@
 </script>
 
 <style scoped>
-    #EditDivision{
+    #edit_village{
         display: flex;
         justify-content: center;
         margin-top: 100rem;
     }
 
-    .EditDivision-form{
-        width: 96%;
+    .EditDistrict-form{
+        width: 95%;
         position: absolute;
         text-align: center;
         top: 20%;
@@ -119,11 +116,11 @@
         background:#eee;
         box-shadow: var(--box-shadow);
     }
-    .EditDivision-form h2{
+    .EditDistrict-form h2{
         display: flex;
         justify-content: left;
     }
-    .EditDivision-form .box{
+    .EditDistrict-form .box{
         width: 100%;
         margin: .7rem 0;
         background: rgb(252, 250, 252);
@@ -134,13 +131,13 @@
         text-transform: none;
     }
 
-    .EditDivision-form p{
+    .EditDistrict-form p{
         font-size: 1.4rem;
         padding: .5rem 0;
         color: var(--light-color);
     }
 
-    .EditDivision-form p a{
+    .EditDistrict-form p a{
         color: var(--orange);
         text-decoration: underline;
     }
@@ -149,7 +146,7 @@
         padding: 7px 7px;
         background-color: rgb(59, 155, 59);
         margin-right: 2%;
-        
+
     }
 
     button:hover{
@@ -157,7 +154,9 @@
         color: #fff;
     }
     .button{
-    margin-left: 89%;
-}
-
+        margin-left: 89%;
+    }
+    ::placeholder{
+        font-size: 12px;
+    }
 </style>
