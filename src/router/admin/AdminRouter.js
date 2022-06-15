@@ -11,6 +11,7 @@ import UnionRouter from './UnionRouter';
 import VillageRouter from './VillageRouter';
 import CropRouter from './CropRouter';
 import PoRouter from './PoRouter';
+import DepartmentRouter from './DepartmentRouter';
 
 export default[
     {
@@ -32,7 +33,8 @@ export default[
             ...PostOfficeRouter,
             ...SeasonRouter,
             ...CropRouter,
-            ...PoRouter
+            ...PoRouter,
+            ...DepartmentRouter
 
         ]
     }

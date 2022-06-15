@@ -544,8 +544,14 @@ main form {
 }
 main .form-group {
 	width: 100%;
-	display: flex;
+	display: block;
 	grid-gap: 10px;
+}
+main .danger_text{
+	float: left;
+	color: red;
+	font-weight: 600;
+	margin-top: -.1rem;
 }
 main .form-group input {
 	flex-grow: 1;

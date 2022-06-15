@@ -1,35 +1,37 @@
 <template>
     <div id="AddCountry">
         <form class="AddCountry-form" v-on:submit.prevent="addCountry">
+
              <h2>Add Country</h2>
+
             <div class="form-group">
                 <input type="name" v-model="countryData.name_en" name="name_en" id="name_en" placeholder="Enter Country Name(EN)" class="box">
+                <span v-if="errors.name_en" class="danger_text">{{errors.name_en[0]}}</span>
+            </div>
 
-            </div>  
             <div class="form-group">
                 <input type="name" v-model="countryData.name_bn" name="name_bn" id="name_bn" placeholder="Enter Country Name(BN)" class="box">
+                <span v-if="errors.name_bn" class="danger_text">{{errors.name_bn[0]}}</span>
             </div>
 
             <div class="form-group">
                 <input type="name" v-model="countryData.code_en" name="code_en" id="code_en" placeholder="Enter Country Name(EN)" class="box">
-
+                <span v-if="errors.code_en" class="danger_text">{{errors.code_en[0]}}</span>
             </div>
+
             <div class="form-group">
                 <input type="name" v-model="countryData.code_bn" name="code_bn" id="code_bn" placeholder="Enter Country Name(BN)" class="box">
+                <span v-if="errors.code_bn" class="danger_text">{{errors.code_bn[0]}}</span>
             </div>
+
             <div class="button">
-                <level>
+                <div>
                     <router-link to="/dashboard/country">
                         <button type="button"> Back </button>
                     </router-link>
-                </level>
-
-                <level>
                     <button type="submit"> Save </button>
-                </level>
+                </div>
             </div>
-           
-            
 
         </form>
     </div>
@@ -95,7 +97,19 @@ export default {
                    this.countryData = {};
                })
            }catch (e) {
-               console.log(e);
+               switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
            }
        }
    }

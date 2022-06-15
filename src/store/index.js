@@ -20,6 +20,7 @@ import BarcPostOffice from "./modules/barcPostOffice";
 import seasion from "./modules/seasion";
 import po from "./modules/po";
 import union from "./modules/union";
+import department from "./modules/department";
 
 export default new Vuex.Store({
     state,
@@ -36,6 +37,7 @@ export default new Vuex.Store({
         BarcPostOffice,
         seasion,
         po,
-        union
+        union,
+        department
     }
 })

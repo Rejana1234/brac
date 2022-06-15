@@ -80,8 +80,9 @@
 			<li class="divider" data-text="location">Setting </li>
 			<li>
 				<ul>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Language</a></li>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Department</a></li>
+					<li>
+						<router-link active-class="active" to="/dashboard/department"><i class='bx bxs-chart icon' ></i> Department</router-link>
+					</li>
 				</ul>
 			</li>
 			<li class="divider" data-text="location">User Management </li>
