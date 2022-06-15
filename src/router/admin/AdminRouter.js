@@ -10,8 +10,14 @@ import ThanaRouter from './ThanaRouter';
 import UnionRouter from './UnionRouter';
 import VillageRouter from './VillageRouter';
 import CropRouter from './CropRouter';
+import LandPreperation from './LandPreperation';
+import LandSize from './LandSize';
 import PoRouter from './PoRouter';
 import DepartmentRouter from './DepartmentRouter';
+import LocationRouter from './LocationRouter';
+import SelectionRouter from './SelectionRouter';
+import CultivationRouter from './CultivationRouter';
+import CultivationSectionRouter from './CultivationSectionRouter';
 
 export default[
     {
@@ -35,6 +41,13 @@ export default[
             ...CropRouter,
             ...PoRouter,
             ...DepartmentRouter
+            ...LandPreperation,
+            ...LandSize,
+            ...PoRouter,
+            ...LocationRouter,
+            ...SelectionRouter,
+            ...CultivationRouter,
+            ...CultivationSectionRouter
 
         ]
     }

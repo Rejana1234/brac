@@ -1,63 +1,60 @@
 <template>
-   <div id="Crop">
-
-       <div class="add-crop">
-           <router-link to="/dashboard/addcrop">
-               <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
-           </router-link>
-       </div>
-
-        <div class="field">
+   <div id="CultivationSection">
+ 
+  <div class="field">
           <div for="entries">Show:
-             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllCrop()">
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllCultivationSection()">
                  <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
              </select>
              Entries
           </div>
 
           <div class="search">
-              <input type="text" v-model="tableData.search" placeholder="Search Crop" @input="getAllCrop()">
+              <input type="text" v-model="tableData.search" placeholder="Search Season" @input="getAllCultivationSection()">
           </div>
-        </div>
-
-       <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+        </div>	
+ 
+ <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="crops.length" v-for="(crop) in crops" :key="crop.id">
-                <td>{{ crop.id }}</td>
+            <tr v-show="cultivationsections.length" v-for="(cultivationsection,index) in cultivationsections" :key="cultivationsection.id">
+                <td>{{ index + 1 }}</td>
                 <td>
-                  <img :src="showImage(crop.image)" alt="" width="50px">
+                  <img :src="showImage(cultivationsection.crop_image)" alt="" width="50px" name="image">
                 </td>
-                <td>{{ crop.name_en }}</td>
-                <td>{{ crop.name_bn }}</td>
-                <td colspan="2">
-                    <router-link :to="`/dashboard/edit_crop/${crop.id}`">
-                        <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-                    </router-link>
-
-                    <button class="delete" v-on:click="deleteCrop(crop)"><i class="fa-solid fa-trash"></i>  Delete</button>
+                <td>{{ cultivationsection.user_id }}</td>
+                <td>{{ cultivationsection.crop_name_en }}</td>
+                <td>{{ cultivationsection.cultivation_category_name}}</td>
+                <td>
+                    <!-- {{ landseasion.season_id}} -->
+                    <div  v-for="(item) in cultivationsection.season" :key="item.id">
+                       <span>{{item.name_en}}</span><br>
+                       <span>{{item.cultural_operation}}: </span>
+                       <span>{{item.start_date}} ~</span>
+                       <span>{{item.end_date}} </span>
+                    </div>
                 </td>
             </tr>
            </tbody>
        </datatable>
 
-        <div class="field">
+      <div class="field">
             <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
-            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCrop();"></pagination>
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCultivationSection();"></pagination>
         </div>
-   </div>	
-</template>
+</div>
 
+</template>
 <script>
 import DataTable from '../../../../components/datatable/DataTable';
-import Pagination from '../../../../components/datatable/Pagination.vue';
+import Pagination from '../../../../components/datatable/Pagination';
 
 import {mapState} from 'vuex';
 
-import { http, httpFile } from '../../../../service/http_service';
+import { http } from '../../../../service/http_service';
 
 export default {
-   name: 'MyCrop',
+   name: 'LandSeasion',
 
    components: {
        datatable: DataTable,
@@ -69,16 +66,17 @@ export default {
        let columns = [
            {label: '#Sl', name: 'id' },
            {label: 'Image', name: 'image'},
-           {label: 'Name EN', name: 'name_en'},
-           {label: 'Name BN', name: 'name_bn'},
-           {label: 'Action', name: 'action'}
+           {label: 'User', name: 'user_id' },   
+           {label: 'Crop', name: 'crop_name_en'},
+           {label: 'cultivation', name: 'cultivation_category_name'},
+           {label: 'Season', name: ''},
        ];
        columns.forEach((column) => {
            sortOrders[column.name] = -1;
        });
 
        return {
-           crops: [],
+           cultivationsections: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -89,8 +87,6 @@ export default {
                search: '',
                column: 0,
                dir: 'desc',
-               
-               
            },
            pagination: {
                    last_page: '',
@@ -110,17 +106,17 @@ export default {
 
     computed: {
         ...mapState({
-            message: state => state.crop.success_message
+            message: state => state.seasion.success_message
         })
     },
 
     mounted(){
-       this.getAllCrop();
+       this.getAllCultivationSection();
     },
 
     methods: {
 
-       getAllCrop(){
+       getAllCultivationSection(){
 
            this.tableData.draw++;
            let params = new URLSearchParams();
@@ -130,19 +126,20 @@ export default {
            params.append('search', this.tableData.search);
            params.append('column', this.tableData.column);
            params.append('dir', this.tableData.dir);
-          
 
-           return http(),httpFile().get('v1/crop/getData?'+params)
+           return http().get('v1/cultivation_section/getData?'+params)
                .then(response => {
-                   this.crops = response.data.data.data;
-                   this.pagination = response.data.data;
+                   this.cultivationsections = response.data.cultivation_section.data;
+                   
+                   this.pagination = response.data.cultivation_section;
+                   console.log(this.cultivationsections);
                })
                .catch(error => {
                    console.log(error);
                })
        },
 
-        showImage(img){
+       showImage(img){
                 let server_Path = this.$store.state.serverPath;
                 return server_Path +"/public/uploads/crop_image/"+ img;
             },
@@ -152,44 +149,23 @@ export default {
             this.sortOrders[key] = this.sortOrders[key] * -1;
             this.tableData.column = this.getIndex(this.columns, 'name', key);
             this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
-            this.getAllCrop();
+            this.getAllLandSeasion();
         },
 
-        getIndex(array, key, value) {
-            return array.findIndex(i => i[key] == value)
-        },
-
-        deleteCrop: async function(crop){
-           try {
-               let crop_id = crop.id;
-
-               await this.$store.dispatch('crop/delete_crop', crop_id).then(() => {
-                   this.$swal.fire({
-                       toast: true,
-                       position: 'top-end',
-                       icon: 'success',
-                       title: this.message,
-                       showConfirmButton: false,
-                       timer: 1500
-                   });
-                   this.getAllCrop();
-               })
-           }catch (e) {
-               console.log(e);
-           }
-        }
 
     },
 };
 </script>
 <style>
+
+
 .table {
     width: 100%;
     text-align: center;
     margin-bottom: 0.5%;
 }
-.add-crop{
-    display:flex;
+.add-Season{
+   display:flex;
     justify-content: flex-end;
    margin-bottom: 3%;
 }

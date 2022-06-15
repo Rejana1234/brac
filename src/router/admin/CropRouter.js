@@ -1,6 +1,5 @@
 import Crop from '../../views/admin/Crop/Crop/Crop';
 import AddCrop from '../../views/admin/Crop/Crop/AddCrop';
-import EditCrop from '../../views/admin/Crop/Crop/EditCrop';
 export default[
     {
         path:'crop',
@@ -13,8 +12,8 @@ export default[
         component: AddCrop
     },
     {
-        path: 'edit_crop',
+        path: 'edit_crop/:id',
         name: 'EditCrop',
-        component: EditCrop
-    }    
+        component: () => import('../../views/admin/Crop/Crop/EditCrop')
+    }
 ]

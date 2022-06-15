@@ -1,27 +1,20 @@
 <template>
-    <div id="EditCrop">
-        <form class="EditCrop-form" v-on:submit.prevent="editCrop">
-             <h2>edit Crop</h2>
+    <div id="EditCultivation">
+        <form class="EditCultivation-form" v-on:submit.prevent="editCultivation">
+            <h2>Edit Cultivation</h2>
             <div class="form-group">
-                <input type="file" class="box" name="image" v-on:change="attachImage" ref="cropImage">            
-            </div>  
-            <div class="form-group">
-                <input type="name" v-model="editCropList.name_en" name="name_en" id="name_en" placeholder="Enter crop Name(EN)" class="box">
-            </div>
-            <div class="form-group">
-                <input type="name" v-model="editCropList.name_bn" name="name_bn" id="name_bn" placeholder="Enter crop Name(BN)" class="box">
-            </div>
-            <div class="button">
-                <div>
-                    <router-link to="/dashboard/crop">
-                        <button type="button"> Back </button>
-                    </router-link>
-                    <button type="submit"> Save </button>
-                </div>
+                <input type="name" v-model="editCultivationList.name" name="name" id="name_en" placeholder="Enter Cultivation Name" class="box">
 
             </div>
-           
-            
+
+            <div class="button">
+                <div>
+                    <router-link to="/dashboard/cultivation_category">
+                        <button type="button"> Back </button>
+                    </router-link>
+                    <button type="submit"> Edit </button>
+                </div>
+            </div>
 
         </form>
     </div>
@@ -31,54 +24,39 @@
     import {mapState, mapActions} from 'vuex';
 
     export default {
-        name: 'MyEditCrop',
+        name: 'MyEditCultivation',
 
         data(){
             return{
-                errors: {},
-                image: ''
+                errors: {}
             }
         },
 
         computed: {
             ...mapState({
-                editCropList: state => state.crop.crop,
-                message: state => state.crop.success_message
+                editCultivationList: state => state.cultivation.cultivation,
+                message: state => state.cultivation.success_message
             })
         },
 
         mounted(){
-            this.getEditCrop(this.$route.params.id);
-            
+            this.getEditCultivation(this.$route.params.id);
         },
 
         methods: {
             ...mapActions({
-                getEditCrop: 'crop/edit_crop'
+                getEditCultivation: 'cultivation/edit_cultivation'
             }),
-            
 
-            attachImage: function(){
-                //to use some file todo
-                this.image = this.$refs.cropImage.files[0];
-                let reader = new FileReader();
-                reader.addEventListener('load', function () {
-                this.$refs.newCategoryImageDisplay.src = reader.result;
-                }.bind(this),false);
-                reader.readAsDataURL(this.file);
-            },
-
-            editCrop: async function(){
+            editCultivation: async function(){
                 try {
                     let id = this.$route.params.id;
                     let formData = new FormData();
 
-                    formData.append('image', this.image);
-                    formData.append('name_en', this.editCropList.name_en);
-                    formData.append('name_bn', this.editCropList.name_bn);
+                    formData.append('name', this.editCultivationList.name);
                     formData.append('_method', 'PUT');
 
-                    await this.$store.dispatch('crop/update_crop', {id:id, data:formData}).then(() => {
+                    await this.$store.dispatch('cultivation/update_cultivation', {id:id, data:formData}).then(() => {
                         this.$swal.fire({
                             toast: true,
                             position: 'top-end',
@@ -87,7 +65,7 @@
                             showConfirmButton: false,
                             timer: 1500
                         });
-                        this.getEditCrop(this.$route.params.id);
+                        this.getEditCultivation(this.$route.params.id);
                     })
 
                 }catch (e) {
@@ -99,7 +77,7 @@
 </script>
 
 <style scoped>
-    .EditCrop-form{
+    .AddCultivation-form{
         width: 96rem;
         position: absolute;
         text-align: center;
@@ -109,11 +87,11 @@
         background:#eee;
         box-shadow: var(--box-shadow);
     }
-    .EditCrop-form h2{
+    .AddCultivation-form h2{
         display: flex;
         justify-content: left;
     }
-    .EditCrop-form .box{
+    .AddCultivation-form .box{
         width: 100%;
         margin: .7rem 0;
         background: rgb(252, 250, 252);
@@ -124,13 +102,13 @@
         text-transform: none;
     }
 
-    .EditCrop-form p{
+    .AddCultivation-form p{
         font-size: 1.4rem;
         padding: .5rem 0;
         color: var(--light-color);
     }
 
-    .EditCrop-form p a{
+    .AddCultivation-form p a{
         color: var(--orange);
         text-decoration: underline;
     }
@@ -154,13 +132,13 @@
         font-size: 12px;
     }
 
-#EditCrop{
+#EditCultivation{
     display: flex;
     justify-content: center;
     margin-top: 100rem;
 }
 
-.EditCrop-form{
+.EditCultivation-form{
     width: 95%;
     position: absolute;
     text-align: center;
@@ -170,11 +148,11 @@
     background:#eee;
     box-shadow: var(--box-shadow);
 }
-.EditCrop-form h2{
+.EditCultivation-form h2{
     display: flex;
     justify-content: left;
 }
- .EditCrop-form .box{
+ .EditCultivation-form .box{
     width: 100%;
     margin: .7rem 0;
     background: rgb(252, 250, 252);
@@ -185,13 +163,13 @@
     text-transform: none;
 }
 
-.EditCrop-form p{
+.EditCultivation-form p{
     font-size: 1.4rem;
     padding: .5rem 0;
     color: var(--light-color);
 }
 
-.EditCrop-form p a{
+.EditCultivation-form p a{
     color: var(--orange);
     text-decoration: underline;
 }

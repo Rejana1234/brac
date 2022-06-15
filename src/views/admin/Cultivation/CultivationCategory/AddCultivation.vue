@@ -1,19 +1,13 @@
 <template>
-    <div id="AddCrop">
-        <form class="AddCrop-form" v-on:submit.prevent="addCrop">
-             <h2>Add Crop</h2>
+    <div id="AddCultivation">
+        <form class="AddCultivation-form" v-on:submit.prevent="addCultivation">
+             <h2>Add Cultivation</h2>  
             <div class="form-group">
-                <input type="file" class="box" name="image" v-on:change="attachImage" ref="cropImage">            
-            </div>  
-            <div class="form-group">
-                <input type="name" v-model="cropData.name_en" name="name_bn" id="name_bn" placeholder="Enter crop Name(EN)" class="box">
-            </div>
-            <div class="form-group">
-                <input type="name" v-model="cropData.name_bn" name="name_bn" id="code_bn" placeholder="Enter crop Name(BN)" class="box">
+                <input type="name" v-model="cultivationData.name" name="name" id="name" placeholder="Enter cultivation Name" class="box">
             </div>
             <div class="button">
                 <div>
-                    <router-link to="/dashboard/crop">
+                    <router-link to="/dashboard/cultivation_category">
                         <button type="button"> Back </button>
                     </router-link>
                     <button type="submit"> Save </button>
@@ -32,7 +26,7 @@
 import {mapState} from 'vuex';
 
 export default {
-    name: 'AddCrop',
+    name: 'AddCultivation',
 
    components: {
      
@@ -40,7 +34,7 @@ export default {
 
    data() {
      return {
-       cropData:{
+       cultivationData:{
            image:'',
            name_en: '',
            name_bn: '',
@@ -53,7 +47,7 @@ export default {
 
    computed: {
        ...mapState({
-           message: state => state.crop.success_message
+           message: state => state.cultivation.success_message
        })
    },
 
@@ -66,24 +60,14 @@ export default {
    },
 
    methods: {
-      attachImage: function(){
-        //to use some file todo
-        this.cropData.image = this.$refs.cropImage.files[0];
-        let reader = new FileReader();
-        reader.addEventListener('load', function () {
-          this.$refs.newCategoryImageDisplay.src = reader.result;
-        }.bind(this),false);
-        reader.readAsDataURL(this.file);
-      },
-       addCrop: async function(){
+      
+       addCultivation: async function(){
            try {
                let formData = new FormData();
-               formData.append('image', this.cropData.image);
-               formData.append('name_en', this.cropData.name_en);
-               formData.append('name_bn', this.cropData.name_bn);
+               formData.append('name', this.cultivationData.name);
                
 
-               await this.$store.dispatch('crop/add_crop', formData).then(() => {
+               await this.$store.dispatch('cultivation/add_cultivation', formData).then(() => {
                    this.$swal.fire({
                        toast: true,
                        position: 'top-end',
@@ -93,7 +77,7 @@ export default {
                        timer: 1500
                    });
 
-                   this.cropData = {};
+                   this.cultivationData = {};
                })
            }catch (e) {
                console.log(e);
@@ -105,13 +89,13 @@ export default {
 
 <style scoped>
 
-#AddCrop{
+#AddCultivation{
     display: flex;
     justify-content: center;
     margin-top: 100rem;
 }
 
-.AddCrop-form{
+.AddCultivation-form{
     width: 95%;
     position: absolute;
     text-align: center;
@@ -121,11 +105,11 @@ export default {
     background:#eee;
     box-shadow: var(--box-shadow);
 }
-.AddCrop-form h2{
+.AddCultivation-form h2{
     display: flex;
     justify-content: left;
 }
- .AddCrop-form .box{
+ .AddCultivation-form .box{
     width: 100%;
     margin: .7rem 0;
     background: rgb(252, 250, 252);
@@ -136,13 +120,13 @@ export default {
     text-transform: none;
 }
 
-.AddCrop-form p{
+.AddCultivation-form p{
     font-size: 1.4rem;
     padding: .5rem 0;
     color: var(--light-color);
 }
 
-.AddCrop-form p a{
+.AddCultivation-form p a{
     color: var(--orange);
     text-decoration: underline;
 }

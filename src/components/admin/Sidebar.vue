@@ -55,26 +55,39 @@
 				</ul>
 			</li>
 			<li class="divider" data-text="location">Land-Size </li>
-			<li><a href="#"><i class='bx bxs-chart icon' ></i> Land-Size</a></li>
+			<li><router-link active-class="active" to="/dashboard/land_size"><i class='bx bxs-chart icon' ></i> Land Size</router-link></li>
 			<li class="divider" data-text="location">Land Preperation </li>
 			<li>
 			<ul >
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Season</a></li>
+					<li>
+						<router-link active-class="active" to="/dashboard/season"><i class='bx bxs-chart icon' ></i> Season </router-link>
+					</li> 
+					<li>
+						<router-link active-class="active" to="/dashboard/land_preperation"><i class='bx bxs-chart icon' ></i> Land Preperation </router-link>
+					</li>
 			</ul>
 			</li>
 			<li class="divider" data-text="location">Crop </li>
 			<li>
 				
 				<ul>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Crop Catagory</a></li>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Crop Selection</a></li>
+					<li> 
+						<router-link active-class="active" to="/dashboard/crop"><i class='bx bxs-chart icon' ></i> Crop </router-link> 
+					</li>
+					<li>
+						<router-link active-class="active" to="/dashboard/crop_selection"><i class='bx bxs-chart icon' ></i> Crop Selection</router-link> 
+					</li>
 				</ul>
 			</li>
 			<li class="divider" data-text="location">Cultivation </li>
 			<li>
 				<ul>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Category</a></li>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Cultivation Selection</a></li>
+					<li>
+						<router-link active-class="active" to="/dashboard/cultivation_category"><i class='bx bxs-chart icon' ></i>Cultivation Category</router-link>
+					</li>
+					<li>
+						<router-link active-class="active" to="/dashboard/cultivation_section"><i class='bx bxs-chart icon' ></i> Cultivation Section</router-link>>
+					</li>
 				</ul>
 			</li>
 			<li class="divider" data-text="location">Setting </li>

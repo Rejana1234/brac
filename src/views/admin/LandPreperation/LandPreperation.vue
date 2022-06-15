@@ -1,10 +1,5 @@
 <template>
    <div id="Season">
-   <div class="add-Season">
-      <router-link to="/dashboard/addseason">
-               <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
-           </router-link>
-   </div>
  
   <div class="field">
           <div for="entries">Show:
@@ -21,18 +16,22 @@
  
  <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="seasions.length" v-for="(seasion,index) in seasions" :key="seasion.id">
+            <tr v-show="landseasions.length" v-for="(landseasion,index) in landseasions" :key="landseasion.id">
                 <td>{{ index + 1 }}</td>
-                <td>{{ seasion.name_en }}</td>
-                <td>{{ seasion.name_bn }}</td>
-                <td>{{ seasion.start_date }}</td>
-                <td>{{ seasion.end_date}}</td>
-                <td colspan="2">
-                    <router-link :to="`/dashboard/edit_seasion/${seasion.id}`">
-                        <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-                    </router-link>
-
-                    <button class="delete" v-on:click="deleteLandSeasion(seasion)"><i class="fa-solid fa-trash"></i>  Delete</button>
+                <td>
+                  <img :src="showImage(landseasion.crop_image)" alt="" width="50px" name="image">
+                </td>
+                <td>{{ landseasion.user_id }}</td>
+                <td>{{ landseasion.crop_name_en }}</td>
+                <td>{{ landseasion.soil_ph_level}}</td>
+                <td>
+                    <!-- {{ landseasion.season_id}} -->
+                    <div  v-for="(item) in landseasion.season_id" :key="item.id">
+                       <span>{{item.name_en}}</span><br>
+                       <span>{{item.cultural_operation}}: </span>
+                       <span>{{item.start_date}} ~</span>
+                       <span>{{item.end_date}} </span>
+                    </div>
                 </td>
             </tr>
            </tbody>
@@ -48,14 +47,14 @@
 </template>
 <script>
 import DataTable from '../../../components/datatable/DataTable';
-import Pagination from '../../../components/datatable/Pagination.vue';
+import Pagination from '../../../components/datatable/Pagination';
 
 import {mapState} from 'vuex';
 
 import { http } from '../../../service/http_service';
 
 export default {
-   name: 'TheSeasion',
+   name: 'LandSeasion',
 
    components: {
        datatable: DataTable,
@@ -66,18 +65,18 @@ export default {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
-           {label: 'Name EN', name: 'name_en'},
-           {label: 'Name BN', name: 'name_bn'},
-           {label: 'Start Date', name: 'start_date'},
-           {label: 'End Date', name: 'end_date'},
-           {label: 'Action', name: 'action'}
+           {label: 'Image', name: 'image'},
+           {label: 'User', name: 'user_id' },   
+           {label: 'Crop', name: 'crop_name_en'},
+           {label: 'PH Level', name: 'soil_ph_level'},
+           {label: 'Season', name: 'crop_name_en'},
        ];
        columns.forEach((column) => {
            sortOrders[column.name] = -1;
        });
 
        return {
-           seasions: [],
+           landseasions: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -107,8 +106,6 @@ export default {
 
     computed: {
         ...mapState({
-            //countries: state => state.country.countries,
-            //pag: state => state.country.pagination,
             message: state => state.seasion.success_message
         })
     },
@@ -130,16 +127,22 @@ export default {
            params.append('column', this.tableData.column);
            params.append('dir', this.tableData.dir);
 
-           return http().get('v1/land_prepration_seasion/getData?'+params)
+           return http().get('v1/land_prepration/getData?'+params)
                .then(response => {
-                   this.seasions = response.data.data.data;
-                   this.pagination = response.data.data;
-                   console.log(this.seasions);
+                   this.landseasions = response.data.land_prepration.data;
+                   
+                   this.pagination = response.data.land_prepration;
+                   console.log(this.landseasions);
                })
                .catch(error => {
                    console.log(error);
                })
        },
+
+       showImage(img){
+                let server_Path = this.$store.state.serverPath;
+                return server_Path +"/public/uploads/crop_image/"+ img;
+            },
 
         sortBy(key) {
             this.sortKey = key;
@@ -149,29 +152,6 @@ export default {
             this.getAllLandSeasion();
         },
 
-        getIndex(array, key, value) {
-            return array.findIndex(i => i[key] == value)
-        },
-
-        deleteLandSeasion: async function(seasion){
-           try {
-               let seasion_id = seasion.id;
-
-               await this.$store.dispatch('seasion/delete_seasion', seasion_id).then(() => {
-                   this.$swal.fire({
-                       toast: true,
-                       position: 'top-end',
-                       icon: 'success',
-                       title: this.message,
-                       showConfirmButton: false,
-                       timer: 1500
-                   });
-                   this.getAllLandSeasion();
-               })
-           }catch (e) {
-               console.log(e);
-           }
-        }
 
     },
 };

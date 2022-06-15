@@ -1,5 +1,5 @@
-import Season from '../../views/admin/Season/Season';
-import AddSeason from '../../views/admin/Season/AddSeason';
+import Season from '../../views/admin/LandPreperation/Season/Season';
+import AddSeason from '../../views/admin/LandPreperation/Season/AddSeason';
 export default[
     {
         path:'season',
@@ -14,6 +14,6 @@ export default[
     {
         path: 'edit_seasion/:id',
         name: 'EditSeason',
-        component: () => import('../../views/admin/Season/EditSeason.vue')
+        component: () => import('../../views/admin/LandPreperation/Season/EditSeason.vue')
     }
 ]

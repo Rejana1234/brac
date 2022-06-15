@@ -1,40 +1,36 @@
 <template>
-   <div id="Crop">
+   <div id="cultivation">
 
-       <div class="add-crop">
-           <router-link to="/dashboard/addcrop">
+       <div class="add-cultivation">
+           <router-link to="/dashboard/addcultivation">
                <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
            </router-link>
        </div>
 
         <div class="field">
           <div for="entries">Show:
-             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllCrop()">
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllCultivation()">
                  <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
              </select>
              Entries
           </div>
 
           <div class="search">
-              <input type="text" v-model="tableData.search" placeholder="Search Crop" @input="getAllCrop()">
+              <input type="text" v-model="tableData.search" placeholder="Search Cultivation" @input="getAllCultivation()">
           </div>
         </div>
 
        <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="crops.length" v-for="(crop) in crops" :key="crop.id">
-                <td>{{ crop.id }}</td>
-                <td>
-                  <img :src="showImage(crop.image)" alt="" width="50px">
-                </td>
-                <td>{{ crop.name_en }}</td>
-                <td>{{ crop.name_bn }}</td>
+            <tr v-show="cultivations.length" v-for="(cultivation) in cultivations" :key="cultivation.id">
+                <td>{{ cultivation.id }}</td>
+                <td>{{ cultivation.name }}</td>
                 <td colspan="2">
-                    <router-link :to="`/dashboard/edit_crop/${crop.id}`">
+                    <router-link :to="`/dashboard/edit_cultivation/${cultivation.id}`">
                         <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                     </router-link>
 
-                    <button class="delete" v-on:click="deleteCrop(crop)"><i class="fa-solid fa-trash"></i>  Delete</button>
+                    <button class="delete" v-on:click="deleteCultivation(cultivation)"><i class="fa-solid fa-trash"></i>  Delete</button>
                 </td>
             </tr>
            </tbody>
@@ -43,7 +39,7 @@
         <div class="field">
             <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
-            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCrop();"></pagination>
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCultivation();"></pagination>
         </div>
    </div>	
 </template>
@@ -54,10 +50,10 @@ import Pagination from '../../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
 
-import { http, httpFile } from '../../../../service/http_service';
+import { http } from '../../../../service/http_service';
 
 export default {
-   name: 'MyCrop',
+   name: 'MyCultivation',
 
    components: {
        datatable: DataTable,
@@ -68,17 +64,15 @@ export default {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
-           {label: 'Image', name: 'image'},
-           {label: 'Name EN', name: 'name_en'},
-           {label: 'Name BN', name: 'name_bn'},
-           {label: 'Action', name: 'action'}
+           {label: 'Name', name: 'name'},
+           {label: 'Action', name: 'action'},
        ];
        columns.forEach((column) => {
            sortOrders[column.name] = -1;
        });
 
        return {
-           crops: [],
+           cultivations: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -89,8 +83,6 @@ export default {
                search: '',
                column: 0,
                dir: 'desc',
-               
-               
            },
            pagination: {
                    last_page: '',
@@ -110,17 +102,18 @@ export default {
 
     computed: {
         ...mapState({
-            message: state => state.crop.success_message
+            
+            message: state => state.cultivation.success_message
         })
     },
 
     mounted(){
-       this.getAllCrop();
+       this.getAllCultivation();
     },
 
     methods: {
 
-       getAllCrop(){
+       getAllCultivation(){
 
            this.tableData.draw++;
            let params = new URLSearchParams();
@@ -130,11 +123,10 @@ export default {
            params.append('search', this.tableData.search);
            params.append('column', this.tableData.column);
            params.append('dir', this.tableData.dir);
-          
 
-           return http(),httpFile().get('v1/crop/getData?'+params)
+           return http().get('v1/cultivation/getData?'+params)
                .then(response => {
-                   this.crops = response.data.data.data;
+                   this.cultivations = response.data.data.data;
                    this.pagination = response.data.data;
                })
                .catch(error => {
@@ -142,28 +134,23 @@ export default {
                })
        },
 
-        showImage(img){
-                let server_Path = this.$store.state.serverPath;
-                return server_Path +"/public/uploads/crop_image/"+ img;
-            },
-
         sortBy(key) {
             this.sortKey = key;
             this.sortOrders[key] = this.sortOrders[key] * -1;
             this.tableData.column = this.getIndex(this.columns, 'name', key);
             this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
-            this.getAllCrop();
+            this.getAllCultivation();
         },
 
         getIndex(array, key, value) {
             return array.findIndex(i => i[key] == value)
         },
 
-        deleteCrop: async function(crop){
+        deleteCultivation: async function(cultivation){
            try {
-               let crop_id = crop.id;
+               let cultivation_id = cultivation.id;
 
-               await this.$store.dispatch('crop/delete_crop', crop_id).then(() => {
+               await this.$store.dispatch('cultivation/delete_cultivation', cultivation_id).then(() => {
                    this.$swal.fire({
                        toast: true,
                        position: 'top-end',
@@ -172,7 +159,7 @@ export default {
                        showConfirmButton: false,
                        timer: 1500
                    });
-                   this.getAllCrop();
+                   this.getAllCultivation();
                })
            }catch (e) {
                console.log(e);
@@ -188,7 +175,7 @@ export default {
     text-align: center;
     margin-bottom: 0.5%;
 }
-.add-crop{
+.add-cultivation{
     display:flex;
     justify-content: flex-end;
    margin-bottom: 3%;

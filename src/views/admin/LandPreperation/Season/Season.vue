@@ -1,63 +1,62 @@
 <template>
-   <div id="Crop">
-
-       <div class="add-crop">
-           <router-link to="/dashboard/addcrop">
+   <div id="Season">
+   <div class="add-Season">
+      <router-link to="/dashboard/addseason">
                <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
            </router-link>
-       </div>
-
-        <div class="field">
+   </div>
+ 
+  <div class="field">
           <div for="entries">Show:
-             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllCrop()">
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllLandSeasion()">
                  <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
              </select>
              Entries
           </div>
 
           <div class="search">
-              <input type="text" v-model="tableData.search" placeholder="Search Crop" @input="getAllCrop()">
+              <input type="text" v-model="tableData.search" placeholder="Search Season" @input="getAllLandSeasion()">
           </div>
-        </div>
-
-       <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+        </div>	
+ 
+ <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="crops.length" v-for="(crop) in crops" :key="crop.id">
-                <td>{{ crop.id }}</td>
-                <td>
-                  <img :src="showImage(crop.image)" alt="" width="50px">
-                </td>
-                <td>{{ crop.name_en }}</td>
-                <td>{{ crop.name_bn }}</td>
+            <tr v-show="seasions.length" v-for="(seasion,index) in seasions" :key="seasion.id">
+                <td>{{ index + 1 }}</td>
+                <td>{{ seasion.name_en }}</td>
+                <td>{{ seasion.name_bn }}</td>
+                <td>{{seasion.cultural_operation}}</td>
+                <td>{{ seasion.start_date }}</td>
+                <td>{{ seasion.end_date}}</td>
                 <td colspan="2">
-                    <router-link :to="`/dashboard/edit_crop/${crop.id}`">
+                    <router-link :to="`/dashboard/edit_seasion/${seasion.id}`">
                         <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                     </router-link>
 
-                    <button class="delete" v-on:click="deleteCrop(crop)"><i class="fa-solid fa-trash"></i>  Delete</button>
+                    <button class="delete" v-on:click="deleteLandSeasion(seasion)"><i class="fa-solid fa-trash"></i>  Delete</button>
                 </td>
             </tr>
            </tbody>
        </datatable>
 
-        <div class="field">
+      <div class="field">
             <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
-            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCrop();"></pagination>
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllLandSeasion();"></pagination>
         </div>
-   </div>	
-</template>
+</div>
 
+</template>
 <script>
 import DataTable from '../../../../components/datatable/DataTable';
 import Pagination from '../../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
 
-import { http, httpFile } from '../../../../service/http_service';
+import { http } from '../../../../service/http_service';
 
 export default {
-   name: 'MyCrop',
+   name: 'TheSeasion',
 
    components: {
        datatable: DataTable,
@@ -68,9 +67,11 @@ export default {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
-           {label: 'Image', name: 'image'},
            {label: 'Name EN', name: 'name_en'},
            {label: 'Name BN', name: 'name_bn'},
+           {label: 'Cultural Operation', name: 'cultural_operation'},
+           {label: 'Start Date', name: 'start_date'},
+           {label: 'End Date', name: 'end_date'},
            {label: 'Action', name: 'action'}
        ];
        columns.forEach((column) => {
@@ -78,7 +79,7 @@ export default {
        });
 
        return {
-           crops: [],
+           seasions: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -89,8 +90,6 @@ export default {
                search: '',
                column: 0,
                dir: 'desc',
-               
-               
            },
            pagination: {
                    last_page: '',
@@ -110,17 +109,19 @@ export default {
 
     computed: {
         ...mapState({
-            message: state => state.crop.success_message
+            //countries: state => state.country.countries,
+            //pag: state => state.country.pagination,
+            message: state => state.seasion.success_message
         })
     },
 
     mounted(){
-       this.getAllCrop();
+       this.getAllLandSeasion();
     },
 
     methods: {
 
-       getAllCrop(){
+       getAllLandSeasion(){
 
            this.tableData.draw++;
            let params = new URLSearchParams();
@@ -130,40 +131,35 @@ export default {
            params.append('search', this.tableData.search);
            params.append('column', this.tableData.column);
            params.append('dir', this.tableData.dir);
-          
 
-           return http(),httpFile().get('v1/crop/getData?'+params)
+           return http().get('v1/land_prepration_seasion/getData?'+params)
                .then(response => {
-                   this.crops = response.data.data.data;
+                   this.seasions = response.data.data.data;
                    this.pagination = response.data.data;
+                   console.log(this.seasions);
                })
                .catch(error => {
                    console.log(error);
                })
        },
 
-        showImage(img){
-                let server_Path = this.$store.state.serverPath;
-                return server_Path +"/public/uploads/crop_image/"+ img;
-            },
-
         sortBy(key) {
             this.sortKey = key;
             this.sortOrders[key] = this.sortOrders[key] * -1;
             this.tableData.column = this.getIndex(this.columns, 'name', key);
             this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
-            this.getAllCrop();
+            this.getAllLandSeasion();
         },
 
         getIndex(array, key, value) {
             return array.findIndex(i => i[key] == value)
         },
 
-        deleteCrop: async function(crop){
+        deleteLandSeasion: async function(seasion){
            try {
-               let crop_id = crop.id;
+               let seasion_id = seasion.id;
 
-               await this.$store.dispatch('crop/delete_crop', crop_id).then(() => {
+               await this.$store.dispatch('seasion/delete_seasion', seasion_id).then(() => {
                    this.$swal.fire({
                        toast: true,
                        position: 'top-end',
@@ -172,7 +168,7 @@ export default {
                        showConfirmButton: false,
                        timer: 1500
                    });
-                   this.getAllCrop();
+                   this.getAllLandSeasion();
                })
            }catch (e) {
                console.log(e);
@@ -183,13 +179,15 @@ export default {
 };
 </script>
 <style>
+
+
 .table {
     width: 100%;
     text-align: center;
     margin-bottom: 0.5%;
 }
-.add-crop{
-    display:flex;
+.add-Season{
+   display:flex;
     justify-content: flex-end;
    margin-bottom: 3%;
 }

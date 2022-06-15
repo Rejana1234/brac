@@ -1,41 +1,29 @@
 <template>
-   <div id="Crop">
-
-       <div class="add-crop">
-           <router-link to="/dashboard/addcrop">
-               <button class="add_new"><i class="fa-solid fa-circle-plus"></i> Add New</button>
-           </router-link>
-       </div>
+   <div id="CropSelection">
 
         <div class="field">
           <div for="entries">Show:
-             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllCrop()">
+             <select  name="entries" id="entries" v-model="tableData.length" @change="getAllSelection()">
                  <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
              </select>
              Entries
           </div>
 
           <div class="search">
-              <input type="text" v-model="tableData.search" placeholder="Search Crop" @input="getAllCrop()">
+              <input type="text" v-model="tableData.search" placeholder="Search Crop " @input="getAllSelection()">
           </div>
         </div>
 
        <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="crops.length" v-for="(crop) in crops" :key="crop.id">
-                <td>{{ crop.id }}</td>
+            <tr v-show="selections.length" v-for="(selection) in selections" :key="selection.id">
+                <td>{{ selection.id }}</td>
                 <td>
-                  <img :src="showImage(crop.image)" alt="" width="50px">
+                  <img :src="showImage(selection.crop_image)" alt="" width="50px" name="image">
                 </td>
-                <td>{{ crop.name_en }}</td>
-                <td>{{ crop.name_bn }}</td>
-                <td colspan="2">
-                    <router-link :to="`/dashboard/edit_crop/${crop.id}`">
-                        <button class="Edit"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
-                    </router-link>
-
-                    <button class="delete" v-on:click="deleteCrop(crop)"><i class="fa-solid fa-trash"></i>  Delete</button>
-                </td>
+                <td>{{ selection.user_id }}</td>
+                <td>{{ selection.crop_name_en }}</td>
+                <td>{{ selection.name_bn }}</td>
             </tr>
            </tbody>
        </datatable>
@@ -43,7 +31,7 @@
         <div class="field">
             <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
-            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCrop();"></pagination>
+            <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllSelection();"></pagination>
         </div>
    </div>	
 </template>
@@ -54,10 +42,10 @@ import Pagination from '../../../../components/datatable/Pagination.vue';
 
 import {mapState} from 'vuex';
 
-import { http, httpFile } from '../../../../service/http_service';
+import { http } from '../../../../service/http_service';
 
 export default {
-   name: 'MyCrop',
+   name: 'CropSelection',
 
    components: {
        datatable: DataTable,
@@ -67,18 +55,19 @@ export default {
    data() {
        let sortOrders = {};
        let columns = [
+
            {label: '#Sl', name: 'id' },
            {label: 'Image', name: 'image'},
-           {label: 'Name EN', name: 'name_en'},
+           {label: 'User ID', name: 'user_id' },   
+           {label: 'Name EN', name: 'crop_name_en'},
            {label: 'Name BN', name: 'name_bn'},
-           {label: 'Action', name: 'action'}
        ];
        columns.forEach((column) => {
            sortOrders[column.name] = -1;
        });
 
        return {
-           crops: [],
+           selections: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -89,8 +78,6 @@ export default {
                search: '',
                column: 0,
                dir: 'desc',
-               
-               
            },
            pagination: {
                    last_page: '',
@@ -110,17 +97,17 @@ export default {
 
     computed: {
         ...mapState({
-            message: state => state.crop.success_message
+            message: state => state.selection.success_message
         })
     },
 
     mounted(){
-       this.getAllCrop();
+       this.getAllSelection();
     },
 
     methods: {
 
-       getAllCrop(){
+       getAllSelection(){
 
            this.tableData.draw++;
            let params = new URLSearchParams();
@@ -130,11 +117,10 @@ export default {
            params.append('search', this.tableData.search);
            params.append('column', this.tableData.column);
            params.append('dir', this.tableData.dir);
-          
 
-           return http(),httpFile().get('v1/crop/getData?'+params)
+           return http().get('v1/crop_selection/getData?'+params)
                .then(response => {
-                   this.crops = response.data.data.data;
+                   this.selections = response.data.data.data;
                    this.pagination = response.data.data;
                })
                .catch(error => {
@@ -152,33 +138,8 @@ export default {
             this.sortOrders[key] = this.sortOrders[key] * -1;
             this.tableData.column = this.getIndex(this.columns, 'name', key);
             this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
-            this.getAllCrop();
+            this.getAllSelection();
         },
-
-        getIndex(array, key, value) {
-            return array.findIndex(i => i[key] == value)
-        },
-
-        deleteCrop: async function(crop){
-           try {
-               let crop_id = crop.id;
-
-               await this.$store.dispatch('crop/delete_crop', crop_id).then(() => {
-                   this.$swal.fire({
-                       toast: true,
-                       position: 'top-end',
-                       icon: 'success',
-                       title: this.message,
-                       showConfirmButton: false,
-                       timer: 1500
-                   });
-                   this.getAllCrop();
-               })
-           }catch (e) {
-               console.log(e);
-           }
-        }
-
     },
 };
 </script>
@@ -188,11 +149,7 @@ export default {
     text-align: center;
     margin-bottom: 0.5%;
 }
-.add-crop{
-    display:flex;
-    justify-content: flex-end;
-   margin-bottom: 3%;
-}
+
 .select{
    align-items:baseline;
 }
