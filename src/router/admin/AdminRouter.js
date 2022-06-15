@@ -47,7 +47,7 @@ export default[
             ...LocationRouter,
             ...SelectionRouter,
             ...CultivationRouter,
-            ...CultivationSectionRouter
+            ...CultivationSectionRouter,
 
         ]
     }

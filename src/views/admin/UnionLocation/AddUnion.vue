@@ -8,14 +8,17 @@
                     <option value="">Select Village</option>
                     <option v-for="(village, index) in villages" :key="index" :value="village.id">{{village.name_en}}</option>
                 </select>
+                <span v-if="errors.village_id" class="danger_text">{{errors.village_id[0]}}</span>
             </div>
 
             <div class="form-group">
                 <input type="name" v-model="unionData.name_en" name="name(en)" id="name_en" placeholder="Enter Union Name(EN)" class="box">
+                <span v-if="errors.name_en" class="danger_text">{{errors.name_en[0]}}</span>
             </div>
 
             <div class="form-group">
                 <input type="name" v-model="unionData.name_bn" name="name(bn)" id="name_bn" placeholder="Enter Union Name(BN)" class="box">
+                <span v-if="errors.name_bn" class="danger_text">{{errors.name_bn[0]}}</span>
             </div>
  
             <div class="button">
@@ -49,7 +52,8 @@ export default {
            village_id: '',
            name_en: '',
            name_bn: ''
-       }
+       },
+       errors:{}
      }
    },
 
@@ -94,7 +98,19 @@ export default {
                    this.unionData = {};
                })
            }catch (e) {
-               console.log(e);
+               switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
            }
        }
    }

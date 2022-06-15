@@ -4,10 +4,11 @@
             <h2>Add Department</h2>
             <div class="form-group">
                 <input type="name" v-model="departmentData.name_en" name="name_en" id="name_en" placeholder="Enter Country Name(EN)" class="box">
-
+                <span v-if="errors.name_en" class="danger_text">{{errors.name_en[0]}}</span>
             </div>
             <div class="form-group">
                 <input type="name" v-model="departmentData.name_bn" name="name_bn" id="name_bn" placeholder="Enter Country Name(BN)" class="box">
+                <span v-if="errors.name_bn" class="danger_text">{{errors.name_bn[0]}}</span>
             </div>
 
             <div class="button">
@@ -37,7 +38,8 @@
                 departmentData: {
                     name_en: '',
                     name_bn: ''
-                }
+                },
+                errors:{}
             }
         },
 
@@ -68,7 +70,19 @@
                         this.departmentData = {};
                     })
                 }catch (e) {
-                    console.log(e);
+                    switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
                 }
             },
         }

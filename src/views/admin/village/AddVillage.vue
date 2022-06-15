@@ -7,18 +7,23 @@
                     <option value="">Select Thana</option>
                     <option v-for="(thana, index) in thanas" :key="index" :value="thana.id">{{thana.name_en}}</option>
                 </select>
+                <span v-if="errors.thana_id" class="danger_text">{{errors.thana_id[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="name" v-model="villageData.name_en" name="name_en" id="name_en" placeholder="Enter District Name(EN)" class="box">
+                <input type="name" v-model="villageData.name_en" name="name_en" id="name_en" placeholder="Enter Village Name(EN)" class="box">
+                <span v-if="errors.name_en" class="danger_text">{{errors.name_en[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="name" v-model="villageData.name_bn" name="name_bn" id="name_bn" placeholder="Enter District Name(BN)" class="box">
+                <input type="name" v-model="villageData.name_bn" name="name_bn" id="name_bn" placeholder="Enter Village Name(BN)" class="box">
+                <span v-if="errors.name_bn" class="danger_text">{{errors.name_bn[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="text" v-model="villageData.code_en" name="code_en" id="code_en" placeholder="Enter District Code(EN)" class="box">
+                <input type="text" v-model="villageData.code_en" name="code_en" id="code_en" placeholder="Enter Village Code(EN)" class="box">
+                <span v-if="errors.code_en" class="danger_text">{{errors.code_en[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="text" v-model="villageData.code_bn" name="code_bn" id="code_bn" placeholder="Enter District Code(BN)" class="box">
+                <input type="text" v-model="villageData.code_bn" name="code_bn" id="code_bn" placeholder="Enter Village Code(BN)" class="box">
+                <span v-if="errors.code_bn" class="danger_text">{{errors.code_bn[0]}}</span>
             </div>
 
             <div class="button">
@@ -97,7 +102,19 @@
                     })
 
                 }catch (e) {
-                    console.log(e);
+                    switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
                 }
             },
         }

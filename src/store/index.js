@@ -27,7 +27,6 @@ import selection from "./modules/selection";
 import cultivation from "./modules/cultivation";
 import section from "./modules/section";
 
-
 export default new Vuex.Store({
     state,
     getters,

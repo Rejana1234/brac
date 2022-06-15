@@ -3,13 +3,16 @@
         <form class="AddCrop-form" v-on:submit.prevent="addCrop">
              <h2>Add Crop</h2>
             <div class="form-group">
-                <input type="file" class="box" name="image" v-on:change="attachImage" ref="cropImage">            
+                <input type="file" class="box" name="image" v-on:change="attachImage" ref="cropImage">  
+                 <span v-if="errors.image" class="danger_text">{{errors.image[0]}}</span>          
             </div>  
             <div class="form-group">
-                <input type="name" v-model="cropData.name_en" name="name_bn" id="name_bn" placeholder="Enter crop Name(EN)" class="box">
+                <input type="name" v-model="cropData.name_en" name="name_en" id="name_en" placeholder="Enter crop Name(EN)" class="box">
+                <span v-if="errors.name_en" class="danger_text">{{errors.name_en[0]}}</span>  
             </div>
             <div class="form-group">
-                <input type="name" v-model="cropData.name_bn" name="name_bn" id="code_bn" placeholder="Enter crop Name(BN)" class="box">
+                <input type="name" v-model="cropData.name_bn" name="name_bn" id="name_bn" placeholder="Enter crop Name(BN)" class="box">
+                <span v-if="errors.name_bn" class="danger_text">{{errors.name_bn[0]}}</span>  
             </div>
             <div class="button">
                 <div>
@@ -96,7 +99,19 @@ export default {
                    this.cropData = {};
                })
            }catch (e) {
-               console.log(e);
+               switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
            }
        }
    }

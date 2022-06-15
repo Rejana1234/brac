@@ -8,9 +8,11 @@
                     <option value="">Select Village</option>
                     <option v-for="(village, index) in villages" :key="index" :value="village.id">{{village.name_en}}</option>
                 </select>
+                <span v-if="errors.village_id" class="danger_text">{{errors.village_id[0]}}</span>
             </div>
             <div class="form-group">
                 <input type="text" name="post_code" v-model="postOfficeData.post_code" id="" placeholder="Enter PostOffice Name(EN)" class="box">
+                <span v-if="errors.post_code" class="danger_text">{{errors.post_code[0]}}</span>
             </div>
  
             <div class="button">
@@ -42,7 +44,9 @@ export default {
        postOfficeData:{
            village_id: '',
            post_code: '',
-       }
+       },
+
+        errors: {}
      }
    },
    computed: {
@@ -82,7 +86,19 @@ export default {
                   this.postOfficeData = {};
               })
           } catch (e) {
-              console.log(e);
+              switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
           }
        }
    }

@@ -8,9 +8,11 @@
                     <option value="">Select Post Office</option>
                     <option v-for="(post_office, index) in postOffices" :key="index" :value="post_office.id">{{post_office.post_code}}</option>
                 </select>
+                <span v-if="errors.post_office_id" class="danger_text">{{errors.post_office_id[0]}}</span>
             </div>
             <div class="form-group">
                 <input type="text" name="poc_code" v-model="pocData.poc_code" id="" placeholder="Enter Poc Code(EN)" class="box">
+                <span v-if="errors.poc_code" class="danger_text">{{errors.poc_code[0]}}</span>
             </div>
 
             <div class="button">
@@ -81,7 +83,19 @@
                         this.pocData = {};
                     })
                 }catch (e) {
-                    console.log(e);
+                    switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
                 }
             },
         }
