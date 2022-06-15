@@ -1,6 +1,6 @@
 <template>
     <div id="login">
-        <form action="" class="login-form">
+        <form action="" class="login-form" v-on:submit.prevent="login">
             <img src="../../assets/My project.png" alt="Logo" width="100" height="100"><br><br>
             <!-- <h1 class="login_heading">Login now</h1> -->
 
@@ -15,7 +15,13 @@
 
 <script>
 export default{
-    name : 'BarcLogin'
+    name : 'BarcLogin',
+
+    methods: {
+        login(){
+            this.$router.push('/dashboard');
+        }
+    }
 }
 </script>
 

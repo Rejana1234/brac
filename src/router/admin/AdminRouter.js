@@ -40,7 +40,7 @@ export default[
             ...SeasonRouter,
             ...CropRouter,
             ...PoRouter,
-            ...DepartmentRouter
+            ...DepartmentRouter,
             ...LandPreperation,
             ...LandSize,
             ...PoRouter,

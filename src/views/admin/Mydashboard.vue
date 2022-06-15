@@ -153,8 +153,8 @@ export default{
 }
 #sidebar .side-menu > li > a.active,
 #sidebar .side-menu > li > a.active:hover {
-	background: var(--blue);
-	color: var(--light);
+	background: var(--grey);
+	color: var(--black);
 }
 #sidebar .side-menu a.active{
 	background: var(--grey);
@@ -225,6 +225,7 @@ nav form {
 	max-width: 400px;
 	width: 100%;
 	margin-right: auto;
+	margin-top: 10px;
 }
 nav .form-group {
 	position: relative;

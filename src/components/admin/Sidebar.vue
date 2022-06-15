@@ -55,7 +55,9 @@
 				</ul>
 			</li>
 			<li class="divider" data-text="location">Land-Size </li>
-			<li><router-link active-class="active" to="/dashboard/land_size"><i class='bx bxs-chart icon' ></i> Land Size</router-link></li>
+			<li>
+				<router-link active-class="active" to="/dashboard/land_size"><i class='bx bxs-chart icon' ></i> Land Size</router-link>
+			</li>
 			<li class="divider" data-text="location">Land Preperation </li>
 			<li>
 			<ul >
@@ -86,7 +88,7 @@
 						<router-link active-class="active" to="/dashboard/cultivation_category"><i class='bx bxs-chart icon' ></i>Cultivation Category</router-link>
 					</li>
 					<li>
-						<router-link active-class="active" to="/dashboard/cultivation_section"><i class='bx bxs-chart icon' ></i> Cultivation Section</router-link>>
+						<router-link active-class="active" to="/dashboard/cultivation_section"><i class='bx bxs-chart icon' ></i> Cultivation Section</router-link>
 					</li>
 				</ul>
 			</li>
