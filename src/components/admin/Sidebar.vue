@@ -86,15 +86,16 @@
 						<router-link active-class="active" to="/dashboard/cultivation_category"><i class='bx bxs-chart icon' ></i>Cultivation Category</router-link>
 					</li>
 					<li>
-						<router-link active-class="active" to="/dashboard/cultivation_section"><i class='bx bxs-chart icon' ></i> Cultivation Section</router-link>>
+						<router-link active-class="active" to="/dashboard/cultivation_section"><i class='bx bxs-chart icon' ></i> Cultivation Section</router-link>
 					</li>
 				</ul>
 			</li>
 			<li class="divider" data-text="location">Setting </li>
 			<li>
 				<ul>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Language</a></li>
-					<li><a href="#"><i class='bx bxs-chart icon' ></i> Department</a></li>
+					<li>
+						<router-link active-class="active" to="/dashboard/department"><i class='bx bxs-chart icon' ></i> Department</router-link>
+					</li>
 				</ul>
 			</li>
 			<li class="divider" data-text="location">User Management </li>

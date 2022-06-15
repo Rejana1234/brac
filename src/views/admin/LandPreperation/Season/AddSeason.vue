@@ -4,18 +4,23 @@
             <h3>Add Season</h3>
             <div class="form-group">
                 <input type="name" v-model="seasionData.name_en" name="name(en)" id="" placeholder="Enter Season Name(EN)" class="box">
+                 <span v-if="errors.name_en" class="danger_text">{{errors.name_en[0]}}</span>
             </div>
             <div class="form-group">
                 <input type="name" v-model="seasionData.name_bn" name="name(bn)" id="" placeholder="Enter Season Name(BN)" class="box">
+                 <span v-if="errors.name_bn" class="danger_text">{{errors.name_bn[0]}}</span>
             </div>
             <div class="form-group">
                 <input type="name" v-model="seasionData.cultural_operation" name="cultural_operation" id="" placeholder="Enter Cultural Operation Name(EN)" class="box">
+                 <span v-if="errors.cultural_operation" class="danger_text">{{errors.cultural_operation[0]}}</span>
             </div>
             <div class="form-group">
                 <input type="date" v-model="seasionData.start_date" name="start date" id="" placeholder="Enter Start Date" class="box">
+                 <span v-if="errors.start_date" class="danger_text">{{errors.start_date[0]}}</span>
             </div>
             <div class="form-group">
                 <input type="date" v-model="seasionData.end_date" name="end date" id="" placeholder="Enter End Date" class="box">
+                <span v-if="errors.end_date" class="danger_text">{{errors.end_date[0]}}</span>
             </div>
 
             <div class="button">
@@ -92,7 +97,19 @@
                     })
 
                 }catch (e) {
-                    console.log(e)
+                    switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
                 }
             }
 

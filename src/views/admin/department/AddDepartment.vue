@@ -1,24 +1,20 @@
 <template>
-    <div id="add_po">
-        <form action="" class="AddPostOffice-form" v-on:submit.prevent="addPo">
-            <h3>Add Poc</h3>
-
+    <div id="add_department">
+        <form class="AddCountry-form" v-on:submit.prevent="addDepartment">
+            <h2>Add Department</h2>
             <div class="form-group">
-                <select  name="post_office_id" id="post_office_id" class="box" v-model="pocData.post_office_id">
-                    <option value="">Select Post Office</option>
-                    <option v-for="(post_office, index) in postOffices" :key="index" :value="post_office.id">{{post_office.post_code}}</option>
-                </select>
-                <span v-if="errors.post_office_id" class="danger_text">{{errors.post_office_id[0]}}</span>
+                <input type="name" v-model="departmentData.name_en" name="name_en" id="name_en" placeholder="Enter Country Name(EN)" class="box">
+                <span v-if="errors.name_en" class="danger_text">{{errors.name_en[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="text" name="poc_code" v-model="pocData.poc_code" id="" placeholder="Enter Poc Code(EN)" class="box">
-                <span v-if="errors.poc_code" class="danger_text">{{errors.poc_code[0]}}</span>
+                <input type="name" v-model="departmentData.name_bn" name="name_bn" id="name_bn" placeholder="Enter Country Name(BN)" class="box">
+                <span v-if="errors.name_bn" class="danger_text">{{errors.name_bn[0]}}</span>
             </div>
 
             <div class="button">
                 <div>
-                    <router-link to="/dashboard/po">
-                        <button type="submit"> Back </button>
+                    <router-link to="/dashboard/department">
+                        <button type="button"> Back </button>
                     </router-link>
 
                     <button type="submit"> Save </button>
@@ -26,51 +22,42 @@
             </div>
 
 
+
         </form>
     </div>
 </template>
 
 <script>
-    import {mapState, mapActions} from 'vuex';
+    import {mapState} from 'vuex';
 
     export default {
-        name: "AddPo",
+        name: "AddDepartment",
 
         data(){
             return{
-                pocData:{
-                    post_office_id: '',
-                    poc_code: ''
+                departmentData: {
+                    name_en: '',
+                    name_bn: ''
                 },
-
-                errors: {}
+                errors:{}
             }
         },
 
         computed: {
             ...mapState({
-                postOffices: state => state.BarcPostOffice.Barc_post_offices,
-                message: state => state.po.success_message
+                message: state => state.department.success_message
             })
         },
 
-        mounted(){
-            this.getAllPostOffice();
-        },
-
         methods: {
-            ...mapActions({
-                getAllPostOffice: 'BarcPostOffice/get_all_post_office'
-            }),
-
-            addPo: async function(){
+            addDepartment: async function(){
                 try {
                     let formData = new FormData();
 
-                    formData.append('post_office_id', this.pocData.post_office_id);
-                    formData.append('poc_code', this.pocData.poc_code);
+                    formData.append('name_en', this.departmentData.name_en);
+                    formData.append('name_bn', this.departmentData.name_bn);
 
-                    await this.$store.dispatch('po/add_po', formData).then(() => {
+                    await this.$store.dispatch('department/add_department', formData).then(() => {
                         this.$swal.fire({
                             toast: true,
                             position: 'top-end',
@@ -80,7 +67,7 @@
                             timer: 1500
                         });
 
-                        this.pocData = {};
+                        this.departmentData = {};
                     })
                 }catch (e) {
                     switch (e.response.status)
@@ -103,13 +90,13 @@
 </script>
 
 <style scoped>
-    #add_po{
+    #add_department{
         display: flex;
         justify-content: center;
         margin-top: 100rem;
     }
 
-    .AddPostOffice-form{
+    .AddCountry-form{
         width: 95%;
         position: absolute;
         text-align: center;
@@ -119,28 +106,28 @@
         background:#eee;
         box-shadow: var(--box-shadow);
     }
-    .AddPostOffice-form h3{
+    .AddCountry-form h2{
         display: flex;
         justify-content: left;
     }
-    .AddPostOffice-form .box{
+    .AddCountry-form .box{
         width: 100%;
         margin: .7rem 0;
         background: rgb(252, 250, 252);
         border-radius: .5rem;
         padding: 1rem;
-        font-size: 12px;
+        font-size: 1rem;
         color: var(--black);
         text-transform: none;
     }
 
-    .AddPostOffice-form p{
+    .AddCountry-form p{
         font-size: 1.4rem;
         padding: .5rem 0;
         color: var(--light-color);
     }
 
-    .AddPostOffice-form p a{
+    .AddCountry-form p a{
         color: var(--orange);
         text-decoration: underline;
     }
@@ -148,7 +135,8 @@
     button {
         padding: 7px 7px;
         background-color: rgb(59, 155, 59);
-        margin-left: 2%;
+        margin-right: 2%;
+
     }
 
     button:hover{

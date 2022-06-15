@@ -18,6 +18,7 @@ import SelectionRouter from './SelectionRouter';
 import CultivationRouter from './CultivationRouter';
 import CultivationSectionRouter from './CultivationSectionRouter';
 
+import DepartmentRouter from './DepartmentRouter';
 
 export default[
     {
@@ -45,7 +46,8 @@ export default[
             ...LocationRouter,
             ...SelectionRouter,
             ...CultivationRouter,
-            ...CultivationSectionRouter
+            ...CultivationSectionRouter,
+            ...DepartmentRouter
 
         ]
     }

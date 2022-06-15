@@ -4,6 +4,7 @@
              <h2>Add Cultivation</h2>  
             <div class="form-group">
                 <input type="name" v-model="cultivationData.name" name="name" id="name" placeholder="Enter cultivation Name" class="box">
+                <span v-if="errors.name" class="danger_text">{{errors.name[0]}}</span>
             </div>
             <div class="button">
                 <div>
@@ -80,7 +81,19 @@ export default {
                    this.cultivationData = {};
                })
            }catch (e) {
-               console.log(e);
+               switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
            }
        }
    }

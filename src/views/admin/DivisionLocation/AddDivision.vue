@@ -10,25 +10,27 @@
                 </select>
             </div>
             <div class="form-group">
-                <input type="name" v-model="divisionData.name_en" name="name(en)" id="" placeholder="Enter Division Name(EN)" class="box">
+                <input type="name" v-model="divisionData.name_en" name="name_en" id="" placeholder="Enter Division Name(EN)" class="box">
+                <span v-if="errors.name_en" class="danger_text">{{errors.name_en[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="name" v-model="divisionData.name_bn" name="name(bn)" id="" placeholder="Enter Division Name(BN)" class="box">
+                <input type="name" v-model="divisionData.name_bn" name="name_bn" id="" placeholder="Enter Division Name(BN)" class="box">
+                <span v-if="errors.name_bn" class="danger_text">{{errors.name_bn[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="text" v-model="divisionData.code_en" name="code(en)" id="" placeholder="Enter Division Code(EN)" class="box">
+                <input type="text" v-model="divisionData.code_en" name="code_en" id="" placeholder="Enter Division Code(EN)" class="box">
+                <span v-if="errors.code_en" class="danger_text">{{errors.code_en[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="text" v-model="divisionData.code_bn" name="code(bn)" id="" placeholder="Enter Division Code(BN)" class="box">
+                <input type="text" v-model="divisionData.code_bn" name="code_bn" id="" placeholder="Enter Division Code(BN)" class="box">
+                <span v-if="errors.code_bn" class="danger_text">{{errors.code_bn[0]}}</span>
             </div>
  
             <div class="button">
-                <level>
-                    <button type="submit"> Back </button>
-                </level>
-                <level>
+                <router-link to="/dashboard/division">
+                        <button type="button"> Back </button>
+                    </router-link>
                     <button type="submit"> Save </button>
-                </level>
             </div>
            
  
@@ -99,7 +101,19 @@ export default {
                })
                
            }catch (e) {
-               console.log(e)
+               switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
            }
        }
      

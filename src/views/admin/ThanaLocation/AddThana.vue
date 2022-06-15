@@ -6,20 +6,24 @@
                 <select  name="District_id" id="district" class="box" v-model="thanaData.district_id">
                        <option value="">Select District</option>
                        <option v-for="(district, index) in Districts" :key="index" :value="district.id">{{district.name_en}}</option>
-                      
                 </select>
+                <span v-if="errors.District_id" class="danger_text">{{errors.District_id[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="name" v-model="thanaData.name_en" name="name(en)" id="" placeholder="Enter Thana Name(EN)" class="box">
+                <input type="name" v-model="thanaData.name_en" name="name_en" id="" placeholder="Enter Thana Name(EN)" class="box">
+                <span v-if="errors.name_en" class="danger_text">{{errors.name_en[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="name" v-model="thanaData.name_bn" name="name(bn)" id="" placeholder="Enter Thana Name(BN)" class="box">
+                <input type="name" v-model="thanaData.name_bn" name="name_bn" id="" placeholder="Enter Thana Name(BN)" class="box">
+                <span v-if="errors.name_bn" class="danger_text">{{errors.name_bn[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="text" v-model="thanaData.code_en" name="code(en)" id="" placeholder="Enter Thana Code(EN)" class="box">
+                <input type="text" v-model="thanaData.code_en" name="code_en" id="" placeholder="Enter Thana Code(EN)" class="box">
+                <span v-if="errors.code_en" class="danger_text">{{errors.code_en[0]}}</span>
             </div>
             <div class="form-group">
-                <input type="text" v-model="thanaData.code_bn" name="code(bn)" id="" placeholder="Enter Thana Code(BN)" class="box">
+                <input type="text" v-model="thanaData.code_bn" name="code_bn" id="" placeholder="Enter Thana Code(BN)" class="box">
+                <span v-if="errors.code_bn" class="danger_text">{{errors.code_bn[0]}}</span>
             </div>
  
             <div class="button">
@@ -100,7 +104,19 @@ export default {
                })
                
            }catch (e) {
-               console.log(e)
+               switch (e.response.status)
+               {
+                   case 422:
+                       this.errors = e.response.data.errors;
+                       break;
+                   default:
+                       this.$swal.fire({
+                           icon: 'error',
+                           text: 'Oops',
+                           title: e.response.data.error,
+                       });
+                       break;
+               }
            }
        }
      

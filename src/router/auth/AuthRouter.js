@@ -4,7 +4,7 @@ import ResetPassword from '../../views/auth/ResetPassword'
 
 export default [
     {
-        path:'/login' , 
+        path:'/' ,
         name: 'Login',
         component: Login
     },
@@ -12,7 +12,6 @@ export default [
         path: '/forget-password',
         name: 'ForgetPassword',
         component: ForgetPassword
-        // component: (ForgetPassword) => import('../../views/auth/c')
     },
     {
         path: '/reset-password',

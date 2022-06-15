@@ -25,6 +25,7 @@ import location from "./modules/location";
 import selection from "./modules/selection";
 import cultivation from "./modules/cultivation";
 import section from "./modules/section";
+import department from "./modules/department";
 
 export default new Vuex.Store({
     state,
@@ -48,6 +49,6 @@ export default new Vuex.Store({
         selection,
         cultivation,
         section,
-        
+        department
     }
 })
