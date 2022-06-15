@@ -18,10 +18,21 @@
            <tbody>
             <tr v-show="landseasions.length" v-for="(landseasion,index) in landseasions" :key="landseasion.id">
                 <td>{{ index + 1 }}</td>
-                <td>{{ landseasion.name_en }}</td>
-                <td>{{ landseasion.name_bn }}</td>
-                <td>{{ landseasion.start_date }}</td>
-                <td>{{ landseasion.end_date}}</td>
+                <td>
+                  <img :src="showImage(landseasion.crop_image)" alt="" width="50px" name="image">
+                </td>
+                <td>{{ landseasion.user_id }}</td>
+                <td>{{ landseasion.crop_name_en }}</td>
+                <td>{{ landseasion.soil_ph_level}}</td>
+                <td>
+                    <!-- {{ landseasion.season_id}} -->
+                    <div  v-for="(item) in landseasion.season_id" :key="item.id">
+                       <span>{{item.name_en}}</span><br>
+                       <span>{{item.cultural_operation}}: </span>
+                       <span>{{item.start_date}} ~</span>
+                       <span>{{item.end_date}} </span>
+                    </div>
+                </td>
             </tr>
            </tbody>
        </datatable>
@@ -43,7 +54,7 @@ import {mapState} from 'vuex';
 import { http } from '../../../service/http_service';
 
 export default {
-   name: 'TheSeasion',
+   name: 'LandSeasion',
 
    components: {
        datatable: DataTable,
@@ -54,17 +65,18 @@ export default {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
-           {label: 'Name EN', name: 'name_en'},
-           {label: 'Name BN', name: 'name_bn'},
-           {label: 'Start Date', name: 'start_date'},
-           {label: 'End Date', name: 'end_date'},
+           {label: 'Image', name: 'image'},
+           {label: 'User', name: 'user_id' },   
+           {label: 'Crop', name: 'crop_name_en'},
+           {label: 'PH Level', name: 'soil_ph_level'},
+           {label: 'Season', name: 'crop_name_en'},
        ];
        columns.forEach((column) => {
            sortOrders[column.name] = -1;
        });
 
        return {
-           seasions: [],
+           landseasions: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -115,16 +127,22 @@ export default {
            params.append('column', this.tableData.column);
            params.append('dir', this.tableData.dir);
 
-           return http().get('v1/land_prepration_seasion/getData?'+params)
+           return http().get('v1/land_prepration/getData?'+params)
                .then(response => {
-                   this.seasions = response.data.data.data;
-                   this.pagination = response.data.data;
-                   console.log(this.seasions);
+                   this.landseasions = response.data.land_prepration.data;
+                   
+                   this.pagination = response.data.land_prepration;
+                   console.log(this.landseasions);
                })
                .catch(error => {
                    console.log(error);
                })
        },
+
+       showImage(img){
+                let server_Path = this.$store.state.serverPath;
+                return server_Path +"/public/uploads/crop_image/"+ img;
+            },
 
         sortBy(key) {
             this.sortKey = key;

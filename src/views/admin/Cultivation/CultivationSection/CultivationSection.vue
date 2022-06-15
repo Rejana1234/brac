@@ -1,7 +1,7 @@
 <template>
-   <div id="cultivationSection">
-
-        <div class="field">
+   <div id="CultivationSection">
+ 
+  <div class="field">
           <div for="entries">Show:
              <select  name="entries" id="entries" v-model="tableData.length" @change="getAllCultivationSection()">
                  <option v-for="(records, index) in perPage" :key="index" :value="records">{{records}}</option>
@@ -10,37 +10,51 @@
           </div>
 
           <div class="search">
-              <input type="text" v-model="tableData.search" placeholder="Search Cul_Section" @input="getAllCultivationSection()">
+              <input type="text" v-model="tableData.search" placeholder="Search Season" @input="getAllCultivationSection()">
           </div>
-        </div>
-
-       <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
+        </div>	
+ 
+ <datatable :columns="columns" :sortKey="sortKey" :sortOrders="sortOrders" @sort="sortBy">
            <tbody>
-            <tr v-show="sections.length" v-for="(section) in sections" :key="section.id">
-                <td>{{ section.id }}</td>
-                <td>{{ section.name }}</td>
+            <tr v-show="cultivationsections.length" v-for="(cultivationsection,index) in cultivationsections" :key="cultivationsection.id">
+                <td>{{ index + 1 }}</td>
+                <td>
+                  <img :src="showImage(cultivationsection.crop_image)" alt="" width="50px" name="image">
+                </td>
+                <td>{{ cultivationsection.user_id }}</td>
+                <td>{{ cultivationsection.crop_name_en }}</td>
+                <td>{{ cultivationsection.cultivation_category_name}}</td>
+                <td>
+                    <!-- {{ landseasion.season_id}} -->
+                    <div  v-for="(item) in cultivationsection.season" :key="item.id">
+                       <span>{{item.name_en}}</span><br>
+                       <span>{{item.cultural_operation}}: </span>
+                       <span>{{item.start_date}} ~</span>
+                       <span>{{item.end_date}} </span>
+                    </div>
+                </td>
             </tr>
            </tbody>
        </datatable>
 
-        <div class="field">
+      <div class="field">
             <div><h5> Showing {{ pagination.from }} to {{ pagination.to }} of {{ pagination.total }} entries</h5> </div>
 
             <pagination :pagination.sync="pagination" :offset="5" @paginate="getAllCultivationSection();"></pagination>
         </div>
-   </div>	
-</template>
+</div>
 
+</template>
 <script>
 import DataTable from '../../../../components/datatable/DataTable';
-import Pagination from '../../../../components/datatable/Pagination.vue';
+import Pagination from '../../../../components/datatable/Pagination';
 
 import {mapState} from 'vuex';
 
 import { http } from '../../../../service/http_service';
 
 export default {
-   name: 'MyCultivationSection',
+   name: 'LandSeasion',
 
    components: {
        datatable: DataTable,
@@ -51,14 +65,18 @@ export default {
        let sortOrders = {};
        let columns = [
            {label: '#Sl', name: 'id' },
-           {label: 'Name', name: 'name'},
+           {label: 'Image', name: 'image'},
+           {label: 'User', name: 'user_id' },   
+           {label: 'Crop', name: 'crop_name_en'},
+           {label: 'cultivation', name: 'cultivation_category_name'},
+           {label: 'Season', name: ''},
        ];
        columns.forEach((column) => {
            sortOrders[column.name] = -1;
        });
 
        return {
-           sections: [],
+           cultivationsections: [],
            columns: columns,
            sortKey: 'id',
            sortOrders: sortOrders,
@@ -88,8 +106,7 @@ export default {
 
     computed: {
         ...mapState({
-            
-            message: state => state.section.success_message
+            message: state => state.seasion.success_message
         })
     },
 
@@ -112,32 +129,46 @@ export default {
 
            return http().get('v1/cultivation_section/getData?'+params)
                .then(response => {
-                   this.sections = response.data.data.data;
-                   this.pagination = response.data.data;
+                   this.cultivationsections = response.data.cultivation_section.data;
+                   
+                   this.pagination = response.data.cultivation_section;
+                   console.log(this.cultivationsections);
                })
                .catch(error => {
                    console.log(error);
                })
        },
 
+       showImage(img){
+                let server_Path = this.$store.state.serverPath;
+                return server_Path +"/public/uploads/crop_image/"+ img;
+            },
+
         sortBy(key) {
             this.sortKey = key;
             this.sortOrders[key] = this.sortOrders[key] * -1;
             this.tableData.column = this.getIndex(this.columns, 'name', key);
             this.tableData.dir = this.sortOrders[key] === 1 ? 'asc' : 'desc';
-            this.getAllCultivationSection();
+            this.getAllLandSeasion();
         },
+
 
     },
 };
 </script>
 <style>
+
+
 .table {
     width: 100%;
     text-align: center;
     margin-bottom: 0.5%;
 }
-
+.add-Season{
+   display:flex;
+    justify-content: flex-end;
+   margin-bottom: 3%;
+}
 .select{
    align-items:baseline;
 }
