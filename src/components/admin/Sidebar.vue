@@ -1,5 +1,6 @@
 <template>
      <section id="sidebar" v-bind:class="{hide: this.isActive}">
+
 		<router-link to="/dashboard" class="brand"><i class='bx bxs-smile icon'></i> BARC </router-link>
 		<div class="sidebar-avartar">
                           <div>
@@ -14,11 +15,14 @@
                          </div>
                     </div>
 		<ul class="side-menu">
+			<li>
+				<router-link active-class="active" to="/dashboard" exact><i class='bx bxs-chart icon' ></i> Dashboard </router-link>
+			</li>
 			<li class="divider" data-text="location">Location</li>
 			<li>
 				<ul>
 					<li>
-						<router-link active-class="active" to="/dashboard/country" exact><i class='bx bxs-chart icon' ></i> Country</router-link>
+						<router-link active-class="active" to="/dashboard/country" ><i class='bx bxs-chart icon' ></i> Country</router-link>
 					</li>
 
 					<li>
