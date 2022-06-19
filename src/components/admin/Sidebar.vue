@@ -1,6 +1,6 @@
 <template>
      <section id="sidebar" v-bind:class="{hide: this.isActive}">
-		<a href="#" class="brand"><i class='bx bxs-smile icon'></i> BARC </a>
+		<router-link to="/dashboard" class="brand"><i class='bx bxs-smile icon'></i> BARC </router-link>
 		<div class="sidebar-avartar">
                           <div>
                                <img src="../../assets/My project.png" width="70px" height="70px" alt=""  >
