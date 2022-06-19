@@ -32,7 +32,7 @@ export default{
     width: 40rem;
     position: absolute;
     text-align: center;
-    top: 10%;
+    top: 20%;
     padding: 2rem;
     border-radius: .5rem;
     background: rgb(164, 232, 171);

@@ -85,7 +85,7 @@ export default{
 	align-items: center;
 	height: 64px;
 	font-weight: 700;
-	color: var(--blue);
+	color: var(--light-green);
 	position: sticky;
 	top: 0;
 	left: 0;
@@ -356,7 +356,7 @@ main .info-data {
 main .info-data .card {
 	padding: 20px;
 	border-radius: 8px;
-	background: rgb(128, 200, 79);
+	background: rgb(127, 234, 123);
 	box-shadow: 4px 4px 16px rgba(0, 0, 0, .05);
 }
 main .card .head {
